@@ -36,5 +36,5 @@ jobs:
           instance-url: ${{ secrets.SN_INSTANCE_URL }}
           context-github: ${{ toJSON(github) }}
           tool-id: ${{ secrets.SN_ORCHESTRATION_TOOL_ID }}
-          change-details: '{"build_number":"21","pipeline_name":"CI_Pipeline","stage_name":"Create_Change"}' #Working Version
+          change-details: '{"build_number":"","pipeline_name":"","stage_name":"Create_Change"}' #Working Version
 
