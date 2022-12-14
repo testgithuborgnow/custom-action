@@ -26,7 +26,14 @@ const main = async() => {
             console.error("Failed parsing changeRequestDetails, please provide a valid JSON");
             return;
         }
-
+        let githubContext;
+        try {
+            githubContext = JSON.parse(githubContextStr);
+        } catch (e) {
+            console.log(`Error occured with message ${e}`);
+            console.error("Exception parsing github context");
+            return;
+        }  
         let buildNumber = changeRequestDetails.build_number;
         let pipelineName = changeRequestDetails.pipeline_name;
         let stageName = changeRequestDetails.stage_name;        
@@ -38,15 +45,7 @@ const main = async() => {
             stageName = jobName;
 
     
-        let githubContext;
-    
-        try {
-            githubContext = JSON.parse(githubContextStr);
-        } catch (e) {
-            console.log(`Error occured with message ${e}`);
-            console.error("Exception parsing github context");
-            return;
-        }        
+      
         const restendpoint = `${instanceUrl}/api/sn_devops/v1/devops/orchestration/changeInfo?buildNumber=${buildNumber}&stageName=${stageName}&pipelineName=${pipelineName}&toolId=${toolId}`;
         let response;
     
