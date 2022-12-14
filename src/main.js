@@ -63,7 +63,7 @@ const main = async() => {
             };
             let httpHeaders = { headers: defaultHeaders };
             response = await axios.get(restendpoint, '', httpHeaders);
-            //console.log("response => "+response+", Stringified response => "+JSON.stringify(response));
+            console.log("response => "+response+", Stringified response => "+JSON.stringify(response));
         } catch (err) {
             if (!err.response) {
                 status = "SUCCESS";
