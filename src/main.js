@@ -62,14 +62,14 @@ const main = async() => {
                 'Authorization': 'Basic ' + `${encodedToken}`
             };
             let httpHeaders = { headers: defaultHeaders };
-            //response = await axios.get(restendpoint, httpHeaders);
-            response = axios.get(restendpoint, httpHeaders).then(
+            response = await axios.get(restendpoint, httpHeaders);
+           /* response = axios.get(restendpoint, httpHeaders).then(
                 (response) => {
                     console.log(response);
                   }, (error) => {
                     console.log(error);
                   }
-            );
+            );*/
             //console.log("response => "+response+", Stringified response => "+JSON.stringify(response));
             console.log(JSON.stringify(response));
             console.log("response => "+response+",  Stringified response => "+JSON.stringify(response));
