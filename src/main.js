@@ -15,6 +15,7 @@ const main = async() => {
     core.setOutput("status",status);
     try{
 
+        console.log(JSON.stringify($(githubContext)));
         console.log('Calling Get Change Info API to get changeRequestNumber'); 
     
         let changeRequestDetails;
