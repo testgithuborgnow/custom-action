@@ -15,7 +15,6 @@ const main = async() => {
     core.setOutput("status",status);
     try{
 
-        console.log(JSON.stringify($(githubContext)));
         console.log('Calling Get Change Info API to get changeRequestNumber'); 
     
         let changeRequestDetails;
@@ -32,7 +31,7 @@ const main = async() => {
         let pipelineName = changeRequestDetails.pipeline_name;
         let stageName = changeRequestDetails.stage_name;        
         if(buildNumber == null || buildNumber == '')
-            buildNumber = `${githubContext.run_id}`;
+            buildNumber = `${githubContext.run_id}`+'/attempts/1';
         if(pipelineName == null || pipelineName == '')
             pipelineName = `${githubContext.repository}` + '/' + `${githubContext.workflow}`;
         if(stageName == null || stageName == '')

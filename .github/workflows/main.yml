@@ -39,5 +39,5 @@ jobs:
           instance-url: ${{ secrets.SN_INSTANCE_URL }}
           context-github: ${{ toJSON(github) }}
           tool-id: ${{ secrets.SN_ORCHESTRATION_TOOL_ID }}
-          change-details: '{"build_number":"46","pipeline_name":"CustomActionGetWorkflow","stage_name":"ServiceNow Change Approval"}' #Working Version
+          change-details: '{"build_number":"","pipeline_name":"maheshganji/custom-action-get/CustomActionGetWorkflow","stage_name":"ServiceNow Change Approval"}' #Working Version
 
