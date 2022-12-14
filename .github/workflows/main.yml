@@ -23,7 +23,7 @@ jobs:
           change-details: '{"build_number":"21","pipeline_name":"CI_Pipeline","stage_name":"Create_Change"}' #Working Version
   changeApproval:
     name: ServiceNow Change Approval
-    runs-on: ubuntu-16.04
+    runs-on: ubuntu-latest
     steps:     
       - name: ServiceNow Change Approval
         uses: ServiceNow/servicenow-devops-change@v1.34.2
