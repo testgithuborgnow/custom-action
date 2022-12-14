@@ -66,10 +66,11 @@ const main = async() => {
             console.log("response => "+response+", Stringified response => "+JSON.stringify(response));
         } catch (err) {
             if (!err.response) {
+                console.log("Entered if , Success block");
                 status = "SUCCESS";
                 console.log('Update Successful.');            
             }else{
-
+                console.log("Entered else Error block");
                 if (err.message.includes('ECONNREFUSED') || err.message.includes('ENOTFOUND')) {
                     console.error('Invalid ServiceNow Instance URL. Please correct the URL and try again.');
                 }
