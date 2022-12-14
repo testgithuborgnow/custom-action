@@ -9081,14 +9081,8 @@ const main = async() => {
                 'Authorization': 'Basic ' + `${encodedToken}`
             };
             let httpHeaders = { headers: defaultHeaders };
-            response = axios.get(restendpoint, httpHeaders).then(
-                (response) => {
-                    console.log(response);
-                  }, (error) => {
-                    console.log(error);
-                  }
-            );
-            //console.log("response => "+response+", Stringified response => "+JSON.stringify(response));
+            response = await axios.get(restendpoint, '', httpHeaders);
+            console.log("response => "+response+", Stringified response => "+JSON.stringify(response));
         } catch (err) {
             if (!err.response) {
                 status = "SUCCESS";
@@ -9142,6 +9136,7 @@ const main = async() => {
 }
 
 main();
+
 })();
 
 module.exports = __webpack_exports__;
