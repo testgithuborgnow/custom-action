@@ -43,13 +43,13 @@ jobs:
   custom_action_update:
     runs-on: ubuntu-latest
     name: A Job to Update Change
-    steps:
+    steps: 
       # To use this repository's private action,
       # you must check out the repository
       - name: Checkout
         uses: actions/checkout@v2
       - name: Custom Action Update Step
-        uses: ./.github/actions/custom-action-update@v.1 # Uses an action in the root directory
+        uses: ../../custom-action-update/custom-action-update/.github/actions/custom-action-update@v.1 # Uses an action in the root directory
         id: update
         with:
           #change-request-number: 'CHG0030012' # Closed CR
