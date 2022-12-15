@@ -9059,7 +9059,7 @@ const main = async() => {
         let pipelineName = changeDetails.pipeline_name;
         let stageName = changeDetails.stage_name;        
         if(buildNumber == null || buildNumber == '')
-            buildNumber = `${githubContext.run_id}`;
+            buildNumber = `${githubContext.run_id}`+ '/attempts/1';
         if(pipelineName == null || pipelineName == '')
             pipelineName = `${githubContext.repository}` + '/' + `${githubContext.workflow}`;
         if(stageName == null || stageName == '')

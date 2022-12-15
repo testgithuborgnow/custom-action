@@ -20,7 +20,7 @@ jobs:
           change-request: '{"setCloseCode":"true","attributes":{"short_description":"Automated Software Deployment","assignment_group":"a715cd759f2002002920bde8132e7018","description":"Automated Software Deployment.","implementation_plan":"Software update is tested and results can be found in Test Summaries Tab; When the change is approved the implementation happens automated by the CICD pipeline within the change planned start and end time window.","backout_plan":"When software fails in production, the previous software release will be re-deployed.","test_plan":"Testing if the software was successfully deployed"}}'
           interval: '100'
           timeout: '3600'
-  custom_action_update:
+  test-get-job-name:
     needs: changeApproval
     runs-on: ubuntu-latest
     name: A Job to Update Change
@@ -29,9 +29,8 @@ jobs:
       # you must check out the repository
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Custom Action Update Step
+      - name: Test Get Job
         uses: ./ # Uses an action in the root directory
-        
         id: update
         with:
           devops-integration-user-name: ${{ secrets.SN_DEVOPS_USER }}
@@ -39,6 +38,6 @@ jobs:
           instance-url: ${{ secrets.SN_INSTANCE_URL }}
           context-github: ${{ toJSON(github) }}
           tool-id: ${{ secrets.SN_ORCHESTRATION_TOOL_ID }}
-          change-details: '{"build_number":"","pipeline_name":"maheshganji/custom-action-get/CustomActionGetWorkflow","stage_name":"ServiceNow Change Approval"}' #Working Version
+          change-details: '{"build_number":"","pipeline_name":"maheshganji/custom-action-get/CustomActionGetWorkflow","stage_name":"ServiceNow Change Approval"}'          
       - name: Output of update
         run: echo "The Status of Update Change Request Details => ${{ steps.update.outputs.change-request-number }}"
