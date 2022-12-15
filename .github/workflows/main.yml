@@ -49,7 +49,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Custom Action Update Step
-        uses: custom-action-update/.github/actions/custom-action-update@v.1 # Uses an action in the root directory
+        uses: ../.github/actions/custom-action-update@v.1 # Uses an action in the root directory
         id: update
         with:
           #change-request-number: 'CHG0030012' # Closed CR
