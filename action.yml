@@ -10,18 +10,15 @@ inputs:
   devops-integration-user-password:
     description: 'Devops Integration User Password'
     required: true
+  tool-id:
+    description: 'Orchestration Tool Id'
+    required: true
   context-github:
     description: 'Github Context'
     required: true
   change-details:
     description: 'The customized inputs to create change with the requested details.'
-    required: true
-  tool-id:
-    description: 'Orchestration Tool Id'
-    required: true
-  job-name:
-    description: 'Display Name of the Job'
-    required: true    
+    required: true        
 outputs:
   change-request-number: 
     description: 'Change Request Number found for the given change details'
@@ -29,4 +26,4 @@ outputs:
     description: 'To know the status of the Change Request GET call'    
 runs:
   using: 'node16'
-  main: 'dist/index.js'
+  main: 'dist/index.js''

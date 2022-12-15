@@ -8,7 +8,6 @@ const main = async() => {
     const instanceUrl = core.getInput('instance-url', { required: true });
     const username = core.getInput('devops-integration-user-name', { required: true });
     const passwd = core.getInput('devops-integration-user-password', { required: true });
-    const jobName = core.getInput('job-name');
     const toolId = core.getInput('tool-id', { required: true });
     let changeDetailsStr = core.getInput('change-details', { required: true });
     let githubContextStr = core.getInput('context-github', { required: true });
@@ -17,39 +16,41 @@ const main = async() => {
 
         console.log('Calling Get Change Info API to get changeRequestNumber'); 
     
-        let changeRequestDetails;
+        let changeDetails;
     
         try {
-          changeRequestDetails = JSON.parse(changeDetailsStr);
+          changeDetails = JSON.parse(changeDetailsStr);
         } catch (e) {
             console.log(`Unable to parse Error occured with message ${e}`);
             console.error("Failed parsing changeRequestDetails, please provide a valid JSON");
             return;
         }
+
         let githubContext;
+    
         try {
             githubContext = JSON.parse(githubContextStr);
         } catch (e) {
             console.log(`Error occured with message ${e}`);
             console.error("Exception parsing github context");
             return;
-        }  
-        let buildNumber = changeRequestDetails.build_number;
-        let pipelineName = changeRequestDetails.pipeline_name;
-        let stageName = changeRequestDetails.stage_name;        
+        } 
+
+        let buildNumber = changeDetails.build_number;
+        let pipelineName = changeDetails.pipeline_name;
+        let stageName = changeDetails.stage_name;        
         if(buildNumber == null || buildNumber == '')
-            buildNumber = `${githubContext.run_id}`+'/attempts/1';
+            buildNumber = `${githubContext.run_id}`;
         if(pipelineName == null || pipelineName == '')
             pipelineName = `${githubContext.repository}` + '/' + `${githubContext.workflow}`;
         if(stageName == null || stageName == '')
-            stageName = jobName;
-
+            stageName = `${githubContext.job}`;
+        
+        console.log("buildNumber => "+buildNumber+", pipelineName => "+pipelineName+", stageName => "+stageName);
     
-      
+       
         const restendpoint = `${instanceUrl}/api/sn_devops/v1/devops/orchestration/changeInfo?buildNumber=${buildNumber}&stageName=${stageName}&pipelineName=${pipelineName}&toolId=${toolId}`;
         let response;
-    
-        console.log("REST endpoint Url -> "+restendpoint);
     
         try {
             const token = `${username}:${passwd}`;
@@ -62,23 +63,20 @@ const main = async() => {
             };
             let httpHeaders = { headers: defaultHeaders };
             response = await axios.get(restendpoint, httpHeaders);
-           /* response = axios.get(restendpoint, httpHeaders).then(
-                (response) => {
-                    console.log(response);
-                  }, (error) => {
-                    console.log(error);
-                  }
-            );*/
-            //console.log("response => "+response+", Stringified response => "+JSON.stringify(response));
-            console.log(JSON.stringify(response.data));
-            console.log("response => "+response+",  Stringified response => "+JSON.stringify(response));
-        } catch (err) {
-            if (!err.response) {
-                console.log("Entered if , Success block ");
+            if(response.data && response.data.result){
                 status = "SUCCESS";
-                console.log('Update Successful.');            
+                console.log("change-request-number => "+response.data.result.number);
+                core.setOutput("change-request-number",response.data.result.number);
             }else{
-                console.log("Entered else Error block ");
+                status = "NOT SUCCESSFUL";
+                console.error('No response from ServiceNow. Please check ServiceNow logs for more details.');
+            }
+        } catch (err) {
+            status = "NOT SUCCESSFUL";
+            if (!err.response) {
+                console.error('No response from ServiceNow. Please check ServiceNow logs for more details.');
+            }else{
+
                 if (err.message.includes('ECONNREFUSED') || err.message.includes('ENOTFOUND')) {
                     console.error('Invalid ServiceNow Instance URL. Please correct the URL and try again.');
                 }
@@ -111,6 +109,7 @@ const main = async() => {
                     }
                 }
             }
+            core.setOutput("status",status);
         }
 
     }catch(err){
