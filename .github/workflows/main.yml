@@ -41,4 +41,4 @@ jobs:
           tool-id: ${{ secrets.SN_ORCHESTRATION_TOOL_ID }}
           change-details: '{"build_number":"","pipeline_name":"maheshganji/custom-action-get/CustomActionGetWorkflow","stage_name":"ServiceNow Change Approval"}' #Working Version
       - name: Output of update
-      run: echo "The Status of Update Change Request Details => ${{ steps.update.outputs.change-request-number }}"
+        run: echo "The Status of Update Change Request Details => ${{ steps.update.outputs.change-request-number }}"
