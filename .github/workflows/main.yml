@@ -5,7 +5,7 @@ on:
 jobs:
   test-get-job-name:
     runs-on: ubuntu-latest
-    name: A Job to Update Change
+    name: A Job to Get Change
     steps:
       # To use this repository's private action,
       # you must check out the repository
