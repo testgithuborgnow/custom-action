@@ -23,7 +23,7 @@ jobs:
   test-get-job-name:
     needs: changeApproval
     runs-on: ubuntu-latest
-    name: A Job to Update Change
+    name: A Job to Get Change Request
     steps:
       # To use this repository's private action,
       # you must check out the repository
