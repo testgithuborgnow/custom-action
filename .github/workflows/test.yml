@@ -23,6 +23,7 @@ jobs:
 
     - name: Compile
       run: npm run build
+      
   GetChangeDetails:
     runs-on: ubuntu-latest
     name: Servicenow Get Change Details
