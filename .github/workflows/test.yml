@@ -13,10 +13,10 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
-    - name: Set Node.js 12.x
+    - name: Set Node.js 14.x
       uses: actions/setup-node@v1
       with:
-        node-version: 12.x
+        node-version: 14.x
 
     - name: Install dependencies
       run: npm ci
@@ -25,7 +25,7 @@ jobs:
       run: npm run build
       
   GetChangeDetails:
-  #  needs: build
+    needs: build
     runs-on: ubuntu-latest
     name: Servicenow Get Change Details
 
@@ -37,8 +37,7 @@ jobs:
         id: get
         with:
           devops-integration-user-name: ${{ secrets.SN_DEVOPS_USER }}
-          devops-integration-user-password: 
-          # ${{ secrets.SN_DEVOPS_PASSWORD }}
+          devops-integration-user-password: ${{ secrets.SN_DEVOPS_PASSWORD }}
           instance-url: ${{ secrets.SN_INSTANCE_URL }}
           context-github: ${{ toJSON(github) }}
           tool-id: ${{ secrets.SN_ORCHESTRATION_TOOL_ID }}
