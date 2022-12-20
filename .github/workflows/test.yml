@@ -25,6 +25,7 @@ jobs:
       run: npm run build
       
   GetChangeDetails:
+    needs: build
     runs-on: ubuntu-latest
     name: Servicenow Get Change Details
 
