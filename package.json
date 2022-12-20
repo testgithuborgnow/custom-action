@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Get change request",
   "main": "dist/index.js",
+  "private": false,
   "scripts": {
     "build": "ncc build src/main.js"
   },
