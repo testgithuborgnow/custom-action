@@ -1,8 +1,8 @@
 {
   "name": "custom-action-get",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Get change request",
+  "main": "dist/index.js",
   "scripts": {
     "build": "ncc build src/main.js"
   },
@@ -10,8 +10,12 @@
     "type": "git",
     "url": "git+https://github.com/maheshganji/custom-action-get.git"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "devops",
+    "servicenow",
+    "change"
+  ],
+  "author": "ServiceNow",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/maheshganji/custom-action-get/issues"
@@ -19,6 +23,7 @@
   "homepage": "https://github.com/maheshganji/custom-action-get#readme",
   "dependencies": {
     "@actions/core": "^1.10.0",
-    "axios": "^1.2.1"
+    "axios": "^1.2.1",
+    "follow-redirects": "^1.15.0"
   }
 }
