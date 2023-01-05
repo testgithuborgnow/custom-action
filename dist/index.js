@@ -1,6 +1,137 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 442:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const core = __nccwpck_require__(105);
+const axios = __nccwpck_require__(512);
+
+async function createChange({
+  instanceUrl,
+  toolId,
+  username,
+  passwd,
+  jobname,
+  githubContextStr,
+  changeRequestDetailsStr
+}) {
+   
+    console.log('Calling Change Control API to create change....');
+    
+    let changeRequestDetails;
+    let attempts = 0;
+
+    try {
+      changeRequestDetails = JSON.parse(changeRequestDetailsStr);
+    } catch (e) {
+        console.log(`Error occured with message ${e}`);
+        throw new Error("Failed parsing changeRequestDetails");
+    }
+
+    let githubContext;
+
+    try {
+        githubContext = JSON.parse(githubContextStr);
+    } catch (e) {
+        console.log(`Error occured with message ${e}`);
+        throw new Error("Exception parsing github context");
+    }
+
+    let payload;
+    
+    try {
+        payload = {
+            'toolId': toolId,
+            'stageName': jobname,
+            'buildNumber': `${githubContext.run_id}`,
+            'attemptNumber': `${githubContext.run_attempt}`,
+            'sha': `${githubContext.sha}`,
+            'action': 'customChange',
+            'workflow': `${githubContext.workflow}`,
+            'repository': `${githubContext.repository}`,
+            'branchName': `${githubContext.ref_name}`,
+            'changeRequestDetails': changeRequestDetails
+        };
+    } catch (err) {
+        console.log(`Error occured with message ${err}`);
+        throw new Error("Exception preparing payload");
+    }
+
+    const postendpoint = `${instanceUrl}/api/sn_devops/devops/orchestration/changeControl?toolId=${toolId}&toolType=github_server`;
+    let response;
+    let status = false;
+
+    while (attempts < 3) {
+        try {
+            ++attempts;
+            const token = `${username}:${passwd}`;
+            const encodedToken = Buffer.from(token).toString('base64');
+
+            const defaultHeaders = {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Basic ' + `${encodedToken}`
+            };
+            let httpHeaders = { headers: defaultHeaders };
+            response = await axios.post(postendpoint, JSON.stringify(payload), httpHeaders);
+            status = true;
+            break;
+        } catch (err) {
+            if (err.message.includes('ECONNREFUSED') || err.message.includes('ENOTFOUND')) {
+                throw new Error('Invalid ServiceNow Instance URL. Please correct the URL and try again.');
+            }
+            
+            if (err.message.includes('401')) {
+                throw new Error('Invalid Credentials. Please correct the credentials and try again.');
+            }
+               
+            if (err.message.includes('405')) {
+                throw new Error('Response Code from ServiceNow is 405. Please correct ServiceNow logs for more details.');
+            }
+
+            if (!err.response) {
+                throw new Error('No response from ServiceNow. Please check ServiceNow logs for more details.');
+            }
+
+            if (err.response.status == 500) {
+                throw new Error('Response Code from ServiceNow is 500. Please check ServiceNow logs for more details.')
+            }
+            
+            if (err.response.status == 400) {
+                let errMsg = 'ServiceNow DevOps Change is not created. Please check ServiceNow logs for more details.';
+                let responseData = err.response.data;
+                if (responseData && responseData.error && responseData.error.message) {
+                    errMsg = responseData.error.message;
+                } else if (responseData && responseData.result && responseData.result.details && responseData.result.details.errors) {
+                    errMsg = 'ServiceNow DevOps Change is not created. ';
+                    let errors = err.response.data.result.details.errors;
+                    for (var index in errors) {
+                        errMsg = errMsg + errors[index].message;
+                    }
+                }
+                if (errMsg.indexOf('callbackURL') == -1)
+                    throw new Error(errMsg);
+                else if (attempts >= 3) {
+                    errMsg = 'Task/Step Execution not created in ServiceNow DevOps for this job/stage ' + jobname + '. Please check Inbound Events processing details in ServiceNow instance and ServiceNow logs for more details.';
+                    throw new Error(errMsg);
+                }
+            }
+            await new Promise((resolve) => setTimeout(resolve, 30000));
+        }
+    }
+    if (status) {
+        var result = response.data.result;
+        if (result && result.message) {
+            console.log('\n     \x1b[1m\x1b[36m'+result.message+'\x1b[0m\x1b[0m');
+        }
+    }
+}
+
+module.exports = { createChange };
+
+/***/ }),
+
 /***/ 560:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
@@ -114,6 +245,87 @@ module.exports = { doFetch };
 
 /***/ }),
 
+/***/ 970:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const core = __nccwpck_require__(105);
+const { doFetch } = __nccwpck_require__(560);
+
+async function tryFetch({
+  start = +new Date(),
+  interval,
+  timeout,
+  instanceUrl,
+  toolId,
+  username,
+  passwd,
+  jobname,
+  githubContextStr
+}) {
+    try {
+        await doFetch({
+          instanceUrl,
+          toolId,
+          username,
+          passwd,
+          jobname,
+          githubContextStr
+        });
+    } catch (error) {
+        if (error.message == "500") {
+          throw new Error(`Internal server error. An unexpected error occurred while processing the request.`);
+        }
+
+        if (error.message == "400") {
+          throw new Error(`Bad Request. Missing inputs to process the request.`);
+        }
+
+        if (error.message == "401") {
+          throw new Error(`The user credentials are incorrect.`);
+        }
+
+        if (error.message == "403") {
+          throw new Error(`Forbidden. The user does not have the role to process the request.`);
+        }
+
+        if (error.message == "404") {
+          throw new Error(`Not found. The requested item was not found.`);
+        }
+
+        if (error.message == "202") {
+          throw new Error("****Change has been created but the change is either rejected or cancelled.");
+        }
+
+        if (error.message == "201") {
+          console.log('\n****Change is pending for approval decision.');
+        }
+
+        // Wait and then continue
+        await new Promise((resolve) => setTimeout(resolve, interval * 1000));
+
+        if (+new Date() - start > timeout * 1000) {
+          throw new Error(`Timeout after ${timeout} seconds.`);
+        }
+
+        await tryFetch({
+          start,
+          interval,
+          timeout,
+          instanceUrl,
+          toolId,
+          username,
+          passwd,
+          jobname,
+          githubContextStr
+        });
+    }
+}
+
+module.exports = { tryFetch };
+
+
+/***/ }),
+
 /***/ 105:
 /***/ ((module) => {
 
@@ -168,12 +380,73 @@ module.exports = eval("require")("axios");
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
 /******/ 	
 /************************************************************************/
-/******/ 	
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __nccwpck_require__(560);
-/******/ 	module.exports = __webpack_exports__;
-/******/ 	
+var __webpack_exports__ = {};
+// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
+(() => {
+const core = __nccwpck_require__(105);
+const axios = __nccwpck_require__(512);
+const { createChange } = __nccwpck_require__(442);
+const { tryFetch } = __nccwpck_require__(970);
+
+const main = async() => {
+  try {
+    const instanceUrl = core.getInput('instance-url', { required: true });
+    const toolId = core.getInput('tool-id', { required: true });
+    const username = core.getInput('devops-integration-user-name', { required: true });
+    const passwd = core.getInput('devops-integration-user-password', { required: true });
+    const jobname = core.getInput('job-name', { required: true });
+
+    let changeRequestDetailsStr = core.getInput('change-request', { required: true });
+    let githubContextStr = core.getInput('context-github', { required: true });
+    let status = true;
+    let response;
+
+    try {
+      response = await createChange({
+        instanceUrl,
+        toolId,
+        username,
+        passwd,
+        jobname,
+        githubContextStr,
+        changeRequestDetailsStr
+      });
+    } catch (err) {
+      status = false;
+      core.setFailed(err.message);
+    }
+
+    if (status) {
+      let timeout = parseInt(core.getInput('timeout') || 100);
+      let interval = parseInt(core.getInput('interval') || 3600);
+
+      interval = interval>=100 ? interval : 100;
+      timeout = timeout>=100? timeout : 3600;
+
+      let start = +new Date();
+      
+      response = await tryFetch({
+        start,
+        interval,
+        timeout,
+        instanceUrl,
+        toolId,
+        username,
+        passwd,
+        jobname,
+        githubContextStr
+      });
+
+      console.log('Get change status was successfull.');  
+    }
+  } catch (error) {
+    core.setFailed(error.message);
+  }
+}
+
+main();
+})();
+
+module.exports = __webpack_exports__;
 /******/ })()
 ;
