@@ -6072,8 +6072,8 @@ async function tryFetch({
         await new Promise((resolve) => setTimeout(resolve, interval * 1000));
 
         if (+new Date() - start > timeout * 1000) {
-          if(false)
-            {}
+          if(test.featureFlag)
+            throw new Error(`Timeout after ${timeout} seconds.`);
           
             console.error('time out occur but pipeline will continue');
             return;
@@ -6293,8 +6293,8 @@ const main = async() => {
     }
 
     if (status) {
-      let timeout = parseInt(core.getInput('timeout') || 6);
-      let interval = parseInt(core.getInput('interval') || 2);
+      let timeout = parseInt(core.getInput('timeout') || 400);
+      let interval = parseInt(core.getInput('interval') || 20);
 
       //interval = interval>=100 ? interval : 100;
       //timeout = timeout>=100? timeout : 3600;
