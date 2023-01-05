@@ -1,5 +1,5 @@
-name: 'Custom Action Update'
-description: 'This is a Custom Action to Update the Change Request Details'
+name: 'ServiceNow DevOps Change Automation'
+description: 'Pause/Resume Workflow Run based on ServiceNow Change Approval Status'
 inputs:
   instance-url: 
     description: 'ServiceNow Instance URL'
@@ -13,17 +13,26 @@ inputs:
   tool-id:
     description: 'Orchestration Tool Id'
     required: true
+  job-name:
+    description: 'Display Name of the Job'
+    required: true
   context-github:
     description: 'Github Context'
     required: true
-  change-details:
+  timeout:
+    description: 'The max. time in seconds to wait until the action should fail.'
+    required: false
+    default: '3600'
+  interval:
+    description: 'The time in seconds to wait between trying the API.'
+    required: false
+    default: '100'
+  change-request:
     description: 'The customized inputs to create change with the requested details.'
-    required: true        
-outputs:
-  change-request-number: 
-    description: 'Change Request Number found for the given change details'
-  status: 
-    description: 'To know the status of the Change Request GET call'    
+    required: true
+branding:
+  icon: 'refresh-ccw'
+  color: 'green'    
 runs:
   using: 'node16'
   main: 'dist/index.js'
