@@ -33,7 +33,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Servicenow Get Change Details
-        uses: maheshganji/custom-action-get@master
+        uses: ServiceNow/servicenow-devops-change@main
 
         id: get
         with:
