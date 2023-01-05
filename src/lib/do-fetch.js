@@ -90,7 +90,9 @@ async function doFetch({
 
         if (responseCode == 201) {
           if (changeState == "pending_decision") {
-            throw new Error("201");
+
+            var changePending = JSON.stringify({"responseCode":"201","changeStatus":details});
+            throw new Error(changePending);
           } else
             throw new Error("202");
         }

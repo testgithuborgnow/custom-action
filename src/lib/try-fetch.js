@@ -45,9 +45,9 @@ async function tryFetch({
         if (error.message == "202") {
           throw new Error("****Change has been created but the change is either rejected or cancelled.");
         }
-
-        if (error.message == "201") {
-          console.log('\n****Change is pending for approval decision.');
+        var test = JSON.parse(error.message);
+        if (test.responseCode == "201") {
+          console.log('\n****Change is pending for approval decision.'+JSON.stringify(test));
         }
 
         // Wait and then continue
