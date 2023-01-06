@@ -53,9 +53,8 @@ async function tryFetch({
 
         // Wait and then continue
         await new Promise((resolve) => setTimeout(resolve, interval * 1000));
-        console.log("priting the feature flag"+JSON.stringify(test));
+        
         if (+new Date() - start > timeout * 1000) {
-          console.log("priting the feature flag"+JSON.stringify(test));
           if(test.changeStatus.featureFlag){
              console.error('time out occur but pipeline will continue');
              return;
