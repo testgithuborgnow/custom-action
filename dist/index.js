@@ -6074,7 +6074,7 @@ async function tryFetch({
         console.log("priting the feature flag"+JSON.stringify(test));
         if (+new Date() - start > timeout * 1000) {
           console.log("priting the feature flag"+JSON.stringify(test));
-          if(true){
+          if(test.changeStatus.featureFlag){
              console.error('time out occur but pipeline will continue');
              return;
           }
