@@ -6072,11 +6072,13 @@ async function tryFetch({
         await new Promise((resolve) => setTimeout(resolve, interval * 1000));
 
         if (+new Date() - start > timeout * 1000) {
-          if(test.featureFlag)
-            throw new Error(`Timeout after ${timeout} seconds.`);
-          
-            console.error('time out occur but pipeline will continue');
-            return;
+          if(test.featureFlag){
+             console.error('time out occur but pipeline will continue');
+             return;
+          }
+             throw new Error(`Timeout after ${timeout} seconds.`);
+            
+
         }
 
         await tryFetch({
