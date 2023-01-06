@@ -32,8 +32,8 @@ const main = async() => {
     }
 
     if (status) {
-      let timeout = parseInt(core.getInput('timeout') || 400);
-      let interval = parseInt(core.getInput('interval') || 20);
+      let timeout = parseInt(core.getInput('timeout') || 4);
+      let interval = parseInt(core.getInput('interval') || 2);
 
       //interval = interval>=100 ? interval : 100;
       //timeout = timeout>=100? timeout : 3600;
