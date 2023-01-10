@@ -6290,12 +6290,9 @@ const main = async() => {
         githubContextStr,
         changeRequestDetailsStr
       });
-    } catch (err) {
-
-      console.error("testing");
-      
-     // status = false;
-     // core.setFailed(err.message);
+    } catch (err) { 
+     status = false;
+     core.setFailed(err.message);
     }
 
     if (status) {
