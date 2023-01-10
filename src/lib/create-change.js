@@ -117,7 +117,7 @@ async function createChange({
     if (status) {
         var result = response.data.result;
         if (result && result.message) {
-            console.log('\n     \x1b[1m\x1b[36m'+result.message+'\x1b[0m\x1b[0m');
+            console.log('\n     \x1b[1m\x1b[36m'+result.message+'testing the message'+'\x1b[0m\x1b[0m');
         }
     }
 }
