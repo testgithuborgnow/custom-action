@@ -32,13 +32,13 @@ const main = async() => {
     }
 
     if (status) {
-      let timeout = parseInt(core.getInput('timeout') || 4);
-      let interval = parseInt(core.getInput('interval') || 2);
+      let timeout = parseInt(core.getInput('timeout') || 3600);
+      let interval = parseInt(core.getInput('interval') || 100);
 
       //interval = interval>=100 ? interval : 100;
       //timeout = timeout>=100? timeout : 3600;
-      interval = 2;
-      timeout = 6;
+     // interval = 2;
+      //timeout = 6;
 
       let start = +new Date();
       
