@@ -52,7 +52,9 @@ async function tryFetch({
         }
 
         // Wait and then continue
-        await new Promise((resolve) => setTimeout(resolve, interval * 1000));
+       // await new Promise((resolve) => setTimeout(resolve, interval * 1000));
+        await new Promise((resolve) => setTimeout(resolve, 1 * 10));
+        console.log('testing1');
         
         if (+new Date() - start > timeout * 1000) {
           if(test.changeStatus.featureFlag){
