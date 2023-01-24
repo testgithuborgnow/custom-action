@@ -5772,7 +5772,7 @@ exports["default"] = _default;
 
 const core = __nccwpck_require__(2186);
 const axios = __nccwpck_require__(6545);
-async function changeStep(        toolId,
+ async function changeStep( toolId,
     username,
     passwd,
     jobname,
@@ -5788,7 +5788,7 @@ async function changeStep(        toolId,
     console.log("I'm httpheaders point"+ httpHeaders);
     console.log("im pay laod "+payload);
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject ) => {
         console.log('Calling Change Control API to create change....');
 
         let changeRequestDetails;
@@ -5830,7 +5830,7 @@ async function changeStep(        toolId,
             throw new Error("Exception preparing payload");
         }
     
-        const postendpoint = `${instanceUrl}/api/sn_devops/devops/orchestration/changeControl?toolId=${toolId}&toolType=github_server`;
+        let postendpoint = `${instanceUrl}/api/sn_devops/devops/orchestration/changeControl?toolId=${toolId}&toolType=github_server`;
         let response;
         let status = false;
         const token = `${username}:${passwd}`;
@@ -5848,7 +5848,7 @@ async function changeStep(        toolId,
         console.log("we httpheaders point"+ httpHeaders);
         console.log("we pay laod "+payload);
 
-        axios.post(postendpoint, payload, httpHeaders)
+           axios.post(postendpoint, payload, httpHeaders)
             .then(response => {
                 // process the response
                 console.log(JSON.stringify(response));
@@ -5860,7 +5860,15 @@ async function changeStep(        toolId,
                 if (retryCount < 1) {
                     retryCount++;
                     console.log("Retrying API call: ", retryCount);
-                    setTimeout(() => changeStep(), 3000);
+                    setTimeout(() => changeStep(toolId,
+                        username,
+                        passwd,
+                        jobname,
+                        githubContextStr,
+                        changeRequestDetailsStr,
+                        changeCreationTimeOut,
+                        abortOnChangeCreationFailure
+                        ), 3000);
                 } else {
                     console.log("Retry limit reached, stopping API call");
                     clearTimeout(overallTimerId);
@@ -6470,33 +6478,7 @@ const main = async() => {
      core.setFailed(err.message);
     }
     
-    if (status) {
-      let timeout = parseInt(core.getInput('timeout') || 3600);
-      let interval = parseInt(core.getInput('interval') || 100);
-      let changeFlag = core.getInput('changeFlag');
-      changeFlag = changeFlag === undefined || changeFlag === "" ? true : (changeFlag == "true");
-      
-     
-      interval = 2;
-      timeout = 10;
-
-      let start = +new Date();
-      
-      response = await tryFetch({
-        start,
-        interval,
-        timeout,
-        instanceUrl,
-        toolId,
-        username,
-        passwd,
-        jobname,
-        githubContextStr,
-        changeFlag
-      });
-
-      console.log('Get change status was successfull.');  
-    }
+    if (false) {}
   } catch (error) {
     core.setFailed(error.message);
   }

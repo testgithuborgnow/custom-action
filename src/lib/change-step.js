@@ -1,6 +1,6 @@
 const core = require('@actions/core');
 const axios = require('axios');
- function changeStep( toolId,
+ async function changeStep( toolId,
     username,
     passwd,
     jobname,
@@ -58,7 +58,7 @@ const axios = require('axios');
             throw new Error("Exception preparing payload");
         }
     
-        const postendpoint = `${instanceUrl}/api/sn_devops/devops/orchestration/changeControl?toolId=${toolId}&toolType=github_server`;
+        let postendpoint = `${instanceUrl}/api/sn_devops/devops/orchestration/changeControl?toolId=${toolId}&toolType=github_server`;
         let response;
         let status = false;
         const token = `${username}:${passwd}`;
@@ -76,7 +76,7 @@ const axios = require('axios');
         console.log("we httpheaders point"+ httpHeaders);
         console.log("we pay laod "+payload);
 
-          axios.post(postendpoint, payload, httpHeaders)
+           axios.post(postendpoint, payload, httpHeaders)
             .then(response => {
                 // process the response
                 console.log(JSON.stringify(response));

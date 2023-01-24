@@ -39,7 +39,7 @@ const main = async() => {
      core.setFailed(err.message);
     }
     
-    if (status) {
+    if (false) {
       let timeout = parseInt(core.getInput('timeout') || 3600);
       let interval = parseInt(core.getInput('interval') || 100);
       let changeFlag = core.getInput('changeFlag');
