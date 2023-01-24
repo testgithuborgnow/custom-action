@@ -6316,7 +6316,7 @@ const main = async() => {
     }
 
     if(true){
-      console.log("i'm executing with ");
+      console.error("i'm executing with you");
       return;
     }
     
