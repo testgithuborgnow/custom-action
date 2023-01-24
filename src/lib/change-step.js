@@ -14,18 +14,18 @@ async function changeStep({
     abortOnChangeCreationFailure
 }) {
 
-    //    let timeoutId = setTimeout(() => {
-    //         if(result && result.message)
-    //              console.log('im printing result'+ result.message);
-    //         else if (false){ 
-    //             throw new Error(`Change creation timeout after ${timeout} seconds.`);;
-    //         }
-    //         else{
-    //             console.log('timeoutOccur');
-    //             clearTimeout(timeoutId);
-    //            return ;
-    //         }
-    //        }, changeCreationTimeOut * 1);
+       let timeoutId = setTimeout(() => {
+            if(result && result.message)
+                 console.log('im printing result'+ result.message);
+            else if (false){ 
+                throw new Error(`Change creation timeout after ${timeout} seconds.`);;
+            }
+            else{
+                console.log('timeoutOccur');
+                clearTimeout(timeoutId);
+               return ;
+            }
+           }, changeCreationTimeOut * 1);
 
     try {
         await createChange({
