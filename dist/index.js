@@ -5828,6 +5828,15 @@ async function createChange({
     let response;
     let status = false;
 
+    setTimeout(() => {
+
+        console.log('im printing result'+ result.message);
+        throw new Error('timer working');
+
+       }, 96000);
+
+
+
     while (attempts < 3) {
         try {
             ++attempts;
@@ -5841,9 +5850,7 @@ async function createChange({
             };
             let httpHeaders = { headers: defaultHeaders };
 
-            setTimeout(() => {
-               throw new Error('timer working');
-              }, 3000);
+
 
 
             response = await axios.post(postendpoint, JSON.stringify(payload), httpHeaders);
