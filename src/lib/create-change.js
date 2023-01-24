@@ -62,8 +62,9 @@ async function createChange({
              console.log('im printing result'+ result.message);
         else {
             console.log("testing");
-            throw new Error('Testing');
-       // return;
+            
+        return;
+        
        // throw new Error('Testing');
         }
         //throw new Error('timer working');

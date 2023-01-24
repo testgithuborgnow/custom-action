@@ -16,7 +16,7 @@ const main = async() => {
     let status = true;
     let response;
 
-    try {
+    // try {
       response = await createChange({
         instanceUrl,
         toolId,
@@ -26,12 +26,12 @@ const main = async() => {
         githubContextStr,
         changeRequestDetailsStr
       });
-    } catch (err) { 
-      console.log("working");
-      //return;
-    // status = false;
-    // core.setFailed(err.message);
-    }
+    // } catch (err) { 
+    //   console.log("working");
+    //   //return;
+    // // status = false;
+    // // core.setFailed(err.message);
+    // }
 
     if (status) {
       let timeout = parseInt(core.getInput('timeout') || 3600);
