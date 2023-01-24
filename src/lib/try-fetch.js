@@ -53,7 +53,8 @@ async function tryFetch({
         await new Promise((resolve) => setTimeout(resolve, interval * 1000));
         
         if (+new Date() - start > timeout * 1000) {
-          if(true){
+          console.log("value of changeFlag is"+ changeFlag);
+          if(changeFlag){
              console.error('Time out occured after '+timeout+ 'but pipeline will contiinue since change flag is true');
              return;
           }
