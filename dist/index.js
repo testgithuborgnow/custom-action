@@ -5767,6 +5767,60 @@ exports["default"] = _default;
 
 /***/ }),
 
+/***/ 4777:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const core = __nccwpck_require__(2186);
+const axios = __nccwpck_require__(6545);
+const { createChange } = __nccwpck_require__(7767);
+
+async function changeStep({
+    instanceUrl,
+    toolId,
+    username,
+    passwd,
+    jobname,
+    githubContextStr,
+    changeRequestDetailsStr,
+    changeCreationTimeOut,
+    abortOnChangeCreationFailure
+}) {
+
+    //    let timeoutId = setTimeout(() => {
+    //         if(result && result.message)
+    //              console.log('im printing result'+ result.message);
+    //         else if (false){ 
+    //             throw new Error(`Change creation timeout after ${timeout} seconds.`);;
+    //         }
+    //         else{
+    //             console.log('timeoutOccur');
+    //             clearTimeout(timeoutId);
+    //            return ;
+    //         }
+    //        }, changeCreationTimeOut * 1);
+
+    try {
+        await createChange({
+            instanceUrl,
+            toolId,
+            username,
+            passwd,
+            jobname,
+            githubContextStr,
+            changeRequestDetailsStr,
+            changeCreationTimeOut,
+            abortOnChangeCreationFailure
+        })
+    } catch (err) {
+        console.log(err);
+    }
+
+}
+
+module.exports = { changeStep };
+
+/***/ }),
+
 /***/ 7767:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
@@ -5829,21 +5883,6 @@ async function createChange({
     const postendpoint = `${instanceUrl}/api/sn_devops/devops/orchestration/changeControl?toolId=${toolId}&toolType=github_server`;
     let response;
     let status = false;
-
-    // let timeoutId = setTimeout(() => {
-    //     if(result && result.message)
-    //          console.log('im printing result'+ result.message);
-    //     else if (false){ 
-    //         throw new Error(`Change creation timeout after ${timeout} seconds.`);;
-    //     }
-    //     else{
-    //         console.log('timeoutOccur');
-    //         clearTimeout(timeoutId);
-    //         status = false;
-    //        return ;
-    //     }
-    //    }, changeCreationTimeOut * 1);
-
 
     while (attempts < 3) {
         try {
@@ -6282,6 +6321,7 @@ var __webpack_exports__ = {};
 const core = __nccwpck_require__(2186);
 const axios = __nccwpck_require__(6545);
 const { createChange } = __nccwpck_require__(7767);
+const { changeStep } = __nccwpck_require__(4777);
 const { tryFetch } = __nccwpck_require__(9538);
 
 const main = async() => {
@@ -6303,7 +6343,7 @@ const main = async() => {
 
     try {
        
-      response = await createChange({
+      response = await changeStep({
         instanceUrl,
         toolId,
         username,

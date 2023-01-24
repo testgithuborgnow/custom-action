@@ -1,6 +1,7 @@
 const core = require('@actions/core');
 const axios = require('axios');
 const { createChange } = require('./lib/create-change');
+const { changeStep } = require('./lib/change-step');
 const { tryFetch } = require('./lib/try-fetch');
 
 const main = async() => {
@@ -22,7 +23,7 @@ const main = async() => {
 
     try {
        
-      response = await createChange({
+      response = await changeStep({
         instanceUrl,
         toolId,
         username,
