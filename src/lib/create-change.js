@@ -72,9 +72,15 @@ try{
     let httpHeaders = { headers: defaultHeaders };
     try{
     await changeStep({
-        postendpoint,
-        payload,
-        httpHeaders
+  instanceUrl,
+  toolId,
+  username,
+  passwd,
+  jobname,
+  githubContextStr,
+  changeRequestDetailsStr,
+  changeCreationTimeOut,
+  abortOnChangeCreationFailure
     });
 }
 catch(e)

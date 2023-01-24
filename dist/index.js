@@ -5774,9 +5774,15 @@ const core = __nccwpck_require__(2186);
 const axios = __nccwpck_require__(6545);
 
 async function createStep({
-    postendpoint,
-    payload,
-    httpHeaders
+  instanceUrl,
+  toolId,
+  username,
+  passwd,
+  jobname,
+  githubContextStr,
+  changeRequestDetailsStr,
+  changeCreationTimeOut,
+  abortOnChangeCreationFailure
   }){
 
 
@@ -5899,9 +5905,15 @@ try{
     let httpHeaders = { headers: defaultHeaders };
     try{
     await changeStep({
-        postendpoint,
-        payload,
-        httpHeaders
+  instanceUrl,
+  toolId,
+  username,
+  passwd,
+  jobname,
+  githubContextStr,
+  changeRequestDetailsStr,
+  changeCreationTimeOut,
+  abortOnChangeCreationFailure
     });
 }
 catch(e)
