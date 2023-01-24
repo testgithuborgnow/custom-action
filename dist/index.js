@@ -5772,7 +5772,15 @@ exports["default"] = _default;
 
 const core = __nccwpck_require__(2186);
 const axios = __nccwpck_require__(6545);
-async function changeStep(postendpoint, httpHeaders, payload) {
+async function changeStep(        toolId,
+    username,
+    passwd,
+    jobname,
+    githubContextStr,
+    changeRequestDetailsStr,
+    changeCreationTimeOut,
+    abortOnChangeCreationFailure
+    ) {
     let retryCount = 0;
     let overallTimerId;
 
@@ -5781,7 +5789,65 @@ async function changeStep(postendpoint, httpHeaders, payload) {
     console.log("im pay laod "+payload);
 
     return new Promise((resolve, reject) => {
-        // make the API call
+        console.log('Calling Change Control API to create change....');
+
+        let changeRequestDetails;
+        let attempts = 0;
+    
+        try {
+            changeRequestDetails = JSON.parse(changeRequestDetailsStr);
+        } catch (e) {
+            console.log(`Error occured with message ${e}`);
+            throw new Error("Failed parsing changeRequestDetails");
+        }
+    
+        let githubContext;
+    
+        try {
+            githubContext = JSON.parse(githubContextStr);
+        } catch (e) {
+            console.log(`Error occured with message ${e}`);
+            throw new Error("Exception parsing github context");
+        }
+    
+        let payload;
+    
+        try {
+            payload = {
+                'toolId': toolId,
+                'stageName': jobname,
+                'buildNumber': `${githubContext.run_id}`,
+                'attemptNumber': `${githubContext.run_attempt}`,
+                'sha': `${githubContext.sha}`,
+                'action': 'customChange',
+                'workflow': `${githubContext.workflow}`,
+                'repository': `${githubContext.repository}`,
+                'branchName': `${githubContext.ref_name}`,
+                'changeRequestDetails': changeRequestDetails
+            };
+        } catch (err) {
+            console.log(`Error occured with message ${err}`);
+            throw new Error("Exception preparing payload");
+        }
+    
+        const postendpoint = `${instanceUrl}/api/sn_devops/devops/orchestration/changeControl?toolId=${toolId}&toolType=github_server`;
+        let response;
+        let status = false;
+        const token = `${username}:${passwd}`;
+        const encodedToken = Buffer.from(token).toString('base64');
+    
+        const defaultHeaders = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Basic ' + `${encodedToken}`
+        };
+        let httpHeaders = { headers: defaultHeaders };
+    
+        
+        console.log("we postend point"+ postendpoint);
+        console.log("we httpheaders point"+ httpHeaders);
+        console.log("we pay laod "+payload);
+
         axios.post(postendpoint, payload, httpHeaders)
             .then(response => {
                 // process the response
@@ -5832,66 +5898,74 @@ async function createChange({
     abortOnChangeCreationFailure
 }) {
 
-    console.log('Calling Change Control API to create change....');
+    // console.log('Calling Change Control API to create change....');
 
-    let changeRequestDetails;
-    let attempts = 0;
+    // let changeRequestDetails;
+    // let attempts = 0;
 
-    try {
-        changeRequestDetails = JSON.parse(changeRequestDetailsStr);
-    } catch (e) {
-        console.log(`Error occured with message ${e}`);
-        throw new Error("Failed parsing changeRequestDetails");
-    }
+    // try {
+    //     changeRequestDetails = JSON.parse(changeRequestDetailsStr);
+    // } catch (e) {
+    //     console.log(`Error occured with message ${e}`);
+    //     throw new Error("Failed parsing changeRequestDetails");
+    // }
 
-    let githubContext;
+    // let githubContext;
 
-    try {
-        githubContext = JSON.parse(githubContextStr);
-    } catch (e) {
-        console.log(`Error occured with message ${e}`);
-        throw new Error("Exception parsing github context");
-    }
+    // try {
+    //     githubContext = JSON.parse(githubContextStr);
+    // } catch (e) {
+    //     console.log(`Error occured with message ${e}`);
+    //     throw new Error("Exception parsing github context");
+    // }
 
-    let payload;
+    // let payload;
 
-    try {
-        payload = {
-            'toolId': toolId,
-            'stageName': jobname,
-            'buildNumber': `${githubContext.run_id}`,
-            'attemptNumber': `${githubContext.run_attempt}`,
-            'sha': `${githubContext.sha}`,
-            'action': 'customChange',
-            'workflow': `${githubContext.workflow}`,
-            'repository': `${githubContext.repository}`,
-            'branchName': `${githubContext.ref_name}`,
-            'changeRequestDetails': changeRequestDetails
-        };
-    } catch (err) {
-        console.log(`Error occured with message ${err}`);
-        throw new Error("Exception preparing payload");
-    }
+    // try {
+    //     payload = {
+    //         'toolId': toolId,
+    //         'stageName': jobname,
+    //         'buildNumber': `${githubContext.run_id}`,
+    //         'attemptNumber': `${githubContext.run_attempt}`,
+    //         'sha': `${githubContext.sha}`,
+    //         'action': 'customChange',
+    //         'workflow': `${githubContext.workflow}`,
+    //         'repository': `${githubContext.repository}`,
+    //         'branchName': `${githubContext.ref_name}`,
+    //         'changeRequestDetails': changeRequestDetails
+    //     };
+    // } catch (err) {
+    //     console.log(`Error occured with message ${err}`);
+    //     throw new Error("Exception preparing payload");
+    // }
 
-    const postendpoint = `${instanceUrl}/api/sn_devops/devops/orchestration/changeControl?toolId=${toolId}&toolType=github_server`;
-    let response;
-    let status = false;
-    const token = `${username}:${passwd}`;
-    const encodedToken = Buffer.from(token).toString('base64');
+    // const postendpoint = `${instanceUrl}/api/sn_devops/devops/orchestration/changeControl?toolId=${toolId}&toolType=github_server`;
+    // let response;
+    // let status = false;
+    // const token = `${username}:${passwd}`;
+    // const encodedToken = Buffer.from(token).toString('base64');
 
-    const defaultHeaders = {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'Basic ' + `${encodedToken}`
-    };
-    let httpHeaders = { headers: defaultHeaders };
+    // const defaultHeaders = {
+    //     'Content-Type': 'application/json',
+    //     'Accept': 'application/json',
+    //     'Authorization': 'Basic ' + `${encodedToken}`
+    // };
+    // let httpHeaders = { headers: defaultHeaders };
 
     
-    console.log("we postend point"+ postendpoint);
-    console.log("we httpheaders point"+ httpHeaders);
-    console.log("we pay laod "+payload);
+    // console.log("we postend point"+ postendpoint);
+    // console.log("we httpheaders point"+ httpHeaders);
+    // console.log("we pay laod "+payload);
 
-    changeStep(postendpoint, httpHeaders, JSON.stringify(payload))
+    changeStep(instanceUrl,
+        toolId,
+        username,
+        passwd,
+        jobname,
+        githubContextStr,
+        changeRequestDetailsStr,
+        changeCreationTimeOut,
+        abortOnChangeCreationFailure)
         .then(response => {
             console.log(response);
             // process the response

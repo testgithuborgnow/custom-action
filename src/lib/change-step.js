@@ -1,6 +1,6 @@
 const core = require('@actions/core');
 const axios = require('axios');
-async function changeStep(        toolId,
+ function changeStep( toolId,
     username,
     passwd,
     jobname,
@@ -16,7 +16,7 @@ async function changeStep(        toolId,
     console.log("I'm httpheaders point"+ httpHeaders);
     console.log("im pay laod "+payload);
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject ) => {
         console.log('Calling Change Control API to create change....');
 
         let changeRequestDetails;
@@ -76,7 +76,7 @@ async function changeStep(        toolId,
         console.log("we httpheaders point"+ httpHeaders);
         console.log("we pay laod "+payload);
 
-        axios.post(postendpoint, payload, httpHeaders)
+          axios.post(postendpoint, payload, httpHeaders)
             .then(response => {
                 // process the response
                 console.log(JSON.stringify(response));
@@ -88,7 +88,15 @@ async function changeStep(        toolId,
                 if (retryCount < 1) {
                     retryCount++;
                     console.log("Retrying API call: ", retryCount);
-                    setTimeout(() => changeStep(), 3000);
+                    setTimeout(() => changeStep(toolId,
+                        username,
+                        passwd,
+                        jobname,
+                        githubContextStr,
+                        changeRequestDetailsStr,
+                        changeCreationTimeOut,
+                        abortOnChangeCreationFailure
+                        ), 3000);
                 } else {
                     console.log("Retry limit reached, stopping API call");
                     clearTimeout(overallTimerId);
