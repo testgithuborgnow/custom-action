@@ -1,6 +1,5 @@
 const core = require('@actions/core');
 const axios = require('axios');
-const fetch = require('node-fetch');
 
 async function createStep({
     postendpoint,
