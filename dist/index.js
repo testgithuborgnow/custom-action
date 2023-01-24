@@ -5830,10 +5830,10 @@ async function createChange({
 
     setTimeout(() => {
 
-        console.log('im printing result'+ result.message);
-        throw new Error('timer working');
+        console.log('im printing result'+ result);
+        //throw new Error('timer working');
 
-       }, 16000);
+       }, 96000);
 
 
 
@@ -5897,10 +5897,11 @@ async function createChange({
     }
     if (status) {
         var result = response.data.result;
-        await sleep(20000);
+        
         if (result && result.message) {
             console.log('\n     \x1b[1m\x1b[36m'+result.message+'testing the message'+'\x1b[0m\x1b[0m');
         }
+       // await sleep(96000);
     }
 }
 
