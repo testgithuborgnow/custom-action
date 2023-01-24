@@ -1,6 +1,6 @@
 const core = require('@actions/core');
 const axios = require('axios');
-const { changeStep } = require('./change-step');
+const { createStep } = require('./change-step');
 
 async function createChange({
   instanceUrl,
@@ -71,16 +71,12 @@ try{
 
     let httpHeaders = { headers: defaultHeaders };
     try{
-    await changeStep({
-  instanceUrl,
-  toolId,
-  username,
-  passwd,
-  jobname,
-  githubContextStr,
-  changeRequestDetailsStr,
-  changeCreationTimeOut,
-  abortOnChangeCreationFailure
+    await createStep({
+        postendpoint,
+        httpHeaders,
+        payload,
+        changeCreationTimeOut,
+        abortOnChangeCreationFailure
     });
 }
 catch(e)
