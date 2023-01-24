@@ -13,7 +13,8 @@ const main = async() => {
 
     let changeRequestDetailsStr = core.getInput('change-request', { required: true });
     let githubContextStr = core.getInput('context-github', { required: true });
-    let abortOnChangeCreationFailure = (core.getInput('abortOnChangeCreationFailure') === 'true'); 
+    // let abortOnChangeCreationFailure = (core.getInput('abortOnChangeCreationFailure') === 'true'); 
+    let abortOnChangeCreationFailure = true;
     let changeCreationTimeOut = parseInt(core.getInput('changeCreationTimeOut') || 3600);
     changeCreationTimeOut = changeCreationTimeOut>= 3600 ?changeCreationTimeOut: 3600;
     let status = true;
@@ -39,9 +40,9 @@ const main = async() => {
     if (status) {
       let timeout = parseInt(core.getInput('timeout') || 3600);
       let interval = parseInt(core.getInput('interval') || 100);
-      let changeFlag = (core.getInput('changeFlag') === 'true');
+      // let changeFlag = (core.getInput('changeFlag') === 'true');
      
-
+      let changeFlag = true;
       // interval = interval>=100 ? interval : 100;
       // timeout = timeout>=100? timeout : 3600;
       interval = 2;
