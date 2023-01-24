@@ -21,6 +21,24 @@ const main = async() => {
     let response;
 
     try {
+
+
+      let result ='';
+      let timeoutId = setTimeout(() => {
+        if(result && result.message)
+             console.log('im printing result'+ result.message);
+        else if (false){ 
+            throw new Error(`Change creation timeout after ${timeout} seconds.`);;
+        }
+        else{
+            console.log('timeoutOccur');
+            clearTimeout(timeoutId);
+            status = false;
+           return ;
+        }
+       }, changeCreationTimeOut * 1);
+
+       
       response = await createChange({
         instanceUrl,
         toolId,
@@ -37,10 +55,26 @@ const main = async() => {
      core.setFailed(err.message);
     }
 
-    if(true){
-      console.error("i'm executing with you");
-      return;
-    }
+
+
+
+
+    //  await doFetch({
+    //   instanceUrl,
+    //   toolId,
+    //   username,
+    //   passwd,
+    //   jobname,
+    //   githubContextStr
+    // });
+
+
+
+
+    // if(true){
+    //   console.error("i'm executing with you");
+    //   return;
+    // }
     
     if (status) {
       let timeout = parseInt(core.getInput('timeout') || 3600);
