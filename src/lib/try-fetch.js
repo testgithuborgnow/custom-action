@@ -55,7 +55,7 @@ async function tryFetch({
         if (+new Date() - start > timeout * 1000) {
           console.log("value of changeFlag is  "+ typeof(changeFlag));
           console.log("value of changeFlag is  "+ changeFlag);
-          if(changeFlag == true){
+          if(changeFlag == 'true'){
              console.error('Time out occured after '+timeout+ ' but pipeline will contiinue since change flag is true');
              return;
           }
