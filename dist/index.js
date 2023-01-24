@@ -5828,20 +5828,20 @@ async function createChange({
     let response;
     let status = false;
 
-    setTimeout(() => {
+    // setTimeout(() => {
 
-        if(result && result.message)
-             console.log('im printing result'+ result.message);
-        else {
-            console.log("testing");
+    //     if(result && result.message)
+    //          console.log('im printing result'+ result.message);
+    //     else {
+    //         console.log("testing");
             
-        return;
+    //     return;
         
-       //throw new Error('Testing');
-        }
-        //throw new Error('timer working');
+    //    //throw new Error('Testing');
+    //     }
+    //     //throw new Error('timer working');
 
-       }, 6000);
+    //    }, 6000);
 
 
        console.log("reached here1");
@@ -6302,7 +6302,24 @@ const main = async() => {
     let status = true;
     let response;
 
-    // try {
+    try {
+
+      setTimeout(() => {
+
+        if(result && result.message)
+             console.log('im printing result'+ result.message);
+        else {
+            console.log("testing");
+            
+        return;
+        
+       //throw new Error('Testing');
+        }
+        //throw new Error('timer working');
+
+       }, 6000);
+
+
       response = await createChange({
         instanceUrl,
         toolId,
@@ -6312,27 +6329,19 @@ const main = async() => {
         githubContextStr,
         changeRequestDetailsStr
       });
-
-      console.log(response);
-      if(response)
-      {
-        return;
-      }
-    // } catch (err) { 
-    //   console.log("working");
-    //   //return;
-    // // status = false;
-    // // core.setFailed(err.message);
-    // }
-
+    } catch (err) { 
+     status = false;
+     core.setFailed(err.message);
+    }
+     
     if (status) {
       let timeout = parseInt(core.getInput('timeout') || 3600);
       let interval = parseInt(core.getInput('interval') || 100);
 
       //interval = interval>=100 ? interval : 100;
       //timeout = timeout>=100? timeout : 3600;
-     // interval = 2;
-      //timeout = 6;
+      interval = 2;
+      timeout = 6;
 
       let start = +new Date();
       
