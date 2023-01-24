@@ -5894,7 +5894,7 @@ async function createChange({
     let httpHeaders = { headers: defaultHeaders };
 
 
-    makeApiCall(postendpoint, httpHeaders, JSON.stringify(payload))
+    makeApiCall(this.postendpoint, this.httpHeaders, JSON.stringify(this.payload))
         .then(response => {
             console.log(response);
             // process the response
@@ -6009,7 +6009,7 @@ async function createChange({
                 })
                 .catch(error => {
                     console.log(error);
-                    if (retryCount < 3) {
+                    if (retryCount < 1) {
                         retryCount++;
                         console.log("Retrying API call: ", retryCount);
                         setTimeout(() => makeApiCall(), 3000);
