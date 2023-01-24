@@ -5907,7 +5907,7 @@ async function createChange({
         var result = response.data.result;
         
         if (result && result.message) {
-            clearTimeout(timeoutId);
+            //clearTimeout(timeoutId);
             console.log('\n     \x1b[1m\x1b[36m'+result.message+'testing the message'+'\x1b[0m\x1b[0m');
         }
        // await sleep(96000);
