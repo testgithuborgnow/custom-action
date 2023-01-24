@@ -28,7 +28,7 @@ const main = async() => {
       });
     } catch (err) { 
       console.log("working");
-      return;
+      //return;
     // status = false;
     // core.setFailed(err.message);
     }
