@@ -1,6 +1,7 @@
 const core = require('@actions/core');
 const axios = require('axios');
  async function changeStep( 
+    instanceUrl,
     toolId,
     username,
     passwd,
@@ -98,7 +99,9 @@ const axios = require('axios');
                 if (retryCount < 1) {
                     retryCount++;
                     console.log("Retrying API call: ", retryCount);
-                    setTimeout(() => changeStep(toolId,
+                    setTimeout(() => changeStep( 
+                        instanceUrl,
+                        toolId,
                         username,
                         passwd,
                         jobname,
