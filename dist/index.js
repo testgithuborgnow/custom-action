@@ -5833,8 +5833,9 @@ async function createChange({
         if(result && result.message)
              console.log('im printing result'+ result.message);
         else {
-        console.error('time out occur but pipeline will continue');
-        return;
+            console.log("testing");
+            throw new Error('Testing');
+       // return;
        // throw new Error('Testing');
         }
         //throw new Error('timer working');
