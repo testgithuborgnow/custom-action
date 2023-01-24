@@ -70,7 +70,8 @@ async function tryFetch({
           username,
           passwd,
           jobname,
-          githubContextStr
+          githubContextStr,
+          changeFlag
         });
     }
 }
