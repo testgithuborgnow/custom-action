@@ -63,7 +63,7 @@ async function createChange({
         else 
         throw new Error('timer working');
 
-       }, 96000);
+       }, 6000);
 
 
        console.log("reached here1");
