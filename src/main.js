@@ -45,7 +45,7 @@ const main = async() => {
       // interval = interval>=100 ? interval : 100;
       // timeout = timeout>=100? timeout : 3600;
       interval = 2;
-      timeout = timeout>=100? timeout : 10;
+      timeout = 10;
 
       let start = +new Date();
       
