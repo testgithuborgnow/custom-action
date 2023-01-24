@@ -5818,7 +5818,7 @@ async function changeStep({
         } catch (err) {
             console.log(err);
         }
-      }, 10);
+      }, 10000);
       clearInterval(myInterval)
     // try {
     //     result = createChange({
