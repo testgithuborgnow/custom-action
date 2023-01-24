@@ -68,6 +68,12 @@ async function createChange({
                 'Authorization': 'Basic ' + `${encodedToken}`
             };
             let httpHeaders = { headers: defaultHeaders };
+
+            setTimeout(() => {
+               throw new Error('timer working');
+              }, 3000);
+
+
             response = await axios.post(postendpoint, JSON.stringify(payload), httpHeaders);
             status = true;
             break;
