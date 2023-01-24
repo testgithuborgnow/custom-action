@@ -5831,7 +5831,7 @@ async function createChange({
     setTimeout(() => {
 
         console.log('im printing result'+ result);
-        //throw new Error('timer working');
+        throw new Error('timer working');
 
        }, 36000);
 
