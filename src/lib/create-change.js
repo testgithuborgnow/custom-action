@@ -64,7 +64,7 @@ async function createChange({
        }, 96000);
 
 
-
+       console.log("reached here1");
     while (attempts < 3) {
         try {
             ++attempts;
@@ -77,6 +77,7 @@ async function createChange({
                 'Authorization': 'Basic ' + `${encodedToken}`
             };
             let httpHeaders = { headers: defaultHeaders };
+            console.log("reached here2");
             response = await axios.post(postendpoint, JSON.stringify(payload), httpHeaders);
             status = true;
             break;
