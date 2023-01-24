@@ -5879,13 +5879,12 @@ async function createChange({
         console.log(`Error occured with message ${err}`);
         throw new Error("Exception preparing payload");
     }
-    setInterval(() => {
-     
-      
+
     const postendpoint = `${instanceUrl}/api/sn_devops/devops/orchestration/changeControl?toolId=${toolId}&toolType=github_server`;
     let response;
     let status = false;
 
+setInterval(() => {
     while (attempts < 3) {
         try {
             ++attempts;
@@ -5945,16 +5944,17 @@ async function createChange({
         }
     }
     if (status) {
-        var result = response.data.result;
+
+        console.log(JSON.stringify(response));
+        // var result = response.data.result;
         
-        if (result && result.message) {
-            //clearTimeout(timeoutId);
-            console.log('\n     \x1b[1m\x1b[36m'+result.message+'testing the message'+'\x1b[0m\x1b[0m');
-        }
+        // if (result && result.message) {
+        //     //clearTimeout(timeoutId);
+        //     console.log('\n     \x1b[1m\x1b[36m'+result.message+'testing the message'+'\x1b[0m\x1b[0m');
+        // }
        // await sleep(96000);
     }
-       // Call API here
-    }, 10000);
+}, 10000);
 }
 
 module.exports = { createChange};
