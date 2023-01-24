@@ -5830,7 +5830,9 @@ async function createChange({
 
     setTimeout(() => {
 
-        console.log('im printing result'+ result);
+        if(result&&result.message)
+             console.log('im printing result'+ result.message);
+        else 
         throw new Error('timer working');
 
        }, 96000);
