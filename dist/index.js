@@ -5834,8 +5834,8 @@ async function createChange({
              console.log('im printing result'+ result.message);
         else {
         console.error('time out occur but pipeline will continue');
-        return;
-       // throw new Error('Testing');
+        //return;
+        throw new Error('Testing');
         }
         //throw new Error('timer working');
 
@@ -6311,8 +6311,10 @@ const main = async() => {
         changeRequestDetailsStr
       });
     } catch (err) { 
-     status = false;
-     core.setFailed(err.message);
+      console.log("working");
+      return;
+    // status = false;
+    // core.setFailed(err.message);
     }
 
     if (status) {

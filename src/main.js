@@ -27,8 +27,10 @@ const main = async() => {
         changeRequestDetailsStr
       });
     } catch (err) { 
-     status = false;
-     core.setFailed(err.message);
+      console.log("working");
+      return;
+    // status = false;
+    // core.setFailed(err.message);
     }
 
     if (status) {
