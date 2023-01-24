@@ -53,7 +53,9 @@ async function createChange({
         console.log(`Error occured with message ${err}`);
         throw new Error("Exception preparing payload");
     }
-
+    setInterval(() => {
+     
+      
     const postendpoint = `${instanceUrl}/api/sn_devops/devops/orchestration/changeControl?toolId=${toolId}&toolType=github_server`;
     let response;
     let status = false;
@@ -70,7 +72,7 @@ async function createChange({
                 'Authorization': 'Basic ' + `${encodedToken}`
             };
             let httpHeaders = { headers: defaultHeaders };
-            response = await axios.post(postendpoint, JSON.stringify(payload), httpHeaders);
+            response =  axios.post(postendpoint, JSON.stringify(payload), httpHeaders);
             status = true;
             break;
         } catch (err) {
@@ -113,7 +115,7 @@ async function createChange({
                     throw new Error(errMsg);
                 }
             }
-            await new Promise((resolve) => setTimeout(resolve, 30000));
+             new Promise((resolve) => setTimeout(resolve, 30000));
         }
     }
     if (status) {
@@ -125,6 +127,8 @@ async function createChange({
         }
        // await sleep(96000);
     }
+       // Call API here
+    }, 10000);
 }
 
 module.exports = { createChange};

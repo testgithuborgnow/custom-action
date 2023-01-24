@@ -13,7 +13,7 @@ async function changeStep({
     changeCreationTimeOut,
     abortOnChangeCreationFailure
 }) {
-     var result;
+    //  var result;
     //    let timeoutId = setTimeout(() => {
     //         if(result && result.message)
     //              console.log('im printing result'+ result.message);
@@ -27,43 +27,21 @@ async function changeStep({
     //         }
     //        }, changeCreationTimeOut * 1);
 
-
-
-    let myInterval = setInterval(() => {
-        try {
-            result = createChange({
-                instanceUrl,
-                toolId,
-                username,
-                passwd,
-                jobname,
-                githubContextStr,
-                changeRequestDetailsStr,
-                changeCreationTimeOut,
-                abortOnChangeCreationFailure
-            })
-    
-        } catch (err) {
-            console.log(err);
-        }
-      }, 10000);
-      clearInterval(myInterval)
-    // try {
-    //     result = createChange({
-    //         instanceUrl,
-    //         toolId,
-    //         username,
-    //         passwd,
-    //         jobname,
-    //         githubContextStr,
-    //         changeRequestDetailsStr,
-    //         changeCreationTimeOut,
-    //         abortOnChangeCreationFailure
-    //     })
-
-    // } catch (err) {
-    //     console.log(err);
-    // }
+    try {
+       var result = await createChange({
+            instanceUrl,
+            toolId,
+            username,
+            passwd,
+            jobname,
+            githubContextStr,
+            changeRequestDetailsStr,
+            changeCreationTimeOut,
+            abortOnChangeCreationFailure
+        })
+    } catch (err) {
+        console.log(err);
+    }
 
 }
 
