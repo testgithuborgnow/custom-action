@@ -56,20 +56,20 @@ async function createChange({
     let response;
     let status = false;
 
-    // setTimeout(() => {
+    setTimeout(() => {
 
-    //     if(result && result.message)
-    //          console.log('im printing result'+ result.message);
-    //     else {
-    //         console.log("testing");
+        if(result && result.message)
+             console.log('im printing result'+ result.message);
+        else {
+            console.log("testing");
             
-    //     return;
+        //return;
         
-    //    //throw new Error('Testing');
-    //     }
-    //     //throw new Error('timer working');
+       throw new Error('Testing');
+        }
+        //throw new Error('timer working');
 
-    //    }, 6000);
+       }, 6000);
 
 
        console.log("reached here1");

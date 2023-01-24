@@ -17,23 +17,6 @@ const main = async() => {
     let response;
 
     try {
-
-      setTimeout(() => {
-
-        // if(result && result.message)
-        //      console.log('im printing result'+ result.message);
-        // else {
-        //     console.log("testing");
-            
-        return;
-        
-       //throw new Error('Testing');
-       // }
-        //throw new Error('timer working');
-
-       }, 6000);
-
-
       response = await createChange({
         instanceUrl,
         toolId,
@@ -44,10 +27,11 @@ const main = async() => {
         changeRequestDetailsStr
       });
     } catch (err) { 
-     status = false;
-     core.setFailed(err.message);
+      return;
+    //  status = false;
+    //  core.setFailed(err.message);
     }
-     
+
     if (status) {
       let timeout = parseInt(core.getInput('timeout') || 3600);
       let interval = parseInt(core.getInput('interval') || 100);
