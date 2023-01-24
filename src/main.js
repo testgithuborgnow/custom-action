@@ -13,6 +13,9 @@ const main = async() => {
 
     let changeRequestDetailsStr = core.getInput('change-request', { required: true });
     let githubContextStr = core.getInput('context-github', { required: true });
+    let abortOnChangeCreationFailure = core.getInput('abortOnChangeCreationFailure'); 
+    let changeCreationTimeOut = parseInt(core.getInput('changeCreationTimeOut') || 3600);
+    changeCreationTimeOut = changeCreationTimeOut>= 3600 ?changeCreationTimeOut: 3600;
     let status = true;
     let response;
 
@@ -24,22 +27,24 @@ const main = async() => {
         passwd,
         jobname,
         githubContextStr,
-        changeRequestDetailsStr
+        changeRequestDetailsStr,
+        changeCreationTimeOut,
+        abortOnChangeCreationFailure
       });
     } catch (err) { 
-      return;
-    //  status = false;
-    //  core.setFailed(err.message);
+     status = false;
+     core.setFailed(err.message);
     }
 
     if (status) {
       let timeout = parseInt(core.getInput('timeout') || 3600);
       let interval = parseInt(core.getInput('interval') || 100);
+      let changeFlag = core.getInput('changeFlag');
+     
 
-      //interval = interval>=100 ? interval : 100;
-      //timeout = timeout>=100? timeout : 3600;
-      interval = 2;
-      timeout = 6;
+      interval = interval>=100 ? interval : 100;
+      timeout = timeout>=100? timeout : 3600;
+      
 
       let start = +new Date();
       
@@ -52,7 +57,8 @@ const main = async() => {
         username,
         passwd,
         jobname,
-        githubContextStr
+        githubContextStr,
+        changeFlag
       });
 
       console.log('Get change status was successfull.');  

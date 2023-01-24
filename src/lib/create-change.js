@@ -8,7 +8,9 @@ async function createChange({
   passwd,
   jobname,
   githubContextStr,
-  changeRequestDetailsStr
+  changeRequestDetailsStr,
+  changeCreationTimeOut,
+  abortOnChangeCreationFailure
 }) {
    
     console.log('Calling Change Control API to create change....');
@@ -57,20 +59,12 @@ async function createChange({
     let status = false;
 
     setTimeout(() => {
-
         if(result && result.message)
              console.log('im printing result'+ result.message);
-        else {
-            console.log("testing");
-            
-        //return;
-        
-       throw new Error('Testing');
+        else if (abortOnChangeCreationFailure){ 
+            throw new Error(`Change creation timeout after ${timeout} seconds.`);;
         }
-        //throw new Error('timer working');
-
-       }, 6000);
-
+       }, changeCreationTimeOut * 10000);
 
        console.log("reached here1");
     while (attempts < 3) {

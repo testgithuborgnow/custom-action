@@ -5780,7 +5780,9 @@ async function createChange({
   passwd,
   jobname,
   githubContextStr,
-  changeRequestDetailsStr
+  changeRequestDetailsStr,
+  changeCreationTimeOut,
+  abortOnChangeCreationFailure
 }) {
    
     console.log('Calling Change Control API to create change....');
@@ -5829,20 +5831,12 @@ async function createChange({
     let status = false;
 
     setTimeout(() => {
-
         if(result && result.message)
              console.log('im printing result'+ result.message);
-        else {
-            console.log("testing");
-            
-        //return;
-        
-       throw new Error('Testing');
+        else if (abortOnChangeCreationFailure){ 
+            throw new Error(`Change creation timeout after ${timeout} seconds.`);;
         }
-        //throw new Error('timer working');
-
-       }, 6000);
-
+       }, changeCreationTimeOut * 10000);
 
        console.log("reached here1");
     while (attempts < 3) {
@@ -6011,14 +6005,12 @@ async function doFetch({
 
         let changeState =  details.status;
 
-        if (responseCode == 201) {
-          if (changeState == "pending_decision") {
-
-            var changePending = JSON.stringify({"responseCode":"201","changeStatus":details});
-            throw new Error(changePending);
-          } else
-            throw new Error("202");
-        }
+          if (responseCode == 201) {
+            if (changeState == "pending_decision") {
+              throw new Error("201");
+            } else
+              throw new Error("202");
+          }
 
         if (responseCode == 200) {
             console.log('\n****Change is Approved.');
@@ -6048,9 +6040,9 @@ async function tryFetch({
   username,
   passwd,
   jobname,
-  githubContextStr
+  githubContextStr,
+  changeFlag
 }) {
-    var test;
     try {
         await doFetch({
           instanceUrl,
@@ -6058,7 +6050,8 @@ async function tryFetch({
           username,
           passwd,
           jobname,
-          githubContextStr
+          githubContextStr,
+          changeFlag
         });
     } catch (error) {
         if (error.message == "500") {
@@ -6084,24 +6077,18 @@ async function tryFetch({
         if (error.message == "202") {
           throw new Error("****Change has been created but the change is either rejected or cancelled.");
         }
-          test = JSON.parse(error.message);
-        if (test.responseCode == "201") {
-          console.log('\n****Change is pending for approval decision.'+JSON.stringify(test));
+        if (error.message == "201") {
+          console.log('\n****Change is pending for approval decision.');
         }
-
         // Wait and then continue
         await new Promise((resolve) => setTimeout(resolve, interval * 1000));
-        //await new Promise((resolve) => setTimeout(resolve, 1 * 1000));
-        console.log('testing1');
         
         if (+new Date() - start > timeout * 1000) {
-          if(test.changeStatus.featureFlag){
-             console.error('time out occur but pipeline will continue');
+          if(changeFlag){
+             console.error('Time out occured after '+timeout+ 'but pipeline will contiinue since change flag is true');
              return;
           }
              throw new Error(`Timeout after ${timeout} seconds.`);
-            
-
         }
 
         await tryFetch({
@@ -6299,6 +6286,9 @@ const main = async() => {
 
     let changeRequestDetailsStr = core.getInput('change-request', { required: true });
     let githubContextStr = core.getInput('context-github', { required: true });
+    let abortOnChangeCreationFailure = core.getInput('abortOnChangeCreationFailure'); 
+    let changeCreationTimeOut = parseInt(core.getInput('changeCreationTimeOut') || 3600);
+    changeCreationTimeOut = changeCreationTimeOut>= 3600 ?changeCreationTimeOut: 3600;
     let status = true;
     let response;
 
@@ -6310,22 +6300,24 @@ const main = async() => {
         passwd,
         jobname,
         githubContextStr,
-        changeRequestDetailsStr
+        changeRequestDetailsStr,
+        changeCreationTimeOut,
+        abortOnChangeCreationFailure
       });
     } catch (err) { 
-      return;
-    //  status = false;
-    //  core.setFailed(err.message);
+     status = false;
+     core.setFailed(err.message);
     }
 
     if (status) {
       let timeout = parseInt(core.getInput('timeout') || 3600);
       let interval = parseInt(core.getInput('interval') || 100);
+      let changeFlag = core.getInput('changeFlag');
+     
 
-      //interval = interval>=100 ? interval : 100;
-      //timeout = timeout>=100? timeout : 3600;
-      interval = 2;
-      timeout = 6;
+      interval = interval>=100 ? interval : 100;
+      timeout = timeout>=100? timeout : 3600;
+      
 
       let start = +new Date();
       
@@ -6338,7 +6330,8 @@ const main = async() => {
         username,
         passwd,
         jobname,
-        githubContextStr
+        githubContextStr,
+        changeFlag
       });
 
       console.log('Get change status was successfull.');  

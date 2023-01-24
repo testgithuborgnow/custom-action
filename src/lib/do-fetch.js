@@ -88,14 +88,12 @@ async function doFetch({
 
         let changeState =  details.status;
 
-        if (responseCode == 201) {
-          if (changeState == "pending_decision") {
-
-            var changePending = JSON.stringify({"responseCode":"201","changeStatus":details});
-            throw new Error(changePending);
-          } else
-            throw new Error("202");
-        }
+          if (responseCode == 201) {
+            if (changeState == "pending_decision") {
+              throw new Error("201");
+            } else
+              throw new Error("202");
+          }
 
         if (responseCode == 200) {
             console.log('\n****Change is Approved.');
