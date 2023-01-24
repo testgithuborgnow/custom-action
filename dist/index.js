@@ -6083,7 +6083,7 @@ async function tryFetch({
         if (+new Date() - start > timeout * 1000) {
           console.log("value of changeFlag is"+ changeFlag);
           if(changeFlag){
-             console.error('Time out occured after '+timeout+ 'but pipeline will contiinue since change flag is true');
+             console.error('Time out occured after '+timeout+ ' but pipeline will contiinue since change flag is true');
              return;
           }
              throw new Error(`Timeout after ${timeout} seconds.`);
@@ -6312,9 +6312,9 @@ const main = async() => {
     if (status) {
       let timeout = parseInt(core.getInput('timeout') || 3600);
       let interval = parseInt(core.getInput('interval') || 100);
-      // let changeFlag = (core.getInput('changeFlag') === 'true');
+      let changeFlag = core.getInput('changeFlag');
      
-      let changeFlag = true;
+      //let changeFlag = true;
       // interval = interval>=100 ? interval : 100;
       // timeout = timeout>=100? timeout : 3600;
       interval = 2;
