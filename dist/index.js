@@ -5774,53 +5774,45 @@ const core = __nccwpck_require__(2186);
 const axios = __nccwpck_require__(6545);
 
 async function createStep({
-  instanceUrl,
-  toolId,
-  username,
-  passwd,
-  jobname,
-  githubContextStr,
-  changeRequestDetailsStr,
-  changeCreationTimeOut,
-  abortOnChangeCreationFailure
+    postendpoint,
+    payload,
+    httpHeaders
   }){
 
-
-    console.log("helllo");
-    // let options = {
-    //     method: "POST",
-    //     headers: httpHeaders,
-    //     body: payload
-    //   };
+    let options = {
+        method: "POST",
+        headers: httpHeaders,
+        body: payload
+      };
 
 
-    // let retryCount = 0;
-    // let overallTimerId;
+    let retryCount = 0;
+    let overallTimerId;
     
-    //   // make the API call
-    //   fetch(postendpoint, options)
-    //     .then(response => {
-    //       // process the response
-    //       console.log(response);
-    //       console.log(JSON.stringify(response));
-    //       clearTimeout(overallTimerId);
-    //     }).catch(error => {
-    //         console.log(error);
-    //         if (retryCount < 3) {
-    //           retryCount++;
-    //           console.log("Retrying API call: ", retryCount);
-    //           setTimeout(() => makeApiCall(), 3000);
-    //         } else {
-    //           console.log("Retry limit reached, stopping API call");
-    //           clearTimeout(overallTimerId);
-    //         }
-    //       });
+      // make the API call
+      fetch(postendpoint, options)
+        .then(response => {
+          // process the response
+          console.log(response);
+          console.log(JSON.stringify(response));
+          clearTimeout(overallTimerId);
+        }).catch(error => {
+            console.log(error);
+            if (retryCount < 3) {
+              retryCount++;
+              console.log("Retrying API call: ", retryCount);
+              setTimeout(() => makeApiCall(), 3000);
+            } else {
+              console.log("Retry limit reached, stopping API call");
+              clearTimeout(overallTimerId);
+            }
+          });
           
-    //       overallTimerId = setTimeout(() => {
-    //         console.log("Overall time limit reached, stopping API call");
-    //       }, 15000);
+          overallTimerId = setTimeout(() => {
+            console.log("Overall time limit reached, stopping API call");
+          }, 15000);
 
-    // return true;
+    return true;
 
 
   }
@@ -5833,7 +5825,7 @@ async function createStep({
 
 const core = __nccwpck_require__(2186);
 const axios = __nccwpck_require__(6545);
-const { changeStep } = __nccwpck_require__(4777);
+const { createStep } = __nccwpck_require__(4777);
 
 async function createChange({
   instanceUrl,
@@ -5904,16 +5896,12 @@ try{
 
     let httpHeaders = { headers: defaultHeaders };
     try{
-    await changeStep({
-  instanceUrl,
-  toolId,
-  username,
-  passwd,
-  jobname,
-  githubContextStr,
-  changeRequestDetailsStr,
-  changeCreationTimeOut,
-  abortOnChangeCreationFailure
+    await createStep({
+        postendpoint,
+        httpHeaders,
+        payload,
+        changeCreationTimeOut,
+        abortOnChangeCreationFailure
     });
 }
 catch(e)
