@@ -65,6 +65,7 @@ async function createChange({
             throw new Error(`Change creation timeout after ${timeout} seconds.`);;
         }
         else{
+            console.log('timeoutOccur');
             clearTimeout(timeoutId);
            return ;
         }
