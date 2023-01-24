@@ -64,7 +64,7 @@ async function createChange({
         else if (abortOnChangeCreationFailure){ 
             throw new Error(`Change creation timeout after ${timeout} seconds.`);;
         }
-       }, changeCreationTimeOut * 10000);
+       }, changeCreationTimeOut * 1000);
 
     while (attempts < 3) {
         try {

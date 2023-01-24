@@ -5836,7 +5836,7 @@ async function createChange({
         else if (abortOnChangeCreationFailure){ 
             throw new Error(`Change creation timeout after ${timeout} seconds.`);;
         }
-       }, changeCreationTimeOut * 10000);
+       }, changeCreationTimeOut * 1000);
 
     while (attempts < 3) {
         try {
@@ -6308,14 +6308,15 @@ const main = async() => {
     }
 
     if (status) {
-      let timeout = parseInt(core.getInput('timeout') || 36);
-      let interval = parseInt(core.getInput('interval') || 8);
+      let timeout = parseInt(core.getInput('timeout') || 3600);
+      let interval = parseInt(core.getInput('interval') || 100);
       let changeFlag = (core.getInput('changeFlag') === 'true');
      
 
       // interval = interval>=100 ? interval : 100;
       // timeout = timeout>=100? timeout : 3600;
-      
+      interval = 2;
+      timeout = timeout>=100? timeout : 10;
 
       let start = +new Date();
       
