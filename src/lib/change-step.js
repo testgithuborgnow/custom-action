@@ -12,9 +12,11 @@ const axios = require('axios');
     let retryCount = 0;
     let overallTimerId;
 
-    console.log("I'm postend point"+ postendpoint);
-    console.log("I'm httpheaders point"+ httpHeaders);
-    console.log("im pay laod "+payload);
+    console.log('im working');
+
+    // console.log("I'm postend point"+ postendpoint);
+    // console.log("I'm httpheaders point"+ httpHeaders);
+    // console.log("im pay laod "+payload);
 
     return new Promise((resolve, reject ) => {
         console.log('Calling Change Control API to create change....');
