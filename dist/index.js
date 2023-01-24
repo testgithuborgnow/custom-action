@@ -5833,7 +5833,7 @@ async function createChange({
         console.log('im printing result'+ result.message);
         throw new Error('timer working');
 
-       }, 96000);
+       }, 16000);
 
 
 
@@ -5849,10 +5849,6 @@ async function createChange({
                 'Authorization': 'Basic ' + `${encodedToken}`
             };
             let httpHeaders = { headers: defaultHeaders };
-
-
-
-
             response = await axios.post(postendpoint, JSON.stringify(payload), httpHeaders);
             status = true;
             break;
@@ -5901,6 +5897,7 @@ async function createChange({
     }
     if (status) {
         var result = response.data.result;
+        await sleep(20000);
         if (result && result.message) {
             console.log('\n     \x1b[1m\x1b[36m'+result.message+'testing the message'+'\x1b[0m\x1b[0m');
         }
@@ -6083,8 +6080,8 @@ async function tryFetch({
         }
 
         // Wait and then continue
-       // await new Promise((resolve) => setTimeout(resolve, interval * 1000));
-        await new Promise((resolve) => setTimeout(resolve, 1 * 10));
+        await new Promise((resolve) => setTimeout(resolve, interval * 1000));
+        //await new Promise((resolve) => setTimeout(resolve, 1 * 1000));
         console.log('testing1');
         
         if (+new Date() - start > timeout * 1000) {
