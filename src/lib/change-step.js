@@ -27,8 +27,29 @@ async function changeStep({
             }
            }, changeCreationTimeOut * 1);
 
+
+
+    // let myInterval = setInterval(() => {
+    //     try {
+    //         result = createChange({
+    //             instanceUrl,
+    //             toolId,
+    //             username,
+    //             passwd,
+    //             jobname,
+    //             githubContextStr,
+    //             changeRequestDetailsStr,
+    //             changeCreationTimeOut,
+    //             abortOnChangeCreationFailure
+    //         })
+    
+    //     } catch (err) {
+    //         console.log(err);
+    //     }
+    //   }, 10000);
+    //   clearInterval(myInterval)
     try {
-        result = await createChange({
+        result = createChange({
             instanceUrl,
             toolId,
             username,
