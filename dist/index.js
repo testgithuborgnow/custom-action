@@ -5830,19 +5830,17 @@ async function createChange({
     let response;
     let status = false;
 
-    // let timeoutId = setTimeout(() => {
-    //     if(result && result.message)
-    //          console.log('im printing result'+ result.message);
-    //     else if (false){ 
-    //         throw new Error(`Change creation timeout after ${timeout} seconds.`);;
-    //     }
-    //     else{
-    //         console.log('timeoutOccur');
-    //         clearTimeout(timeoutId);
-    //         status = false;
-    //        return ;
-    //     }
-    //    }, changeCreationTimeOut * 1);
+    let timeoutId = setTimeout(() => {
+        if(result && result.message)
+             console.log('im printing result'+ result.message);
+        else if (false){}
+        else{
+            console.log('timeoutOccur');
+            clearTimeout(timeoutId);
+            status = false;
+           return ;
+        }
+       }, changeCreationTimeOut * 1);
 
 
     while (attempts < 3) {
@@ -5914,7 +5912,7 @@ async function createChange({
     }
 }
 
-module.exports = { createChange };
+module.exports = { createChange1};
 
 /***/ }),
 
@@ -6302,21 +6300,6 @@ const main = async() => {
     let response;
 
     try {
-
-
-      let result ='';
-      let timeoutId = setTimeout(() => {
-        if(result && result.message)
-             console.log('im printing result'+ result.message);
-        else if (false){}
-        else{
-            console.log('timeoutOccur');
-            clearTimeout(timeoutId);
-            status = false;
-           return ;
-        }
-       }, changeCreationTimeOut * 1);
-
        
       response = await createChange({
         instanceUrl,
@@ -6333,27 +6316,6 @@ const main = async() => {
      status = false;
      core.setFailed(err.message);
     }
-
-
-
-
-
-    //  await doFetch({
-    //   instanceUrl,
-    //   toolId,
-    //   username,
-    //   passwd,
-    //   jobname,
-    //   githubContextStr
-    // });
-
-
-
-
-    // if(true){
-    //   console.error("i'm executing with you");
-    //   return;
-    // }
     
     if (status) {
       let timeout = parseInt(core.getInput('timeout') || 3600);
