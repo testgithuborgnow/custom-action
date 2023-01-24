@@ -68,7 +68,7 @@ async function createChange({
     let httpHeaders = { headers: defaultHeaders };
 
 
-    makeApiCall(postendpoint, httpHeaders, payload)
+    makeApiCall(postendpoint, httpHeaders, JSON.stringify(payload))
         .then(response => {
             console.log(response);
             // process the response
@@ -167,9 +167,14 @@ async function createChange({
     let overallTimerId;
 
     function makeApiCall(postendpoint, httpHeaders, payload) {
+
+        console.log("I'm postend point"+ postendpoint);
+        console.log("I'm httpheaders point"+ httpHeaders);
+        console.log("im pay laod "+payload);
+
         return new Promise((resolve, reject) => {
             // make the API call
-            axios.post(postendpoint, payload, { httpHeaders })
+            axios.post(postendpoint, payload, httpHeaders)
                 .then(response => {
                     // process the response
                     console.log(JSON.stringify(response));
