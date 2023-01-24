@@ -23,7 +23,7 @@ const main = async() => {
 
     try {
        
-      response = await changeStep({
+      response = await createChange({
         instanceUrl,
         toolId,
         username,

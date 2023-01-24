@@ -1,48 +1,40 @@
 const core = require('@actions/core');
 const axios = require('axios');
-const { createChange } = require('./create-change');
+async function changeStep(postendpoint, httpHeaders, payload) {
+    let retryCount = 0;
+    let overallTimerId;
 
-async function changeStep({
-    instanceUrl,
-    toolId,
-    username,
-    passwd,
-    jobname,
-    githubContextStr,
-    changeRequestDetailsStr,
-    changeCreationTimeOut,
-    abortOnChangeCreationFailure
-}) {
-    //  var result;
-    //    let timeoutId = setTimeout(() => {
-    //         if(result && result.message)
-    //              console.log('im printing result'+ result.message);
-    //         else if (false){ 
-    //             throw new Error(`Change creation timeout after ${timeout} seconds.`);;
-    //         }
-    //         else{
-    //             console.log('timeoutOccur');
-    //             clearTimeout(timeoutId);
-    //            return ;
-    //         }
-    //        }, changeCreationTimeOut * 1);
+    console.log("I'm postend point"+ postendpoint);
+    console.log("I'm httpheaders point"+ httpHeaders);
+    console.log("im pay laod "+payload);
 
-    try {
-       var result = await createChange({
-            instanceUrl,
-            toolId,
-            username,
-            passwd,
-            jobname,
-            githubContextStr,
-            changeRequestDetailsStr,
-            changeCreationTimeOut,
-            abortOnChangeCreationFailure
-        })
-    } catch (err) {
-        console.log(err);
-    }
+    return new Promise((resolve, reject) => {
+        // make the API call
+        axios.post(postendpoint, payload, httpHeaders)
+            .then(response => {
+                // process the response
+                console.log(JSON.stringify(response));
+                clearTimeout(overallTimerId);
+                resolve(response);
+            })
+            .catch(error => {
+                console.log(error);
+                if (retryCount < 1) {
+                    retryCount++;
+                    console.log("Retrying API call: ", retryCount);
+                    setTimeout(() => changeStep(), 3000);
+                } else {
+                    console.log("Retry limit reached, stopping API call");
+                    clearTimeout(overallTimerId);
+                    reject(error);
+                }
+            });
 
+        // start the overall timer
+        overallTimerId = setTimeout(() => {
+            console.log("Overall time limit reached, stopping API call");
+            reject(new Error("Overall time limit reached, no response received"));
+        }, 15000);
+    });
 }
-
 module.exports = { changeStep };
