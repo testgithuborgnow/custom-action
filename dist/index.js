@@ -5785,7 +5785,7 @@ async function changeStep({
     changeCreationTimeOut,
     abortOnChangeCreationFailure
 }) {
-
+     var result;
        let timeoutId = setTimeout(() => {
             if(result && result.message)
                  console.log('im printing result'+ result.message);
@@ -5798,7 +5798,7 @@ async function changeStep({
            }, changeCreationTimeOut * 1);
 
     try {
-        await createChange({
+        result = await createChange({
             instanceUrl,
             toolId,
             username,
@@ -5809,6 +5809,7 @@ async function changeStep({
             changeCreationTimeOut,
             abortOnChangeCreationFailure
         })
+
     } catch (err) {
         console.log(err);
     }
