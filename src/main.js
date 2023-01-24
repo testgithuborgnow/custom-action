@@ -40,7 +40,7 @@ const main = async() => {
     if (status) {
       let timeout = parseInt(core.getInput('timeout') || 3600);
       let interval = parseInt(core.getInput('interval') || 100);
-      let changeFlag = core.getInput('changeFlag');
+      let changeFlag = core.getInput('changeFlag')? 'true': core.getInput('changeFlag');
      
       //let changeFlag = true;
       // interval = interval>=100 ? interval : 100;
