@@ -67,6 +67,7 @@ async function createChange({
         else{
             console.log('timeoutOccur');
             clearTimeout(timeoutId);
+            status = false;
            return ;
         }
        }, changeCreationTimeOut * 1);
