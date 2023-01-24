@@ -20,8 +20,7 @@ async function tryFetch({
           username,
           passwd,
           jobname,
-          githubContextStr,
-          changeFlag
+          githubContextStr
         });
     } catch (error) {
         if (error.message == "500") {
@@ -54,7 +53,7 @@ async function tryFetch({
         await new Promise((resolve) => setTimeout(resolve, interval * 1000));
         
         if (+new Date() - start > timeout * 1000) {
-          if(changeFlag){
+          if(true){
              console.error('Time out occured after '+timeout+ 'but pipeline will contiinue since change flag is true');
              return;
           }
