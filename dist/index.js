@@ -5898,7 +5898,7 @@ async function createChange({
     console.log("we httpheaders point"+ httpHeaders);
     console.log("we pay laod "+payload);
 
-    makeApiCall(postendpoint, httpHeaders, JSON.stringify(payload))
+    await makeApiCall(postendpoint, httpHeaders, JSON.stringify(payload))
         .then(response => {
             console.log(response);
             // process the response
