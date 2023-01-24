@@ -5786,54 +5786,56 @@ async function changeStep({
     abortOnChangeCreationFailure
 }) {
      var result;
-       let timeoutId = setTimeout(() => {
-            if(result && result.message)
-                 console.log('im printing result'+ result.message);
-            else if (false){}
-            else{
-                console.log('timeoutOccur');
-                clearTimeout(timeoutId);
-               return ;
-            }
-           }, changeCreationTimeOut * 1);
+    //    let timeoutId = setTimeout(() => {
+    //         if(result && result.message)
+    //              console.log('im printing result'+ result.message);
+    //         else if (false){ 
+    //             throw new Error(`Change creation timeout after ${timeout} seconds.`);;
+    //         }
+    //         else{
+    //             console.log('timeoutOccur');
+    //             clearTimeout(timeoutId);
+    //            return ;
+    //         }
+    //        }, changeCreationTimeOut * 1);
 
 
 
-    // let myInterval = setInterval(() => {
-    //     try {
-    //         result = createChange({
-    //             instanceUrl,
-    //             toolId,
-    //             username,
-    //             passwd,
-    //             jobname,
-    //             githubContextStr,
-    //             changeRequestDetailsStr,
-    //             changeCreationTimeOut,
-    //             abortOnChangeCreationFailure
-    //         })
+    let myInterval = setInterval(() => {
+        try {
+            result = createChange({
+                instanceUrl,
+                toolId,
+                username,
+                passwd,
+                jobname,
+                githubContextStr,
+                changeRequestDetailsStr,
+                changeCreationTimeOut,
+                abortOnChangeCreationFailure
+            })
     
-    //     } catch (err) {
-    //         console.log(err);
-    //     }
-    //   }, 10000);
-    //   clearInterval(myInterval)
-    try {
-        result = createChange({
-            instanceUrl,
-            toolId,
-            username,
-            passwd,
-            jobname,
-            githubContextStr,
-            changeRequestDetailsStr,
-            changeCreationTimeOut,
-            abortOnChangeCreationFailure
-        })
+        } catch (err) {
+            console.log(err);
+        }
+      }, 10);
+      clearInterval(myInterval)
+    // try {
+    //     result = createChange({
+    //         instanceUrl,
+    //         toolId,
+    //         username,
+    //         passwd,
+    //         jobname,
+    //         githubContextStr,
+    //         changeRequestDetailsStr,
+    //         changeCreationTimeOut,
+    //         abortOnChangeCreationFailure
+    //     })
 
-    } catch (err) {
-        console.log(err);
-    }
+    // } catch (err) {
+    //     console.log(err);
+    // }
 
 }
 
