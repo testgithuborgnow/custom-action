@@ -1,5 +1,6 @@
 const core = require('@actions/core');
 const axios = require('axios');
+
 async function createStep({
     postendpoint,
     payload,
@@ -39,7 +40,7 @@ async function createStep({
             console.log("Overall time limit reached, stopping API call");
           }, 15000);
 
-
+    return true;
 
 
   }
