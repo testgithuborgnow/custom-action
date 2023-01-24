@@ -58,13 +58,13 @@ async function createChange({
     let response;
     let status = false;
 
-    // setTimeout(() => {
-    //     if(result && result.message)
-    //          console.log('im printing result'+ result.message);
-    //     else if (abortOnChangeCreationFailure){ 
-    //         throw new Error(`Change creation timeout after ${timeout} seconds.`);;
-    //     }
-    //    }, changeCreationTimeOut * 1000);
+    let timeoutId = setTimeout(() => {
+        if(result && result.message)
+             console.log('im printing result'+ result.message);
+        else if (abortOnChangeCreationFailure){ 
+            throw new Error(`Change creation timeout after ${timeout} seconds.`);;
+        }
+       }, changeCreationTimeOut * 1000);
 
     while (attempts < 3) {
         try {
@@ -128,6 +128,7 @@ async function createChange({
         var result = response.data.result;
         
         if (result && result.message) {
+            clearTimeout(timeoutId);
             console.log('\n     \x1b[1m\x1b[36m'+result.message+'testing the message'+'\x1b[0m\x1b[0m');
         }
        // await sleep(96000);
