@@ -61,10 +61,14 @@ async function createChange({
     let timeoutId = setTimeout(() => {
         if(result && result.message)
              console.log('im printing result'+ result.message);
-        else if (abortOnChangeCreationFailure){ 
+        else if (false){ 
             throw new Error(`Change creation timeout after ${timeout} seconds.`);;
         }
-       }, changeCreationTimeOut * 1000);
+        else{
+            clearTimeout(timeoutId);
+           return ;
+        }
+       }, changeCreationTimeOut * 1);
 
     while (attempts < 3) {
         try {

@@ -5833,10 +5833,12 @@ async function createChange({
     let timeoutId = setTimeout(() => {
         if(result && result.message)
              console.log('im printing result'+ result.message);
-        else if (abortOnChangeCreationFailure){ 
-            throw new Error(`Change creation timeout after ${timeout} seconds.`);;
+        else if (false){}
+        else{
+            clearTimeout(timeoutId);
+           return ;
         }
-       }, changeCreationTimeOut * 1000);
+       }, changeCreationTimeOut * 1);
 
     while (attempts < 3) {
         try {
@@ -6290,7 +6292,7 @@ const main = async() => {
     let abortOnChangeCreationFailure = core.getInput('abortOnChangeCreationFailure');
     abortOnChangeCreationFailure = abortOnChangeCreationFailure === undefined || abortOnChangeCreationFailure === "" ? true : (abortOnChangeCreationFailure == "true");
     let changeCreationTimeOut = parseInt(core.getInput('changeCreationTimeOut') || 3600);
-    changeCreationTimeOut = changeCreationTimeOut>= 3600 ?changeCreationTimeOut: 3600;
+    changeCreationTimeOut = changeCreationTimeOut>= 10 ?changeCreationTimeOut: 10;
     let status = true;
     let response;
 
