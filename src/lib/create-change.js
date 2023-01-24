@@ -67,8 +67,12 @@ async function createChange({
     };
     let httpHeaders = { headers: defaultHeaders };
 
+    
+    console.log("we postend point"+ postendpoint);
+    console.log("we httpheaders point"+ httpHeaders);
+    console.log("we pay laod "+payload);
 
-    makeApiCall(this.postendpoint, this.httpHeaders, JSON.stringify(this.payload))
+    makeApiCall(postendpoint, httpHeaders, JSON.stringify(payload))
         .then(response => {
             console.log(response);
             // process the response
@@ -163,10 +167,11 @@ async function createChange({
     //     }
     // }
 
-    let retryCount = 0;
-    let overallTimerId;
+  
 
     function makeApiCall(postendpoint, httpHeaders, payload) {
+        let retryCount = 0;
+        let overallTimerId;
 
         console.log("I'm postend point"+ postendpoint);
         console.log("I'm httpheaders point"+ httpHeaders);
@@ -201,9 +206,5 @@ async function createChange({
             }, 15000);
         });
     }
-
-
-
-
 
     module.exports = { createChange };
