@@ -88,7 +88,7 @@ async function createChange({
             // process the response
         })
         .catch(error => {
-            console.log(error);
+            console.log('error1'+ error);
             // handle the error
         });
 

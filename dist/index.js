@@ -5859,7 +5859,7 @@ const axios = __nccwpck_require__(6545);
 
     return new Promise((resolve, reject) => {
 
-           axios.post(postendpoint, payload, httpHeaders)
+           axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
             .then(response => {
                 // process the response
                 console.log(response);
@@ -5867,26 +5867,31 @@ const axios = __nccwpck_require__(6545);
                 resolve(response);
             })
             .catch(error => {
-                console.log(error);
-                if (retryCount < 1) {
-                    retryCount++;
-                    console.log("Retrying API call: ", retryCount);
-                    setTimeout(() => changeStep( 
-                        instanceUrl,
-                        toolId,
-                        username,
-                        passwd,
-                        jobname,
-                        githubContextStr,
-                        changeRequestDetailsStr,
-                        changeCreationTimeOut,
-                        abortOnChangeCreationFailure
-                        ), 3000);
-                } else {
-                    console.log("Retry limit reached, stopping API call");
-                    clearTimeout(overallTimerId);
-                    reject(error);
-                }
+                console.log('error2'+error);
+                console.log('error2'+JSON.stringify(error));
+
+
+
+
+                // if (retryCount < 1) {
+                //     retryCount++;
+                //     console.log("Retrying API call: ", retryCount);
+                //     setTimeout(() => changeStep( 
+                //         instanceUrl,
+                //         toolId,
+                //         username,
+                //         passwd,
+                //         jobname,
+                //         githubContextStr,
+                //         changeRequestDetailsStr,
+                //         changeCreationTimeOut,
+                //         abortOnChangeCreationFailure
+                //         ), 3000);
+                // } else {
+                //     console.log("Retry limit reached, stopping API call");
+                //     clearTimeout(overallTimerId);
+                //     reject(error);
+                // }
             });
 
         // start the overall timer
@@ -5996,7 +6001,7 @@ async function createChange({
             // process the response
         })
         .catch(error => {
-            console.log(error);
+            console.log('error1'+ error);
             // handle the error
         });
 

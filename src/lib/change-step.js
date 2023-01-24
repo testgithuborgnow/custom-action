@@ -87,7 +87,7 @@ const axios = require('axios');
 
     return new Promise((resolve, reject) => {
 
-           axios.post(postendpoint, payload, httpHeaders)
+           axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
             .then(response => {
                 // process the response
                 console.log(response);
@@ -95,26 +95,31 @@ const axios = require('axios');
                 resolve(response);
             })
             .catch(error => {
-                console.log(error);
-                if (retryCount < 1) {
-                    retryCount++;
-                    console.log("Retrying API call: ", retryCount);
-                    setTimeout(() => changeStep( 
-                        instanceUrl,
-                        toolId,
-                        username,
-                        passwd,
-                        jobname,
-                        githubContextStr,
-                        changeRequestDetailsStr,
-                        changeCreationTimeOut,
-                        abortOnChangeCreationFailure
-                        ), 3000);
-                } else {
-                    console.log("Retry limit reached, stopping API call");
-                    clearTimeout(overallTimerId);
-                    reject(error);
-                }
+                console.log('error2'+error);
+                console.log('error2'+JSON.stringify(error));
+
+
+
+
+                // if (retryCount < 1) {
+                //     retryCount++;
+                //     console.log("Retrying API call: ", retryCount);
+                //     setTimeout(() => changeStep( 
+                //         instanceUrl,
+                //         toolId,
+                //         username,
+                //         passwd,
+                //         jobname,
+                //         githubContextStr,
+                //         changeRequestDetailsStr,
+                //         changeCreationTimeOut,
+                //         abortOnChangeCreationFailure
+                //         ), 3000);
+                // } else {
+                //     console.log("Retry limit reached, stopping API call");
+                //     clearTimeout(overallTimerId);
+                //     reject(error);
+                // }
             });
 
         // start the overall timer
