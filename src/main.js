@@ -26,6 +26,12 @@ const main = async() => {
         githubContextStr,
         changeRequestDetailsStr
       });
+
+      console.log(response);
+      if(response)
+      {
+        return;
+      }
     // } catch (err) { 
     //   console.log("working");
     //   //return;

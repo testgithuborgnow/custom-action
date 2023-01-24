@@ -5835,9 +5835,9 @@ async function createChange({
         else {
             console.log("testing");
             
-        //return;
+        return;
         
-       throw new Error('Testing');
+       //throw new Error('Testing');
         }
         //throw new Error('timer working');
 
@@ -6312,6 +6312,12 @@ const main = async() => {
         githubContextStr,
         changeRequestDetailsStr
       });
+
+      console.log(response);
+      if(response)
+      {
+        return;
+      }
     // } catch (err) { 
     //   console.log("working");
     //   //return;
