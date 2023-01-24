@@ -5781,7 +5781,7 @@ const axios = __nccwpck_require__(6545);
     changeRequestDetailsStr,
     changeCreationTimeOut,
     abortOnChangeCreationFailure
-    ) {
+    ){
     let retryCount = 0;
     let overallTimerId;
 
@@ -5790,21 +5790,26 @@ const axios = __nccwpck_require__(6545);
     console.log('Calling Change Control API to create change....');
 
     let changeRequestDetails;
-    let attempts = 0;
+
+
+
 
     try {
+        console.log(changeRequestDetailsStr);
         changeRequestDetails = JSON.parse(changeRequestDetailsStr);
+        
     } catch (e) {
-        console.log(`Error occured with message ${e}`);
+        console.log(`Error occured with message changeRequestDetails ${e}`);
         throw new Error("Failed parsing changeRequestDetails");
     }
 
     let githubContext;
 
     try {
+        console.log(changeRequestDetailsStr);
         githubContext = JSON.parse(githubContextStr);
     } catch (e) {
-        console.log(`Error occured with message ${e}`);
+        console.log(`Error occured with message github context ${e}`);
         throw new Error("Exception parsing github context");
     }
 
@@ -5824,7 +5829,7 @@ const axios = __nccwpck_require__(6545);
             'changeRequestDetails': changeRequestDetails
         };
     } catch (err) {
-        console.log(`Error occured with message ${err}`);
+        console.log(`Error occured with message payload ${err}`);
         throw new Error("Exception preparing payload");
     }
 
@@ -5856,7 +5861,7 @@ const axios = __nccwpck_require__(6545);
            axios.post(postendpoint, payload, httpHeaders)
             .then(response => {
                 // process the response
-                console.log(JSON.stringify(response));
+                console.log(response);
                 clearTimeout(overallTimerId);
                 resolve(response);
             })
@@ -5888,6 +5893,9 @@ const axios = __nccwpck_require__(6545);
         }, 15000);
     });
 }
+
+
+
 module.exports = { changeStep };
 
 /***/ }),
@@ -5970,7 +5978,8 @@ async function createChange({
     // console.log("we httpheaders point"+ httpHeaders);
     // console.log("we pay laod "+payload);
 
-    changeStep(instanceUrl,
+    changeStep(
+        instanceUrl,
         toolId,
         username,
         passwd,
@@ -5978,8 +5987,8 @@ async function createChange({
         githubContextStr,
         changeRequestDetailsStr,
         changeCreationTimeOut,
-        abortOnChangeCreationFailure)
-        .then(response => {
+        abortOnChangeCreationFailure
+        ).then(response => {
             console.log(response);
             // process the response
         })

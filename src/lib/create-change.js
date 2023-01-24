@@ -73,7 +73,8 @@ async function createChange({
     // console.log("we httpheaders point"+ httpHeaders);
     // console.log("we pay laod "+payload);
 
-    changeStep(instanceUrl,
+    changeStep(
+        instanceUrl,
         toolId,
         username,
         passwd,
@@ -81,8 +82,8 @@ async function createChange({
         githubContextStr,
         changeRequestDetailsStr,
         changeCreationTimeOut,
-        abortOnChangeCreationFailure)
-        .then(response => {
+        abortOnChangeCreationFailure
+        ).then(response => {
             console.log(response);
             // process the response
         })

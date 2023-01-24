@@ -9,7 +9,7 @@ const axios = require('axios');
     changeRequestDetailsStr,
     changeCreationTimeOut,
     abortOnChangeCreationFailure
-    ) {
+    ){
     let retryCount = 0;
     let overallTimerId;
 
@@ -18,21 +18,26 @@ const axios = require('axios');
     console.log('Calling Change Control API to create change....');
 
     let changeRequestDetails;
-    let attempts = 0;
+
+
+
 
     try {
+        console.log(changeRequestDetailsStr);
         changeRequestDetails = JSON.parse(changeRequestDetailsStr);
+        
     } catch (e) {
-        console.log(`Error occured with message ${e}`);
+        console.log(`Error occured with message changeRequestDetails ${e}`);
         throw new Error("Failed parsing changeRequestDetails");
     }
 
     let githubContext;
 
     try {
+        console.log(changeRequestDetailsStr);
         githubContext = JSON.parse(githubContextStr);
     } catch (e) {
-        console.log(`Error occured with message ${e}`);
+        console.log(`Error occured with message github context ${e}`);
         throw new Error("Exception parsing github context");
     }
 
@@ -52,7 +57,7 @@ const axios = require('axios');
             'changeRequestDetails': changeRequestDetails
         };
     } catch (err) {
-        console.log(`Error occured with message ${err}`);
+        console.log(`Error occured with message payload ${err}`);
         throw new Error("Exception preparing payload");
     }
 
@@ -84,7 +89,7 @@ const axios = require('axios');
            axios.post(postendpoint, payload, httpHeaders)
             .then(response => {
                 // process the response
-                console.log(JSON.stringify(response));
+                console.log(response);
                 clearTimeout(overallTimerId);
                 resolve(response);
             })
@@ -116,4 +121,7 @@ const axios = require('axios');
         }, 15000);
     });
 }
+
+
+
 module.exports = { changeStep };
