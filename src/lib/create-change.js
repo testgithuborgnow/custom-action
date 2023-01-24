@@ -61,7 +61,7 @@ async function createChange({
         console.log('im printing result'+ result);
         //throw new Error('timer working');
 
-       }, 96000);
+       }, 36000);
 
 
 
