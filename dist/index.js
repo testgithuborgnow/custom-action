@@ -5838,7 +5838,6 @@ async function createChange({
         }
        }, changeCreationTimeOut * 10000);
 
-       console.log("reached here1");
     while (attempts < 3) {
         try {
             ++attempts;
@@ -5851,7 +5850,6 @@ async function createChange({
                 'Authorization': 'Basic ' + `${encodedToken}`
             };
             let httpHeaders = { headers: defaultHeaders };
-            console.log("reached here2");
             response = await axios.post(postendpoint, JSON.stringify(payload), httpHeaders);
             status = true;
             break;
@@ -6310,13 +6308,13 @@ const main = async() => {
     }
 
     if (status) {
-      let timeout = parseInt(core.getInput('timeout') || 3600);
-      let interval = parseInt(core.getInput('interval') || 100);
+      let timeout = parseInt(core.getInput('timeout') || 36);
+      let interval = parseInt(core.getInput('interval') || 8);
       let changeFlag = (core.getInput('changeFlag') === 'true');
      
 
-      interval = interval>=100 ? interval : 100;
-      timeout = timeout>=100? timeout : 3600;
+      // interval = interval>=100 ? interval : 100;
+      // timeout = timeout>=100? timeout : 3600;
       
 
       let start = +new Date();
