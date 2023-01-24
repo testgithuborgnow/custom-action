@@ -1,6 +1,7 @@
 const core = require('@actions/core');
 const axios = require('axios');
- async function changeStep( toolId,
+ async function changeStep( 
+    toolId,
     username,
     passwd,
     jobname,
