@@ -14,69 +14,71 @@ const axios = require('axios');
 
     console.log('im working');
 
+    console.log('Calling Change Control API to create change....');
+
+    let changeRequestDetails;
+    let attempts = 0;
+
+    try {
+        changeRequestDetails = JSON.parse(changeRequestDetailsStr);
+    } catch (e) {
+        console.log(`Error occured with message ${e}`);
+        throw new Error("Failed parsing changeRequestDetails");
+    }
+
+    let githubContext;
+
+    try {
+        githubContext = JSON.parse(githubContextStr);
+    } catch (e) {
+        console.log(`Error occured with message ${e}`);
+        throw new Error("Exception parsing github context");
+    }
+
+    let payload;
+
+    try {
+        payload = {
+            'toolId': toolId,
+            'stageName': jobname,
+            'buildNumber': `${githubContext.run_id}`,
+            'attemptNumber': `${githubContext.run_attempt}`,
+            'sha': `${githubContext.sha}`,
+            'action': 'customChange',
+            'workflow': `${githubContext.workflow}`,
+            'repository': `${githubContext.repository}`,
+            'branchName': `${githubContext.ref_name}`,
+            'changeRequestDetails': changeRequestDetails
+        };
+    } catch (err) {
+        console.log(`Error occured with message ${err}`);
+        throw new Error("Exception preparing payload");
+    }
+
+    let postendpoint = `${instanceUrl}/api/sn_devops/devops/orchestration/changeControl?toolId=${toolId}&toolType=github_server`;
+    let response;
+    let status = false;
+    const token = `${username}:${passwd}`;
+    const encodedToken = Buffer.from(token).toString('base64');
+
+    const defaultHeaders = {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Authorization': 'Basic ' + `${encodedToken}`
+    };
+    let httpHeaders = { headers: defaultHeaders };
+
+    
+    console.log("we postend point"+ postendpoint);
+    console.log("we httpheaders point"+ httpHeaders);
+    console.log("we pay laod "+payload);
+
+
     // console.log("I'm postend point"+ postendpoint);
     // console.log("I'm httpheaders point"+ httpHeaders);
     // console.log("im pay laod "+payload);
 
-    return new Promise((resolve, reject ) => {
-        console.log('Calling Change Control API to create change....');
-
-        let changeRequestDetails;
-        let attempts = 0;
-    
-        try {
-            changeRequestDetails = JSON.parse(changeRequestDetailsStr);
-        } catch (e) {
-            console.log(`Error occured with message ${e}`);
-            throw new Error("Failed parsing changeRequestDetails");
-        }
-    
-        let githubContext;
-    
-        try {
-            githubContext = JSON.parse(githubContextStr);
-        } catch (e) {
-            console.log(`Error occured with message ${e}`);
-            throw new Error("Exception parsing github context");
-        }
-    
-        let payload;
-    
-        try {
-            payload = {
-                'toolId': toolId,
-                'stageName': jobname,
-                'buildNumber': `${githubContext.run_id}`,
-                'attemptNumber': `${githubContext.run_attempt}`,
-                'sha': `${githubContext.sha}`,
-                'action': 'customChange',
-                'workflow': `${githubContext.workflow}`,
-                'repository': `${githubContext.repository}`,
-                'branchName': `${githubContext.ref_name}`,
-                'changeRequestDetails': changeRequestDetails
-            };
-        } catch (err) {
-            console.log(`Error occured with message ${err}`);
-            throw new Error("Exception preparing payload");
-        }
-    
-        let postendpoint = `${instanceUrl}/api/sn_devops/devops/orchestration/changeControl?toolId=${toolId}&toolType=github_server`;
-        let response;
-        let status = false;
-        const token = `${username}:${passwd}`;
-        const encodedToken = Buffer.from(token).toString('base64');
-    
-        const defaultHeaders = {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': 'Basic ' + `${encodedToken}`
-        };
-        let httpHeaders = { headers: defaultHeaders };
-    
-        
-        console.log("we postend point"+ postendpoint);
-        console.log("we httpheaders point"+ httpHeaders);
-        console.log("we pay laod "+payload);
+    return new Promise((resolve, reject) => {
 
            axios.post(postendpoint, payload, httpHeaders)
             .then(response => {
