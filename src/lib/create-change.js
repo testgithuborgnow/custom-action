@@ -114,7 +114,7 @@ setInterval(() => {
                     throw new Error(errMsg);
                 }
             }
-             new Promise((resolve) => setTimeout(resolve, 30000));
+             //new Promise((resolve) => setTimeout(resolve, 30000));
         }
     }
     if (status) {
