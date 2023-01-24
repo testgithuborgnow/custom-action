@@ -5830,13 +5830,13 @@ async function createChange({
     let response;
     let status = false;
 
-    // setTimeout(() => {
-    //     if(result && result.message)
-    //          console.log('im printing result'+ result.message);
-    //     else if (abortOnChangeCreationFailure){ 
-    //         throw new Error(`Change creation timeout after ${timeout} seconds.`);;
-    //     }
-    //    }, changeCreationTimeOut * 1000);
+    setTimeout(() => {
+        if(result && result.message)
+             console.log('im printing result'+ result.message);
+        else if (abortOnChangeCreationFailure){ 
+            throw new Error(`Change creation timeout after ${timeout} seconds.`);;
+        }
+       }, changeCreationTimeOut * 1000);
 
     while (attempts < 3) {
         try {
@@ -5982,7 +5982,7 @@ async function doFetch({
           throw new Error("404");
         }
     }
-
+    
     if (status) {
         try {
           responseCode = response.status;
@@ -6286,8 +6286,8 @@ const main = async() => {
 
     let changeRequestDetailsStr = core.getInput('change-request', { required: true });
     let githubContextStr = core.getInput('context-github', { required: true });
-    // let abortOnChangeCreationFailure = (core.getInput('abortOnChangeCreationFailure') === 'true'); 
-    let abortOnChangeCreationFailure = true;
+    let abortOnChangeCreationFailure = core.getInput('abortOnChangeCreationFailure');
+    abortOnChangeCreationFailure = abortOnChangeCreationFailure === undefined || abortOnChangeCreationFailure === "" ? true : (abortOnChangeCreationFailure == "true");
     let changeCreationTimeOut = parseInt(core.getInput('changeCreationTimeOut') || 3600);
     changeCreationTimeOut = changeCreationTimeOut>= 3600 ?changeCreationTimeOut: 3600;
     let status = true;

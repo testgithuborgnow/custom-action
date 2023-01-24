@@ -13,8 +13,8 @@ const main = async() => {
 
     let changeRequestDetailsStr = core.getInput('change-request', { required: true });
     let githubContextStr = core.getInput('context-github', { required: true });
-    // let abortOnChangeCreationFailure = (core.getInput('abortOnChangeCreationFailure') === 'true'); 
-    let abortOnChangeCreationFailure = true;
+    let abortOnChangeCreationFailure = core.getInput('abortOnChangeCreationFailure');
+    abortOnChangeCreationFailure = abortOnChangeCreationFailure === undefined || abortOnChangeCreationFailure === "" ? true : (abortOnChangeCreationFailure == "true");
     let changeCreationTimeOut = parseInt(core.getInput('changeCreationTimeOut') || 3600);
     changeCreationTimeOut = changeCreationTimeOut>= 3600 ?changeCreationTimeOut: 3600;
     let status = true;

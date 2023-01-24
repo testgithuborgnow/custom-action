@@ -67,7 +67,7 @@ async function doFetch({
           throw new Error("404");
         }
     }
-
+    
     if (status) {
         try {
           responseCode = response.status;
