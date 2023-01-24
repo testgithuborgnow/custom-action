@@ -37,6 +37,11 @@ const main = async() => {
      core.setFailed(err.message);
     }
 
+    if(true){
+      console.log("i'm executing with ");
+      return;
+    }
+    
     if (status) {
       let timeout = parseInt(core.getInput('timeout') || 3600);
       let interval = parseInt(core.getInput('interval') || 100);
