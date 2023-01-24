@@ -20,15 +20,15 @@ const main = async() => {
 
       setTimeout(() => {
 
-        if(result && result.message)
-             console.log('im printing result'+ result.message);
-        else {
-            console.log("testing");
+        // if(result && result.message)
+        //      console.log('im printing result'+ result.message);
+        // else {
+        //     console.log("testing");
             
         return;
         
        //throw new Error('Testing');
-        }
+       // }
         //throw new Error('timer working');
 
        }, 6000);
