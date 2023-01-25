@@ -64,9 +64,9 @@ async function createChange({
     //     throw new Error('test');
     // }, changeCreationTimeOut * 1000);
 
-    while (attempts < 1) {
-        //try {
-        ++attempts;
+    // while (attempts < 1) {
+    //     //try {
+    //     ++attempts;
         const token = `${username}:${passwd}`;
         const encodedToken = Buffer.from(token).toString('base64');
 
@@ -165,47 +165,49 @@ async function createChange({
         // if (retries === maxRetries) {
         //     console.error("API call failed, maximum retries exceeded.")
         // }
-        const retries = 3;
+        // const retries = 3;
 
-        for (let i = 0; i <= retries; i++) {
-            const apiCall = new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
-                        .then((response) => resolve(response))
-                        .catch((error) => reject(error));
-                }, 1000*1000);
-            });
-        
-            apiCall
-                .then(response => {
-                    console.log(response.data);
-                    return;
-                })
-                .catch(error => {
-                    if (i === retries) {
-                        console.error(`API call failed after ${i} retries: ${error}`);
-                        return;
-                    }
-                    console.error(`API call failed on attempt ${i+1}. Retrying...`);
-                });
-        }
-        
+        // while(retries<3)
+        // {
+        // retries++;
+        //     const apiCall = new Promise((resolve, reject) => {
+        //         setTimeout(() => {
+        //             axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
+        //                 .then((response) => resolve(response))
+        //                 .catch((error) => reject(error));
+        //         }, 100 * 1000);
+        //     });
+
+        //     apiCall
+        //         .then(response => {
+        //             console.log(response.data);
+        //             break;
+        //         })
+        //         .catch(error => {
+        //             if (i === retries) {
+        //                 console.error(`API call failed after ${i} retries: ${error}`);
+        //                 return;
+        //             }
+        //             console.error(`API call failed on attempt ${i + 1}. Retrying...`);
+        //         });
+        // }
+
         // working one
-        // const apiCall = new Promise((resolve, reject) => {
-        //     setTimeout(() => {
-        //       axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
-        //         .then((response) => resolve(response))
-        //         .catch((error) => reject(error));
-        //     }, 1000*1000);
-        //   });
+        const apiCall = new Promise((resolve, reject) => {
+            setTimeout(() => {
+              axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
+                .then((response) => resolve(response))
+                .catch((error) => reject(error));
+            }, 1000*1000);
+          });
 
-        //   apiCall
-        //     .then(response => {
-        //       console.log(response.data)
-        //     })
-        //     .catch(error => {
-        //       console.error(error)
-        //     })
+          apiCall
+            .then(response => {
+              console.log(response.data)
+            })
+            .catch(error => {
+              console.error(error)
+            })
         // till here
 
 
@@ -296,6 +298,6 @@ async function createChange({
     //         console.log('\n     \x1b[1m\x1b[36m' + result.message + '\x1b[0m\x1b[0m');
     //     }
     // }
-}
+//}
 
 module.exports = { createChange };
