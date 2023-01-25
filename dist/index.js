@@ -5850,27 +5850,43 @@ async function createChange({
         let httpHeaders = { headers: defaultHeaders };
 
 
-        let timer = new Promise((resolve, reject) => {
-            setTimeout(() => resolve(), 300*1000);
-        });
+        // let timer = new Promise((resolve, reject) => {
+        //     setTimeout(() => resolve(), 300*1000);
+        // });
 
-        let response;
-        try {
-            response = await Promise.race([
-                axios.post(postendpoint, JSON.stringify(payload), httpHeaders),
-                timer
-            ]);
+        // let response;
+        // try {
+        //     response = await Promise.race([
+        //         axios.post(postendpoint, JSON.stringify(payload), httpHeaders),
+        //         timer
+        //     ]);
             
 
-            if (!response) {
-                console.log("API call timeout")
-                return;
-            }
-            console.log(response.data);
-        } catch (error) {
-            console.log('message'+error.message);
-            return;
-        }
+        //     if (!response) {
+        //         console.log("API call timeout")
+        //         return;
+        //     }
+        //     console.log(response.data);
+        // } catch (error) {
+        //     console.log('message'+JSON.stringify(error));
+        //     return;
+        // }
+
+        const apiCall = new Promise((resolve, reject) => {
+            setTimeout(() => {
+              axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
+                .then((response) => resolve(response))
+                .catch((error) => reject(error));
+            }, 30000);
+          });
+          
+          apiCall
+            .then(response => {
+              console.log(response.data)
+            })
+            .catch(error => {
+              console.error(error)
+            })
 
 
 
