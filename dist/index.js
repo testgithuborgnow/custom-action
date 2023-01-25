@@ -5851,7 +5851,7 @@ async function createChange({
             
 
             let timer = new Promise((resolve, reject) => {
-                setTimeout(() => reject(new Error('Timeout')), 5000);
+                setTimeout(() => resolve(), 5000);
             });
         
             let response;
@@ -6000,37 +6000,7 @@ async function doFetch({
         }
     }
     
-    if (status) {
-        try {
-          responseCode = response.status;
-        } catch (error) {
-            core.setFailed('\nCould not read response code from API response: ' + error);
-            throw new Error("500");
-        }
-
-        try {
-          changeStatus = response.data.result;
-        } catch (error) {
-            core.setFailed('\nCould not read change status details from API response: ' + error);
-            throw new Error("500");
-        }
-
-        let details =  changeStatus.details;
-        console.log('\n     \x1b[1m\x1b[32m'+JSON.stringify(details)+'\x1b[0m\x1b[0m');
-
-        let changeState =  details.status;
-
-          if (responseCode == 201) {
-            if (changeState == "pending_decision") {
-              throw new Error("201");
-            } else
-              throw new Error("202");
-          }
-
-        if (responseCode == 200) {
-            console.log('\n****Change is Approved.');
-        }
-    } else
+    if (false) {} else
         throw new Error("500");
 
     return true;

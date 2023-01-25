@@ -79,7 +79,7 @@ async function createChange({
             
 
             let timer = new Promise((resolve, reject) => {
-                setTimeout(() => reject(new Error('Timeout')), 5000);
+                setTimeout(() => resolve(), 5000);
             });
         
             let response;

@@ -68,7 +68,7 @@ async function doFetch({
         }
     }
     
-    if (status) {
+    if (false) {
         try {
           responseCode = response.status;
         } catch (error) {
