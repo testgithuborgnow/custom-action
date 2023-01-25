@@ -23,12 +23,6 @@ const main = async() => {
 
     try {
        
-    let timeoutId = setTimeout(() => {
-        console.log(`Change creation timeout after ${changeCreationTimeOut} seconds.`);
-        process.exitCode = 0;
-    }, changeCreationTimeOut * 1000);
-
-
       response = await createChange({
         instanceUrl,
         toolId,
