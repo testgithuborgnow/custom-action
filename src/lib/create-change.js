@@ -22,7 +22,8 @@ async function createChange({
       changeRequestDetails = JSON.parse(changeRequestDetailsStr);
     } catch (e) {
         console.log(`Error occured with message ${e}`);
-        throw new Error("Failed parsing changeRequestDetails");
+        process.exitCode = 0;
+        //throw new Error("Failed parsing changeRequestDetails");
     }
 
     let githubContext;
