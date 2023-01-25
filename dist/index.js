@@ -6005,7 +6005,37 @@ async function doFetch({
         }
     }
     
-    if (false) {} else
+    if (status) {
+        try {
+          responseCode = response.status;
+        } catch (error) {
+            core.setFailed('\nCould not read response code from API response: ' + error);
+            throw new Error("500");
+        }
+
+        try {
+          changeStatus = response.data.result;
+        } catch (error) {
+            core.setFailed('\nCould not read change status details from API response: ' + error);
+            throw new Error("500");
+        }
+
+        let details =  changeStatus.details;
+        console.log('\n     \x1b[1m\x1b[32m'+JSON.stringify(details)+'\x1b[0m\x1b[0m');
+
+        let changeState =  details.status;
+
+          if (responseCode == 201) {
+            if (changeState == "pending_decision") {
+              throw new Error("201");
+            } else
+              throw new Error("202");
+          }
+
+        if (responseCode == 200) {
+            console.log('\n****Change is Approved.');
+        }
+    } else
         throw new Error("500");
 
     return true;
@@ -6299,38 +6329,14 @@ const main = async() => {
         changeCreationTimeOut,
         abortOnChangeCreationFailure
       });
+
+      return true;
     } catch (err) { 
      status = false;
      core.setFailed(err.message);
     }
     
-    if (status) {
-      let timeout = parseInt(core.getInput('timeout') || 3600);
-      let interval = parseInt(core.getInput('interval') || 100);
-      let changeFlag = core.getInput('changeFlag');
-      changeFlag = changeFlag === undefined || changeFlag === "" ? true : (changeFlag == "true");
-      
-     
-      interval = 2;
-      timeout = 10;
-
-      let start = +new Date();
-      
-      response = await tryFetch({
-        start,
-        interval,
-        timeout,
-        instanceUrl,
-        toolId,
-        username,
-        passwd,
-        jobname,
-        githubContextStr,
-        changeFlag
-      });
-
-      console.log('Get change status was successfull.');  
-    }
+    if (false) {}
   } catch (error) {
     core.setFailed(error.message);
   }
