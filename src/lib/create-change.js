@@ -148,12 +148,12 @@ async function createChange({
         //     await new Promise((resolve) => setTimeout(resolve, 30000));
         // }
     }
-    if (status) {
-        var result = response.data.result;
-        if (result && result.message) {
-            console.log('\n     \x1b[1m\x1b[36m' + result.message + '\x1b[0m\x1b[0m');
-        }
-    }
+    // if (status) {
+    //     var result = response.data.result;
+    //     if (result && result.message) {
+    //         console.log('\n     \x1b[1m\x1b[36m' + result.message + '\x1b[0m\x1b[0m');
+    //     }
+    // }
 }
 
 module.exports = { createChange };
