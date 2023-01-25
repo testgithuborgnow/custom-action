@@ -5876,7 +5876,7 @@ async function createChange({
         //     const timeoutId = setTimeout(() => {
         //         reject(new Error("API call timeout"));
         //     }, 1000000);
-    
+
         //     axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
         //     .then((response) => {
         //         clearTimeout(timeoutId);
@@ -5887,7 +5887,7 @@ async function createChange({
         //         reject(error);
         //     });
         // });
-    
+
         // apiCall
         // .then(response => {
         //     console.log(response.data)
@@ -5896,33 +5896,35 @@ async function createChange({
         //     console.error(error.message)
         // })
 
-        let timeout = 1000*1000;
+        let timeout = 1000 * 1000;
         let maxRetries = 3;
         let retries = 0;
 
-        
-        while(retries < maxRetries) {
+
+        while (retries < maxRetries) {
             let apiCall = new Promise((resolve, reject) => {
                 let timeoutId = setTimeout(() => {
                     reject(new Error("API call timeout"));
                 }, timeout);
-    
+
                 axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
-                .then((response) => {
-                    clearTimeout(timeoutId);
-                    resolve(response);
-                })
-                .catch((error) => {
-                    clearTimeout(timeoutId);
-                    reject(error);
-                });
+                    .then((response) => {
+                        clearTimeout(timeoutId);
+                        resolve(response);
+                    })
+                    .catch((error) => {
+                        clearTimeout(timeoutId);
+                        reject(error);
+                    });
             });
-    
+
             try {
                 let response = await apiCall;
                 console.log(response.data);
                 break;
             } catch (error) {
+
+                 console.log(JSON.stringify(error));
                 if (error.message === "API call timeout") {
                     console.error("API call timeout, please try again later");
                     break;
@@ -5932,7 +5934,7 @@ async function createChange({
                 }
             }
         }
-        if(retries === maxRetries){
+        if (retries === maxRetries) {
             console.error("API call failed, maximum retries exceeded.")
         }
 
@@ -5953,7 +5955,7 @@ async function createChange({
         //     .catch(error => {
         //       console.error(error)
         //     })
-       // till here
+        // till here
 
 
         // let counter = 0;
