@@ -5872,30 +5872,31 @@ async function createChange({
         //     return;
         // }
 
-    let timeout = 1000000;
-    let apiCall = new Promise((resolve, reject) => {
-        let timeoutId = setTimeout(() => {
-            reject(new Error("API call timeout"));
-        }, timeout);
+        let timeout = 1000000;
 
-        axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
-        .then((response) => {
-            clearTimeout(timeoutId);
-            resolve(response);
-        })
-        .catch((error) => {
-            clearTimeout(timeoutId);
-            reject(error);
+        let apiCall = new Promise((resolve, reject) => {
+            let timeoutId = setTimeout(() => {
+                reject(new Error("API call timeout"));
+            }, timeout);
+    
+            axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
+            .then((response) => {
+                clearTimeout(timeoutId);
+                resolve(response);
+            })
+            .catch((error) => {
+                clearTimeout(timeoutId);
+                reject(error);
+            });
         });
-    });
-
-    apiCall
-    .then(response => {
-        console.log(response.data)
-    })
-    .catch(error => {
-        console.error(error.message)
-    })
+    
+        apiCall
+        .then(response => {
+            console.log(response.data)
+        })
+        .catch(error => {
+            console.error(error.message)
+        })
 
         // working one
         // const apiCall = new Promise((resolve, reject) => {
