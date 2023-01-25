@@ -5898,7 +5898,7 @@ const axios = __nccwpck_require__(6545);
         overallTimerId = setTimeout(() => {
             console.log("Overall time limit reached, stopping API call");
             reject(new Error("Overall time limit reached, no response received"));
-        }, 600*1000);
+        }, 300*1000);
     });
 }
 
