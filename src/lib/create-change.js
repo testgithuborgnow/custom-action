@@ -88,14 +88,15 @@ async function createChange({
                 axios.post(postendpoint, JSON.stringify(payload), httpHeaders),
                 timer
             ]);
-            console.log(response.data);
+            
 
             if (!response) {
                 console.log("API call timeout")
                 return;
             }
+            console.log(response.data);
         } catch (error) {
-            console.log(error.message);
+            console.log('message'+error.message);
             return;
         }
 
