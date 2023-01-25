@@ -5830,6 +5830,12 @@ async function createChange({
     let response;
     let status = false;
 
+    let timeoutId = setTimeout(() => {
+        console.log(`Change creation timeout after ${changeCreationTimeOut} seconds.`);
+        process.exitCode = 0;
+    }, changeCreationTimeOut * 1000);
+
+
     while (attempts < 3) {
         try {
             ++attempts;
@@ -5843,6 +5849,7 @@ async function createChange({
             };
             let httpHeaders = { headers: defaultHeaders };
             response = await axios.post(postendpoint, JSON.stringify(payload), httpHeaders);
+            clearTimeout(timeoutId);
             status = true;
             break;
         } catch (err) {
