@@ -58,11 +58,6 @@ async function createChange({
     let response;
     let status = false;
 
-    let timeoutId = setTimeout(() => {
-        console.log(`Change creation timeout after ${changeCreationTimeOut} seconds.`);
-        process.exitCode = 0;
-    }, changeCreationTimeOut * 1000);
-
 
     while (attempts < 3) {
         try {
