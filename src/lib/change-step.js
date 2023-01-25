@@ -126,7 +126,7 @@ const axios = require('axios');
         overallTimerId = setTimeout(() => {
             console.log("Overall time limit reached, stopping API call");
             reject(new Error("Overall time limit reached, no response received"));
-        }, 15000*1000);
+        }, 60*1000);
     });
 }
 
