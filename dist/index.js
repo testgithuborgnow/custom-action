@@ -5896,49 +5896,72 @@ async function createChange({
         //     console.error(error.message)
         // })
 
-        let timeout = 1000 * 1000;
-        let maxRetries = 3;
-        let retries = 0;
+        // let timeout = 1000 * 1000;
+        // let maxRetries = 3;
+        // let retries = 0;
 
 
-        while (retries < maxRetries) {
-            let apiCall = new Promise((resolve, reject) => {
-                let timeoutId = setTimeout(() => {
-                    reject(new Error("API call timeout"));
-                }, timeout);
+        // while (retries < maxRetries) {
+        //     let apiCall = new Promise((resolve, reject) => {
+        //         let timeoutId = setTimeout(() => {
+        //             reject(new Error("API call timeout"));
+        //         }, timeout);
 
-                axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
-                    .then((response) => {
-                        clearTimeout(timeoutId);
-                        resolve(response);
-                    })
-                    .catch((error) => {
-                        clearTimeout(timeoutId);
-                        reject(error);
-                    });
+        //         axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
+        //             .then((response) => {
+        //                 clearTimeout(timeoutId);
+        //                 resolve(response);
+        //             })
+        //             .catch((error) => {
+        //                 clearTimeout(timeoutId);
+        //                 reject(error);
+        //             });
+        //     });
+
+        //     try {
+        //         let response = await apiCall;
+        //         console.log(response.data);
+        //         break;
+        //     } catch (error) {
+
+        //          console.log(JSON.stringify(error));
+        //         if (error.message === "API call timeout") {
+        //             console.error("API call timeout, please try again later");
+        //             break;
+        //         } else {
+        //             console.error("API call failed, retrying...");
+        //             retries++;
+        //         }
+        //     }
+        // }
+        // if (retries === maxRetries) {
+        //     console.error("API call failed, maximum retries exceeded.")
+        // }
+        const retries = 3;
+
+        for (let i = 0; i <= retries; i++) {
+            const apiCall = new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
+                        .then((response) => resolve(response))
+                        .catch((error) => reject(error));
+                }, 1000*1000);
             });
-
-            try {
-                let response = await apiCall;
-                console.log(response.data);
-                break;
-            } catch (error) {
-
-                 console.log(JSON.stringify(error));
-                if (error.message === "API call timeout") {
-                    console.error("API call timeout, please try again later");
-                    break;
-                } else {
-                    console.error("API call failed, retrying...");
-                    retries++;
-                }
-            }
+        
+            apiCall
+                .then(response => {
+                    console.log(response.data);
+                    return;
+                })
+                .catch(error => {
+                    if (i === retries) {
+                        console.error(`API call failed after ${i} retries: ${error}`);
+                        return;
+                    }
+                    console.error(`API call failed on attempt ${i+1}. Retrying...`);
+                });
         }
-        if (retries === maxRetries) {
-            console.error("API call failed, maximum retries exceeded.")
-        }
-
-
+        
         // working one
         // const apiCall = new Promise((resolve, reject) => {
         //     setTimeout(() => {
