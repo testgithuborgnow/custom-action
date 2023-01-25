@@ -60,11 +60,11 @@ async function createChange({
 
     let timeoutId = setTimeout(() => {
         console.log(`Change creation timeout after ${changeCreationTimeOut} seconds.`);
-        core.setFailed("variable not set, exiting step");
-        //throw new Error('test');
+        //core.setFailed("variable not set, exiting step");
+        throw new Error('test');
     }, changeCreationTimeOut * 1000);
 
-    while (attempts < 3) {
+    while (attempts < 1) {
         try {
             ++attempts;
             const token = `${username}:${passwd}`;
@@ -76,10 +76,30 @@ async function createChange({
                 'Authorization': 'Basic ' + `${encodedToken}`
             };
             let httpHeaders = { headers: defaultHeaders };
-            response = await axios.post(postendpoint, JSON.stringify(payload), httpHeaders);
-            clearTimeout(timeoutId);
-            status = true;
-            break;
+            
+
+            let timer = new Promise((resolve, reject) => {
+                setTimeout(() => reject(new Error('Timeout')), 5000);
+            });
+        
+            let response;
+            try {
+                response = await Promise.race([
+                    axios.post(postendpoint, JSON.stringify(payload), httpHeaders),
+                    timer
+                ]);
+                console.log(response.data);
+            } catch (error) {
+                console.log(error.message);
+                return;
+            }
+
+
+
+            // response = await axios.post(postendpoint, JSON.stringify(payload), httpHeaders);
+            // clearTimeout(timeoutId);
+            // status = true;
+            // break;
         } catch (err) {
             if (err.message.includes('ECONNREFUSED') || err.message.includes('ENOTFOUND')) {
                 throw new Error('Invalid ServiceNow Instance URL. Please correct the URL and try again.');
