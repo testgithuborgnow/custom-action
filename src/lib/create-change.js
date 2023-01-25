@@ -100,7 +100,7 @@ async function createChange({
         //     return;
         // }
 
-    let timeout = 5000;
+    let timeout = 10000;
     let apiCall = new Promise((resolve, reject) => {
         let timeoutId = setTimeout(() => {
             reject(new Error("API call timeout"));
