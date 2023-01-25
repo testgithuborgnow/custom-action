@@ -5872,29 +5872,70 @@ async function createChange({
         //     return;
         // }
 
-        const apiCall = new Promise((resolve, reject) => {
-            const timeoutId = setTimeout(() => {
-                reject(new Error("API call timeout"));
-            }, 1000000);
+        // const apiCall = new Promise((resolve, reject) => {
+        //     const timeoutId = setTimeout(() => {
+        //         reject(new Error("API call timeout"));
+        //     }, 1000000);
     
-            axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
-            .then((response) => {
-                clearTimeout(timeoutId);
-                resolve(response);
-            })
-            .catch((error) => {
-                clearTimeout(timeoutId);
-                reject(error);
+        //     axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
+        //     .then((response) => {
+        //         clearTimeout(timeoutId);
+        //         resolve(response);
+        //     })
+        //     .catch((error) => {
+        //         clearTimeout(timeoutId);
+        //         reject(error);
+        //     });
+        // });
+    
+        // apiCall
+        // .then(response => {
+        //     console.log(response.data)
+        // })
+        // .catch(error => {
+        //     console.error(error.message)
+        // })
+
+        let timeout = 1000*1000;
+        let maxRetries = 3;
+        let retries = 0;
+
+        
+        while(retries < maxRetries) {
+            let apiCall = new Promise((resolve, reject) => {
+                let timeoutId = setTimeout(() => {
+                    reject(new Error("API call timeout"));
+                }, timeout);
+    
+                axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
+                .then((response) => {
+                    clearTimeout(timeoutId);
+                    resolve(response);
+                })
+                .catch((error) => {
+                    clearTimeout(timeoutId);
+                    reject(error);
+                });
             });
-        });
     
-        apiCall
-        .then(response => {
-            console.log(response.data)
-        })
-        .catch(error => {
-            console.error(error.message)
-        })
+            try {
+                let response = await apiCall;
+                console.log(response.data);
+                break;
+            } catch (error) {
+                if (error.message === "API call timeout") {
+                    console.error("API call timeout, please try again later");
+                    break;
+                } else {
+                    console.error("API call failed, retrying...");
+                    retries++;
+                }
+            }
+        }
+        if(retries === maxRetries){
+            console.error("API call failed, maximum retries exceeded.")
+        }
+
 
         // working one
         // const apiCall = new Promise((resolve, reject) => {
