@@ -36,7 +36,7 @@ const axios = require('axios');
 
     try {
         console.log(changeRequestDetailsStr);
-        githubContext = githubContextStr;
+        githubContext =JSON.parse(githubContextStr);
     } catch (e) {
         console.log(`Error occured with message github context ${e}`);
         throw new Error("Exception parsing github context");
