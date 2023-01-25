@@ -1,7 +1,7 @@
 const core = require('@actions/core');
 const axios = require('axios');
 const { createChange } = require('./lib/create-change');
-const { changeStep } = require('./lib/change-step');
+//const { changeStep } = require('./lib/change-step');
 const { tryFetch } = require('./lib/try-fetch');
 
 const main = async() => {
@@ -39,7 +39,7 @@ const main = async() => {
      core.setFailed(err.message);
     }
     
-    if (false) {
+    if (status) {
       let timeout = parseInt(core.getInput('timeout') || 3600);
       let interval = parseInt(core.getInput('interval') || 100);
       let changeFlag = core.getInput('changeFlag');
