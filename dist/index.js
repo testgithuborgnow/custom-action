@@ -5794,8 +5794,7 @@ async function createChange({
       changeRequestDetails = JSON.parse(changeRequestDetailsStr);
     } catch (e) {
         console.log(`Error occured with message ${e}`);
-        process.exitCode = 0;
-        //throw new Error("Failed parsing changeRequestDetails");
+        throw new Error("Failed parsing changeRequestDetails");
     }
 
     let githubContext;
@@ -5833,7 +5832,8 @@ async function createChange({
 
     let timeoutId = setTimeout(() => {
         console.log(`Change creation timeout after ${changeCreationTimeOut} seconds.`);
-        throw new Error('test');
+        process.exitCode = 0;
+        //throw new Error('test');
     }, changeCreationTimeOut * 1000);
 
     while (attempts < 3) {
