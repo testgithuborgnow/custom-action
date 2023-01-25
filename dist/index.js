@@ -6285,7 +6285,7 @@ const main = async() => {
     let githubContextStr = core.getInput('context-github', { required: true });
     let abortOnChangeCreationFailure = core.getInput('abortOnChangeCreationFailure');
     abortOnChangeCreationFailure = abortOnChangeCreationFailure === undefined || abortOnChangeCreationFailure === "" ? true : (abortOnChangeCreationFailure == "true");
-    let changeCreationTimeOut = parseInt(core.getInput('changeCreationTimeOut') || 3600);
+    let changeCreationTimeOut = parseInt(core.getInput('changeCreationTimeOut') || 10);
     changeCreationTimeOut = changeCreationTimeOut>= 10 ?changeCreationTimeOut: 10;
     let status = true;
     let response;
