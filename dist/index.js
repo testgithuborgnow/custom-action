@@ -5871,22 +5871,48 @@ async function createChange({
         //     console.log('message'+JSON.stringify(error));
         //     return;
         // }
-        // working one
-        const apiCall = new Promise((resolve, reject) => {
-            setTimeout(() => {
-              axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
-                .then((response) => resolve(response))
-                .catch((error) => reject(error));
-            }, 100000);
-          });
 
-          apiCall
-            .then(response => {
-              console.log(response.data)
-            })
-            .catch(error => {
-              console.error(error)
-            })
+    let timeout = 100000;
+    let apiCall = new Promise((resolve, reject) => {
+        let timeoutId = setTimeout(() => {
+            reject(new Error("API call timeout"));
+        }, timeout);
+
+        axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
+        .then((response) => {
+            clearTimeout(timeoutId);
+            resolve(response);
+        })
+        .catch((error) => {
+            clearTimeout(timeoutId);
+            reject(error);
+        });
+    });
+
+    apiCall
+    .then(response => {
+        console.log(response.data)
+    })
+    .catch(error => {
+        console.error(error.message)
+    })
+
+        // working one
+        // const apiCall = new Promise((resolve, reject) => {
+        //     setTimeout(() => {
+        //       axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
+        //         .then((response) => resolve(response))
+        //         .catch((error) => reject(error));
+        //     }, 100000);
+        //   });
+
+        //   apiCall
+        //     .then(response => {
+        //       console.log(response.data)
+        //     })
+        //     .catch(error => {
+        //       console.error(error)
+        //     })
        // till here
 
 
