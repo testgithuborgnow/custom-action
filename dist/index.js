@@ -5877,7 +5877,7 @@ async function createChange({
               axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
                 .then((response) => resolve(response))
                 .catch((error) => reject(error));
-            }, 30000);
+            }, 1000);
           });
           
           apiCall
