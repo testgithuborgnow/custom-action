@@ -100,12 +100,10 @@ async function createChange({
         //     return;
         // }
 
-        let timeout = 1000000;
-
         let apiCall = new Promise((resolve, reject) => {
             let timeoutId = setTimeout(() => {
                 reject(new Error("API call timeout"));
-            }, timeout);
+            }, 1000000);
     
             axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
             .then((response) => {
