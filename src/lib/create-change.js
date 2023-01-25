@@ -132,7 +132,7 @@ async function createChange({
               axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
                 .then((response) => resolve(response))
                 .catch((error) => reject(error));
-            }, 100000);
+            }, 10*1000);
           });
 
           apiCall
