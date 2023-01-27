@@ -191,7 +191,7 @@ async function createChange({
     //         console.error(error)
     //     });
 
-    //working one
+    // working one
     // const apiCall = new Promise((resolve, reject) => {
     //     setTimeout(() => {
     //       axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
@@ -208,7 +208,7 @@ async function createChange({
     //     .catch(error => {
     //       console.error(error)
     //     })
-    //till here
+    // till here
     // let counter = 0;
     // const maxRetries = 3;
     // let timeoutId;
@@ -338,7 +338,11 @@ async function createChange({
 
 function makeAPICall(postendpoint, payload, httpHeaders ) {
     return new Promise((resolve, reject) => {
-      axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
+        fetch(postendpoint, {
+            method: 'POST',
+            httpHeaders,
+            body: JSON.stringify(payload)
+          })
         .then(response => {
           resolve(response);
         })
