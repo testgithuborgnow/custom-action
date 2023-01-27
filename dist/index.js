@@ -5840,23 +5840,19 @@ async function createChange({
     };
     let httpHeaders = { headers: defaultHeaders };
 
-    const apiCall = new Promise((resolve, reject) => {
-        var timerId = setTimeout(() => {
-            axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
-                .then((response) => {
-                    clearTimeout(timerId);
-                    resolve(response);
-                })
-                .catch((error) => reject(error));
-        }, 300 * 1000);
-    });
-    apiCall
-        .then(response => {
-            console.log(response.data)
+    
+    timerId = setTimeout(() => {
+        console.error("API call timed out");
+    }, 10000);
+
+    axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
+        .then(function (response) {
+            clearTimeout(timerId);
+            console.log(response.data);
         })
-        .catch(error => {
-            console.error(error)
-        })
+        .catch(function (error) {
+            console.error(error);
+        });
 
 }
 
