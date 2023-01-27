@@ -69,11 +69,11 @@ async function createChange({
     let httpHeaders = { headers: defaultHeaders };
 
     const apiCall = new Promise((resolve, reject) => {
-
+        setTimeout(() => {
             axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
                 .then((response) => resolve(response))
                 .catch((error) => reject(error));
-       
+        }, 10000 * 1000);
     });
     apiCall
         .then(response => {
