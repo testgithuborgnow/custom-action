@@ -77,7 +77,7 @@ async function createChange({
             const timeTaken = endTime - startTime;
             console.log(`API call took ${timeTaken}ms`);
             console.log('response from the info'+JSON.stringify(response))
-            return response;
+            //return response;
           } catch (error) {
             apiError = error;
           }
@@ -139,13 +139,13 @@ async function createChange({
         // }
 
 
-    }
+    //}
     if (status) {
         var result = response.data.result;
         if (result && result.message) {
             console.log('\n     \x1b[1m\x1b[36m' + result.message + '\x1b[0m\x1b[0m');
         }
     }
-//}
+}
 
 module.exports = { createChange };
