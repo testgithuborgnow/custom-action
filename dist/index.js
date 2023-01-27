@@ -5070,7 +5070,7 @@ async function createChange({
             console.log(response.data);
         })
         .catch(error => {
-            console.error(error);
+            console.error(JSON.stringify(error.response.data.result.details));
         });
 
 
