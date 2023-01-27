@@ -5841,14 +5841,14 @@ async function createChange({
     let httpHeaders = { headers: defaultHeaders };
 
     const apiCall = new Promise((resolve, reject) => {
-        var timerId = setTimeout(() => { reject(error) }, 100 * 1000);
-        axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
-            .then((response) => {
-                clearTimeout(timerId);
-                resolve(response);
-            })
-            .catch((error) => reject(error));
-
+        var timerId = setTimeout(() => {
+            axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
+                .then((response) => {
+                    clearTimeout(timerId);
+                    resolve(response);
+                })
+                .catch((error) => reject(error));
+        }, 100 * 1000);
     });
     apiCall
         .then(response => {
