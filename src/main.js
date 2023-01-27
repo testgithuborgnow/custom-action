@@ -47,9 +47,6 @@ const main = async() => {
       let changeFlag = core.getInput('changeFlag');
       changeFlag = changeFlag === undefined || changeFlag === "" ? true : (changeFlag == "true");
       
-     
-      // interval = 2;
-      // timeout = 10;
 
       let start = +new Date();
       

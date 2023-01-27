@@ -2,24 +2,24 @@ const core = require('@actions/core');
 const axios = require('axios');
 
 async function createChange({
-    instanceUrl,
-    toolId,
-    username,
-    passwd,
-    jobname,
-    githubContextStr,
-    changeRequestDetailsStr,
-    changeCreationTimeOut,
-    abortOnChangeCreationFailure
+  instanceUrl,
+  toolId,
+  username,
+  passwd,
+  jobname,
+  githubContextStr,
+  changeRequestDetailsStr,
+  changeCreationTimeOut,
+  abortOnChangeCreationFailure
 }) {
-
+   
     console.log('Calling Change Control API to create change....');
-
+    
     let changeRequestDetails;
     let attempts = 0;
 
     try {
-        changeRequestDetails = JSON.parse(changeRequestDetailsStr);
+      changeRequestDetails = JSON.parse(changeRequestDetailsStr);
     } catch (e) {
         console.log(`Error occured with message ${e}`);
         throw new Error("Failed parsing changeRequestDetails");
@@ -35,7 +35,7 @@ async function createChange({
     }
 
     let payload;
-
+    
     try {
         payload = {
             'toolId': toolId,
@@ -70,34 +70,18 @@ async function createChange({
                 'Authorization': 'Basic ' + `${encodedToken}`
             };
             let httpHeaders = { headers: defaultHeaders };
-            //response = await axios.post(postendpoint, JSON.stringify(payload), httpHeaders);
-
-
-
-            const timeout = 100*1000; // 5 seconds
-            let apiError = null;
-
-            try {
-                const response = await axios.post(postendpoint, JSON.stringify(payload), httpHeaders);
-                const endTime = new Date();
-                const timeTaken = endTime - startTime;
-                console.log(`API call took ${timeTaken}ms`);
-                return response;
-            } catch (error) {
-                apiError = error;
-            }
+            response = await axios.post(postendpoint, JSON.stringify(payload), httpHeaders);
 
             await new Promise((resolve, reject) => {
                 setTimeout(() => {
-                    if (!apiError) {
-                        apiError = new Error(`API call timed out after ${timeout}ms`);
-                    }
+                  if (apiError) {
                     reject(apiError);
-                }, timeout);
-            });
-
-
-
+                  } else {
+                    console.log(`API call took ${timeout}ms`);
+                    resolve();
+                  }
+                }, 1000*10);
+              });
 
             status = true;
             break;
@@ -105,11 +89,11 @@ async function createChange({
             if (err.message.includes('ECONNREFUSED') || err.message.includes('ENOTFOUND')) {
                 throw new Error('Invalid ServiceNow Instance URL. Please correct the URL and try again.');
             }
-
+            
             if (err.message.includes('401')) {
                 throw new Error('Invalid Credentials. Please correct the credentials and try again.');
             }
-
+               
             if (err.message.includes('405')) {
                 throw new Error('Response Code from ServiceNow is 405. Please correct ServiceNow logs for more details.');
             }
@@ -121,7 +105,7 @@ async function createChange({
             if (err.response.status == 500) {
                 throw new Error('Response Code from ServiceNow is 500. Please check ServiceNow logs for more details.')
             }
-
+            
             if (err.response.status == 400) {
                 let errMsg = 'ServiceNow DevOps Change is not created. Please check ServiceNow logs for more details.';
                 let responseData = err.response.data;
@@ -147,7 +131,7 @@ async function createChange({
     if (status) {
         var result = response.data.result;
         if (result && result.message) {
-            console.log('\n     \x1b[1m\x1b[36m' + result.message + '\x1b[0m\x1b[0m');
+            console.log('\n     \x1b[1m\x1b[36m'+result.message+'\x1b[0m\x1b[0m');
         }
     }
 }
