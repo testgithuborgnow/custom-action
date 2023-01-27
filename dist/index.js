@@ -5831,6 +5831,7 @@ async function createChange({
     //     ++attempts;
     const token = `${username}:${passwd}`;
     const encodedToken = Buffer.from(token).toString('base64');
+    console.log('Endocded token   '+encodedToken);
     const defaultHeaders = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
