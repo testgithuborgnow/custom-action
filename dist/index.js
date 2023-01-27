@@ -9484,7 +9484,7 @@ const main = async() => {
     
     if (status) {
       let timeout = parseInt(core.getInput('timeout') || 3600);
-      let interval = parseInt(core.getInput('interval') || 100);
+      let interval = parseInt(core.getInput('interval') || 10);
       let changeFlag = core.getInput('changeFlag');
       changeFlag = changeFlag === undefined || changeFlag === "" ? true : (changeFlag == "true");
       
