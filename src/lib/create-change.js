@@ -242,35 +242,35 @@ async function createChange({
     //     .catch(error => {
     //         console.error(error);
     //     });
-    let counter = 0;
-    const maxRetries = 3;
-    const apiCall = new Promise((resolve, reject) => {
-        const retry = () => {
-            axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
-                .then((response) => resolve(response))
-                .catch((error) => {
-                    if (counter < maxRetries) {
-                        console.log(`Retrying API call: attempt ${counter + 1} of ${maxRetries}`);
-                        counter++;
-                        retry();
-                    } else {
-                        reject(error);
-                    }
-                });
-        };
-        retry();
-        // set a timeout for the entire promise function
-        setTimeout(() => {
-            reject("API call timed out");
-        }, 200*1000);
-    });
-    apiCall
-        .then(response => {
-            console.log(response.data);
-        })
-        .catch(error => {
-            console.error(error);
-        });
+    // let counter = 0;
+    // const maxRetries = 3;
+    // const apiCall = new Promise((resolve, reject) => {
+    //     const retry = () => {
+    //         axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
+    //             .then((response) => resolve(response))
+    //             .catch((error) => {
+    //                 if (counter < maxRetries) {
+    //                     console.log(`Retrying API call: attempt ${counter + 1} of ${maxRetries}`);
+    //                     counter++;
+    //                     retry();
+    //                 } else {
+    //                     reject(error);
+    //                 }
+    //             });
+    //     };
+    //     retry();
+    //     // set a timeout for the entire promise function
+    //     setTimeout(() => {
+    //         reject("API call timed out");
+    //     }, 200*1000);
+    // });
+    // apiCall
+    //     .then(response => {
+    //         console.log(response.data);
+    //     })
+    //     .catch(error => {
+    //         console.error(error);
+    //     });
 
 
     // response = await axios.post(postendpoint, JSON.stringify(payload), httpHeaders);
@@ -314,6 +314,16 @@ async function createChange({
     //     }
     //     await new Promise((resolve) => setTimeout(resolve, 30000));
     // }
+
+
+        try {
+          const response = await makeAPICall(postendpoint, payload ,httpHeaders) ;
+          console.log(response);
+        } catch (error) {
+          console.log(error);
+        }
+      
+       
 }
 // if (status) {
 //     var result = response.data.result;
@@ -322,4 +332,19 @@ async function createChange({
 //     }
 // }
 //}
+
+
+
+function makeAPICall() {
+    return new Promise((resolve, reject) => {
+      axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
+        .then(response => {
+          resolve(response);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  }
+
 module.exports = { createChange };
