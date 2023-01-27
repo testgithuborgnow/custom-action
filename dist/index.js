@@ -5965,29 +5965,29 @@ async function createChange({
     // }
 
 
-    let timerId;
+    // let timerId;
 
-    const apiCall = new Promise((resolve, reject) => {
-        timerId = setTimeout(() => {
-            axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
-                .then((response) => {
-                    clearTimeout(timerId);
-                    resolve(response);
-                })
-                .catch((error) => {
-                    clearTimeout(timerId);
-                    reject(error);
-                });
-        }, 1000 * 1000);
-    });
+    // const apiCall = new Promise((resolve, reject) => {
+    //     timerId = setTimeout(() => {
+    //         axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
+    //             .then((response) => {
+    //                 clearTimeout(timerId);
+    //                 resolve(response);
+    //             })
+    //             .catch((error) => {
+    //                 clearTimeout(timerId);
+    //                 reject(error);
+    //             });
+    //     }, 1000 * 1000);
+    // });
 
-    apiCall
-        .then(response => {
-            console.log(response.data)
-        })
-        .catch(error => {
-            console.error(error)
-        });
+    // apiCall
+    //     .then(response => {
+    //         console.log(response.data)
+    //     })
+    //     .catch(error => {
+    //         console.error(error)
+    //     });
 
 
     // working one
@@ -6009,37 +6009,37 @@ async function createChange({
     // till here
 
 
-    // let counter = 0;
-    // const maxRetries = 3;
+    let counter = 0;
+    const maxRetries = 3;
 
-    // const apiCall = new Promise((resolve, reject) => {
-    //     const retry = () => {
-    //         axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
-    //             .then((response) => resolve(response))
-    //             .catch((error) => {
-    //                 if (counter < maxRetries) {
-    //                     console.log(`Retrying API call: attempt ${counter + 1} of ${maxRetries}`);
-    //                     counter++;
-    //                     retry();
-    //                 } else {
-    //                     reject(error);
-    //                 }
-    //             });
-    //     };
-    //     retry();
-    //     // set a timeout for the entire promise function
-    //     setTimeout(() => {
-    //         reject("API call timed out");
-    //     }, 400000);
-    // });
+    const apiCall = new Promise((resolve, reject) => {
+        const retry = () => {
+            axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
+                .then((response) => resolve(response))
+                .catch((error) => {
+                    if (counter < maxRetries) {
+                        console.log(`Retrying API call: attempt ${counter + 1} of ${maxRetries}`);
+                        counter++;
+                        retry();
+                    } else {
+                        reject(error);
+                    }
+                });
+        };
+        retry();
+        // set a timeout for the entire promise function
+        setTimeout(() => {
+            reject("API call timed out");
+        }, 400000);
+    });
 
-    // apiCall
-    //     .then(response => {
-    //         console.log(response.data);
-    //     })
-    //     .catch(error => {
-    //         console.error(error);
-    //     });
+    apiCall
+        .then(response => {
+            console.log(response.data);
+        })
+        .catch(error => {
+            console.error(error);
+        });
 
 
 
