@@ -194,11 +194,11 @@ async function createChange({
 
         // working one
         const apiCall = new Promise((resolve, reject) => {
-            setTimeout(() => {
+            // setTimeout(() => {
               axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
                 .then((response) => resolve(response))
                 .catch((error) => reject(error));
-            }, 1000*1000);
+            // }, 1000*1000);
           });
 
           apiCall
