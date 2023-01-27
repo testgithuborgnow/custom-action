@@ -58,7 +58,7 @@ async function createChange({
     let response;
     let status = false;
 
-    while (attempts < 3) {
+    //while (attempts < 3) {
         // try {
         ++attempts;
         const token = `${username}:${passwd}`;
@@ -76,6 +76,7 @@ async function createChange({
             const endTime = new Date();
             const timeTaken = endTime - startTime;
             console.log(`API call took ${timeTaken}ms`);
+            console.log('response from the info'+JSON.stringify(response))
             return response;
           } catch (error) {
             apiError = error;
@@ -88,11 +89,11 @@ async function createChange({
                     console.log(`API call took ${timeout}ms`);
                     resolve();
                 }
-            }, 1000 * 10);
+            }, 100 * 1000);
         });
 
-        status = true;
-        break;
+       status = true;
+        //break;
 
         // } catch (err) {
         //     if (err.message.includes('ECONNREFUSED') || err.message.includes('ENOTFOUND')) {
@@ -145,6 +146,6 @@ async function createChange({
             console.log('\n     \x1b[1m\x1b[36m' + result.message + '\x1b[0m\x1b[0m');
         }
     }
-}
+//}
 
 module.exports = { createChange };
