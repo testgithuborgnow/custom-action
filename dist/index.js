@@ -6332,7 +6332,33 @@ const main = async() => {
      core.setFailed(err.message);
     }
     
-    if (false) {}
+    if (status) {
+      let timeout = parseInt(core.getInput('timeout') || 3600);
+      let interval = parseInt(core.getInput('interval') || 100);
+      let changeFlag = core.getInput('changeFlag');
+      changeFlag = changeFlag === undefined || changeFlag === "" ? true : (changeFlag == "true");
+      
+     
+      // interval = 2;
+      // timeout = 10;
+
+      let start = +new Date();
+      
+      response = await tryFetch({
+        start,
+        interval,
+        timeout,
+        instanceUrl,
+        toolId,
+        username,
+        passwd,
+        jobname,
+        githubContextStr,
+        changeFlag
+      });
+
+      console.log('Get change status was successfull.');  
+    }
   } catch (error) {
     core.setFailed(error.message);
   }
