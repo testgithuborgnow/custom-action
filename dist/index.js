@@ -6030,7 +6030,7 @@ async function createChange({
         // set a timeout for the entire promise function
         setTimeout(() => {
             reject("API call timed out");
-        }, 120*1000);
+        }, 200*1000);
     });
 
     apiCall
