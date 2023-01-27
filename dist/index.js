@@ -6027,10 +6027,10 @@ async function createChange({
                 });
         };
         retry();
-        // set a timeout for the entire promise function
-        setTimeout(() => {
-            reject("API call timed out");
-        }, 230*1000);
+        // // set a timeout for the entire promise function
+        // setTimeout(() => {
+        //     reject("API call timed out");
+        // }, 230*1000);
     });
 
     apiCall
