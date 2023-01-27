@@ -58,36 +58,98 @@ async function createChange({
     let response;
     let status = false;
 
-    const token = `${username}:${passwd}`;
-    const encodedToken = Buffer.from(token).toString('base64');
+    while (attempts < 3) {
+        try {
+            ++attempts;
+            const token = `${username}:${passwd}`;
+            const encodedToken = Buffer.from(token).toString('base64');
 
-    const defaultHeaders = {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'Basic ' + `${encodedToken}`
-    };
-    let httpHeaders = { headers: defaultHeaders };
+            const defaultHeaders = {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Basic ' + `${encodedToken}`
+            };
+            let httpHeaders = { headers: defaultHeaders };
+            //response = await axios.post(postendpoint, JSON.stringify(payload), httpHeaders);
 
-    
-    var result = await makeGetRequest(postendpoint, payload, payload);
-    console.log(result.result);
-    console.log('Statement 2');
 
-}
 
-function makeGetRequest(postendpoint, payload, payload) {
-    return new Promise(function (resolve, reject) {
-        axios.post(postendpoint, JSON.stringify(payload), payload).then(
-            (response) => {
-                var result = response.data;
-                console.log('Processing Request');
-                resolve(result);
-            },
-                (error) => {
-                reject(error);
+            const timeout = 100*1000; // 5 seconds
+            let apiError = null;
+
+            try {
+                const response = await axios.post(postendpoint, JSON.stringify(payload), httpHeaders);
+                const endTime = new Date();
+                const timeTaken = endTime - startTime;
+                console.log(`API call took ${timeTaken}ms`);
+                return response;
+            } catch (error) {
+                apiError = error;
             }
-        );
-    });
+
+            await new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    if (!apiError) {
+                        apiError = new Error(`API call timed out after ${timeout}ms`);
+                    }
+                    reject(apiError);
+                }, timeout);
+            });
+
+
+
+
+            status = true;
+            break;
+        } catch (err) {
+            if (err.message.includes('ECONNREFUSED') || err.message.includes('ENOTFOUND')) {
+                throw new Error('Invalid ServiceNow Instance URL. Please correct the URL and try again.');
+            }
+
+            if (err.message.includes('401')) {
+                throw new Error('Invalid Credentials. Please correct the credentials and try again.');
+            }
+
+            if (err.message.includes('405')) {
+                throw new Error('Response Code from ServiceNow is 405. Please correct ServiceNow logs for more details.');
+            }
+
+            if (!err.response) {
+                throw new Error('No response from ServiceNow. Please check ServiceNow logs for more details.');
+            }
+
+            if (err.response.status == 500) {
+                throw new Error('Response Code from ServiceNow is 500. Please check ServiceNow logs for more details.')
+            }
+
+            if (err.response.status == 400) {
+                let errMsg = 'ServiceNow DevOps Change is not created. Please check ServiceNow logs for more details.';
+                let responseData = err.response.data;
+                if (responseData && responseData.error && responseData.error.message) {
+                    errMsg = responseData.error.message;
+                } else if (responseData && responseData.result && responseData.result.details && responseData.result.details.errors) {
+                    errMsg = 'ServiceNow DevOps Change is not created. ';
+                    let errors = err.response.data.result.details.errors;
+                    for (var index in errors) {
+                        errMsg = errMsg + errors[index].message;
+                    }
+                }
+                if (errMsg.indexOf('callbackURL') == -1)
+                    throw new Error(errMsg);
+                else if (attempts >= 3) {
+                    errMsg = 'Task/Step Execution not created in ServiceNow DevOps for this job/stage ' + jobname + '. Please check Inbound Events processing details in ServiceNow instance and ServiceNow logs for more details.';
+                    throw new Error(errMsg);
+                }
+            }
+            await new Promise((resolve) => setTimeout(resolve, 30000));
+        }
+    }
+    if (status) {
+        var result = response.data.result;
+        if (result && result.message) {
+            console.log('\n     \x1b[1m\x1b[36m' + result.message + '\x1b[0m\x1b[0m');
+        }
+    }
 }
 
 module.exports = { createChange };
