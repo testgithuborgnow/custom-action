@@ -34,8 +34,6 @@ const main = async() => {
         changeCreationTimeOut,
         abortOnChangeCreationFailure
       });
-
-      return true;
     } catch (err) { 
      status = false;
      core.setFailed(err.message);

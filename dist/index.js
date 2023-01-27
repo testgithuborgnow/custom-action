@@ -5047,8 +5047,8 @@ async function createChange({
             };
             let httpHeaders = { headers: defaultHeaders };
             response = await axios.post(postendpoint, JSON.stringify(payload), httpHeaders);
-            clearTimeout(timeoutId);
             status = true;
+            clearTimeout(timeoutId);
             break;
         } catch (err) {
             if (err.message.includes('ECONNREFUSED') || err.message.includes('ENOTFOUND')) {
@@ -9479,8 +9479,6 @@ const main = async() => {
         changeCreationTimeOut,
         abortOnChangeCreationFailure
       });
-
-      return true;
     } catch (err) { 
      status = false;
      core.setFailed(err.message);
