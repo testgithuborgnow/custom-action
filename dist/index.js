@@ -5843,7 +5843,7 @@ async function createChange({
     
     timerId = setTimeout(() => {
         console.error("API call timed out");
-    }, 100*000);
+    }, 100*1000);
 
     axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
         .then(function (response) {
