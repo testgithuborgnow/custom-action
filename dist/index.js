@@ -5831,12 +5831,12 @@ async function createChange({
     //     ++attempts;
     const token = `${username}:${passwd}`;
     const encodedToken = Buffer.from(token).toString('base64');
-    const defaultHeaders = {
+    const httpHeaders = {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
         'Authorization': 'Basic ' + `${encodedToken}`
     };
-    let httpHeaders = { headers: defaultHeaders };
+    //let httpHeaders = { headers: defaultHeaders };
 
     // let timer = new Promise((resolve, reject) => {
     //     setTimeout(() => resolve(), 300*1000);
