@@ -56,7 +56,7 @@ async function createChange({
 
     let timeoutId = setTimeout(() => {
         console.log('timeout occured for change creation');
-        if(abortOnChangeCreationFailure)
+        if(false)
             throw new Error(`Timeout after ${changeCreationTimeOut} seconds.`);
       }, changeCreationTimeOut * 1000);
 
