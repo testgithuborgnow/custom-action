@@ -58,7 +58,7 @@ async function createChange({
         console.log('timeout occured for change creation');
         if(abortOnChangeCreationFailure)
             throw new Error(`Timeout after ${changeCreationTimeOut} seconds.`);
-      }, changeCreationTimeOut);
+      }, changeCreationTimeOut * 1000);
 
       
     const postendpoint = `${instanceUrl}/api/sn_devops/devops/orchestration/changeControl?toolId=${toolId}&toolType=github_server`;
