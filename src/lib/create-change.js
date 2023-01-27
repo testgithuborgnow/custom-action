@@ -1,6 +1,6 @@
 const core = require('@actions/core');
 const axios = require('axios');
-const { changeStep } = require('./lib/change-step');
+const { changeStep } = require('./change-step');
 async function createChange({
     instanceUrl,
     toolId,

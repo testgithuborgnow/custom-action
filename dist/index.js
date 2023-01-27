@@ -4964,12 +4964,35 @@ exports["default"] = _default;
 
 /***/ }),
 
+/***/ 4777:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+const core = __nccwpck_require__(2186);
+const axios = __nccwpck_require__(8757);
+
+
+function changeStep(postendpoint, payload, httpHeaders) {
+    return new Promise((resolve, reject) => {
+      axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
+        .then(response => {
+          resolve(response);
+        })
+        .catch(error => {
+          reject(error);
+        });
+    });
+  }
+
+  module.exports = { changeStep };
+
+/***/ }),
+
 /***/ 7767:
 /***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 const core = __nccwpck_require__(2186);
 const axios = __nccwpck_require__(8757);
-const { changeStep } = __nccwpck_require__(2205);
+const { changeStep } = __nccwpck_require__(4777);
 async function createChange({
     instanceUrl,
     toolId,
@@ -5319,14 +5342,6 @@ async function tryFetch({
 }
 
 module.exports = { tryFetch };
-
-
-/***/ }),
-
-/***/ 2205:
-/***/ ((module) => {
-
-module.exports = eval("require")("./lib/change-step");
 
 
 /***/ }),
