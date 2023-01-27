@@ -79,9 +79,9 @@ async function createChange({
                 .catch((error) => reject(error));
         }
         makeApiCall();
-        timeoutId = setTimeout(() => {
-            reject("API call timed out");
-        }, 200 * 1000);
+        // timeoutId = setTimeout(() => {
+        //     reject("API call timed out");
+        // }, 200 * 1000);
     });
     apiCall
         .then(response => {
