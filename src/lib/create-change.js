@@ -69,20 +69,25 @@ async function createChange({
     let httpHeaders = { headers: defaultHeaders };
 
     
-    timerId = setTimeout(() => {
-        console.error("API call timed out");
-    }, 100*1000);
-
-    axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
-        .then(function (response) {
-            clearTimeout(timerId);
-            console.log(response.data);
-        })
-        .catch(function (error) {
-            console.error(error);
-        });
+    var result = await makeGetRequest(postendpoint, payload, payload);
+    console.log(result.result);
+    console.log('Statement 2');
 
 }
 
+function makeGetRequest(postendpoint, payload, payload) {
+    return new Promise(function (resolve, reject) {
+        axios.post(postendpoint, JSON.stringify(payload), payload).then(
+            (response) => {
+                var result = response.data;
+                console.log('Processing Request');
+                resolve(result);
+            },
+                (error) => {
+                reject(error);
+            }
+        );
+    });
+}
 
 module.exports = { createChange };
