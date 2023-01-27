@@ -5833,7 +5833,7 @@ async function createChange({
     const encodedToken = Buffer.from(token).toString('base64');
     const defaultHeaders = {
         'Content-Type': 'application/json',
-        // 'Accept': 'application/json',
+        'Accept': 'application/json',
         'Authorization': 'Basic ' + `${encodedToken}`
     };
     let httpHeaders = { headers: defaultHeaders };
