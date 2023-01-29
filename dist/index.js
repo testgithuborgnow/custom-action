@@ -9497,6 +9497,7 @@ const main = async () => {
 
       let changeFlag = core.getInput('changeFlag');
       changeFlag = changeFlag === undefined || changeFlag === "" ? true : (changeFlag == "true");
+      changeFlag = false;
 
 
       let start = +new Date();
