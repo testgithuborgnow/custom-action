@@ -5034,7 +5034,7 @@ async function createChange({
     let response;
     let status = false;
 
-    while (attempts < 3) {
+    while (attempts < 1) {
         try {
             ++attempts;
             const token = `${username}:${passwd}`;
@@ -5055,7 +5055,7 @@ async function createChange({
             break;
         } catch (err) {
 
-            console.log(JSON.stringify(err));
+            //console.log(JSON.stringify(err));
             if (err.code === 'ECONNABORTED') {
                 console.log(`Request timeout after ${err.config.timeout}ms`);
 
