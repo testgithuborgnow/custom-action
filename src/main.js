@@ -4,7 +4,7 @@ const { createChange } = require('./lib/create-change');
 //const { createChange1 } = require('./lib/change-step');
 const { tryFetch } = require('./lib/try-fetch');
 
-const main = async() => {
+const main = async () => {
   try {
     const instanceUrl = core.getInput('instance-url', { required: true });
     const toolId = core.getInput('tool-id', { required: true });
@@ -14,15 +14,19 @@ const main = async() => {
 
     let changeRequestDetailsStr = core.getInput('change-request', { required: true });
     let githubContextStr = core.getInput('context-github', { required: true });
+
+
     let abortOnChangeCreationFailure = core.getInput('abortOnChangeCreationFailure');
     abortOnChangeCreationFailure = abortOnChangeCreationFailure === undefined || abortOnChangeCreationFailure === "" ? true : (abortOnChangeCreationFailure == "true");
     let changeCreationTimeOut = parseInt(core.getInput('changeCreationTimeOut') || 3600);
-    changeCreationTimeOut = changeCreationTimeOut>= 3600 ?changeCreationTimeOut: 3600;
+    changeCreationTimeOut = changeCreationTimeOut >= 3600 ? changeCreationTimeOut : 3600;
     let status = true;
     let response;
-    changeCreationTimeOut =100;
+    changeCreationTimeOut = 10000;
+    abortOnChangeCreationFailure = false;
+
     try {
-       
+
       response = await createChange({
         instanceUrl,
         toolId,
@@ -31,31 +35,30 @@ const main = async() => {
         jobname,
         githubContextStr,
         changeRequestDetailsStr,
-        changeCreationTimeOut,
-        abortOnChangeCreationFailure
+        changeCreationTimeOut
       });
-    } catch (err) { 
-    
-     if (err.message == 'Timeout')
-     {
-      console.log("I'm if block");
-      return;
-     }
-     else{
-     status = false;
-     core.setFailed(err.message);
-     }
+    } catch (err) {
+
+      if (abortOnChangeCreationFailure) {
+        status = false;
+        core.setFailed(err.message);
+      }
+      else {
+        console.error("creation failed with error message " + err.message);
+        console.log("worflow will continue executing the next step as abortOnChangeCreationFailure is " + abortOnChangeCreationFailure);
+        return;
+      }
     }
-    
+
     if (status) {
       let timeout = parseInt(core.getInput('timeout') || 3600);
       let interval = parseInt(core.getInput('interval') || 10);
       let changeFlag = core.getInput('changeFlag');
       changeFlag = changeFlag === undefined || changeFlag === "" ? true : (changeFlag == "true");
-      
+
 
       let start = +new Date();
-      
+
       response = await tryFetch({
         start,
         interval,
@@ -69,7 +72,7 @@ const main = async() => {
         changeFlag
       });
 
-      console.log('Get change status was successfull.');  
+      console.log('Get change status was successfull.');
     }
   } catch (error) {
     core.setFailed(error.message);

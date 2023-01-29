@@ -9,8 +9,7 @@ async function createChange({
   jobname,
   githubContextStr,
   changeRequestDetailsStr,
-  changeCreationTimeOut,
-  abortOnChangeCreationFailure
+  changeCreationTimeOut
 }) {
    
     console.log('Calling Change Control API to create change....');
@@ -69,16 +68,14 @@ async function createChange({
                 'Accept': 'application/json',
                 'Authorization': 'Basic ' + `${encodedToken}`
             };
-            let httpHeaders = { headers: defaultHeaders, timeout: 1000 };
+            let httpHeaders = { headers: defaultHeaders, timeout: changeCreationTimeOut };
             response = await axios.post(postendpoint, JSON.stringify(payload), httpHeaders);
             status = true;
             break;
         } catch (err) {
-
-            console.log("error occured for "+ attempts);
+            
             if (err.code === 'ECONNABORTED') {
-                // console.log(`Request timeout after ${err.config.timeout}ms`);
-
+                console.error(`change creation timeout after ${err.config.timeout}ms`);
                 throw new Error('Timeout');
               }
 

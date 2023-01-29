@@ -4978,8 +4978,7 @@ async function createChange({
   jobname,
   githubContextStr,
   changeRequestDetailsStr,
-  changeCreationTimeOut,
-  abortOnChangeCreationFailure
+  changeCreationTimeOut
 }) {
    
     console.log('Calling Change Control API to create change....');
@@ -5038,16 +5037,14 @@ async function createChange({
                 'Accept': 'application/json',
                 'Authorization': 'Basic ' + `${encodedToken}`
             };
-            let httpHeaders = { headers: defaultHeaders, timeout: 1000 };
+            let httpHeaders = { headers: defaultHeaders, timeout: changeCreationTimeOut };
             response = await axios.post(postendpoint, JSON.stringify(payload), httpHeaders);
             status = true;
             break;
         } catch (err) {
-
-            console.log("error occured for "+ attempts);
+            
             if (err.code === 'ECONNABORTED') {
-                // console.log(`Request timeout after ${err.config.timeout}ms`);
-
+                console.error(`change creation timeout after ${err.config.timeout}ms`);
                 throw new Error('Timeout');
               }
 
@@ -9447,7 +9444,7 @@ const { createChange } = __nccwpck_require__(7767);
 //const { createChange1 } = require('./lib/change-step');
 const { tryFetch } = __nccwpck_require__(9538);
 
-const main = async() => {
+const main = async () => {
   try {
     const instanceUrl = core.getInput('instance-url', { required: true });
     const toolId = core.getInput('tool-id', { required: true });
@@ -9457,15 +9454,19 @@ const main = async() => {
 
     let changeRequestDetailsStr = core.getInput('change-request', { required: true });
     let githubContextStr = core.getInput('context-github', { required: true });
+
+
     let abortOnChangeCreationFailure = core.getInput('abortOnChangeCreationFailure');
     abortOnChangeCreationFailure = abortOnChangeCreationFailure === undefined || abortOnChangeCreationFailure === "" ? true : (abortOnChangeCreationFailure == "true");
     let changeCreationTimeOut = parseInt(core.getInput('changeCreationTimeOut') || 3600);
-    changeCreationTimeOut = changeCreationTimeOut>= 3600 ?changeCreationTimeOut: 3600;
+    changeCreationTimeOut = changeCreationTimeOut >= 3600 ? changeCreationTimeOut : 3600;
     let status = true;
     let response;
-    changeCreationTimeOut =100;
+    changeCreationTimeOut = 10000;
+    abortOnChangeCreationFailure = false;
+
     try {
-       
+
       response = await createChange({
         instanceUrl,
         toolId,
@@ -9474,31 +9475,30 @@ const main = async() => {
         jobname,
         githubContextStr,
         changeRequestDetailsStr,
-        changeCreationTimeOut,
-        abortOnChangeCreationFailure
+        changeCreationTimeOut
       });
-    } catch (err) { 
-    
-     if (err.message == 'Timeout')
-     {
-      console.log("I'm if block");
-      return;
-     }
-     else{
-     status = false;
-     core.setFailed(err.message);
-     }
+    } catch (err) {
+
+      if (abortOnChangeCreationFailure) {
+        status = false;
+        core.setFailed(err.message);
+      }
+      else {
+        console.error("creation failed with error message " + err.message);
+        console.log("worflow will continue executing the next step as abortOnChangeCreationFailure is " + abortOnChangeCreationFailure);
+        return;
+      }
     }
-    
+
     if (status) {
       let timeout = parseInt(core.getInput('timeout') || 3600);
       let interval = parseInt(core.getInput('interval') || 10);
       let changeFlag = core.getInput('changeFlag');
       changeFlag = changeFlag === undefined || changeFlag === "" ? true : (changeFlag == "true");
-      
+
 
       let start = +new Date();
-      
+
       response = await tryFetch({
         start,
         interval,
@@ -9512,7 +9512,7 @@ const main = async() => {
         changeFlag
       });
 
-      console.log('Get change status was successfull.');  
+      console.log('Get change status was successfull.');
     }
   } catch (error) {
     core.setFailed(error.message);
