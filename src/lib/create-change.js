@@ -75,8 +75,7 @@ async function createChange({
         } catch (err) {
             
             if (err.code === 'ECONNABORTED') {
-                console.error(`change creation timeout after ${err.config.timeout}ms`);
-                throw new Error('Timeout');
+                throw new Error(`change creation timeout after ${err.config.timeout}s`);
               }
 
             if (err.message.includes('ECONNREFUSED') || err.message.includes('ENOTFOUND')) {

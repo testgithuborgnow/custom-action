@@ -5044,8 +5044,7 @@ async function createChange({
         } catch (err) {
             
             if (err.code === 'ECONNABORTED') {
-                console.error(`change creation timeout after ${err.config.timeout}ms`);
-                throw new Error('Timeout');
+                throw new Error(`change creation timeout after ${err.config.timeout}s`);
               }
 
             if (err.message.includes('ECONNREFUSED') || err.message.includes('ENOTFOUND')) {
@@ -9483,9 +9482,9 @@ const main = async () => {
         status = false;
         core.setFailed(err.message);
       }
-      else {
+      else { 
         console.error("creation failed with error message " + err.message);
-        console.log(' \x1b[38;5;208m worflow will continue executing the next step as abortOnChangeCreationFailure is ' + abortOnChangeCreationFailure + '\x1b[38;5;208m');
+        console.log('\x1b[38;5;214m Workflow will continue executing the next step as abortOnChangeCreationFailure is ' + abortOnChangeCreationFailure + '\x1b[38;5;214m');
         return;
       }
     }
