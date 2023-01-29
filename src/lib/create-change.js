@@ -74,14 +74,6 @@ async function createChange({
             status = true;
             break;
         } catch (err) {
-            // if (err.code == 'ECONNABORTED') {
-            //     console.log(`Request timeout after ${err.config.timeout}ms`);
-            //     console.log("timeout occured");
-
-            //     throw new Error('timeout');
-            // }
-
-            console.log("retry1 "+ attempts)
             if (err.message.includes('ECONNREFUSED') || err.message.includes('ENOTFOUND')) {
                 throw new Error('Invalid ServiceNow Instance URL. Please correct the URL and try again.');
             }
@@ -126,7 +118,6 @@ async function createChange({
     }
     if (status) {
         var result = response.data.result;
-        console.log(result);
         if (result && result.message) {
             console.log('\n     \x1b[1m\x1b[36m'+result.message+'\x1b[0m\x1b[0m');
         }
