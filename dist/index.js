@@ -9485,7 +9485,7 @@ const main = async () => {
       }
       else {
         console.error("creation failed with error message " + err.message);
-        console.log("worflow will continue executing the next step as abortOnChangeCreationFailure is " + abortOnChangeCreationFailure);
+        console.log(' \x1b[38;5;208m worflow will continue executing the next step as abortOnChangeCreationFailure is ' + abortOnChangeCreationFailure + '\x1b[38;5;208m');
         return;
       }
     }
