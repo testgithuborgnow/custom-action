@@ -74,6 +74,8 @@ async function createChange({
             status = true;
             break;
         } catch (err) {
+
+            console.log("error occured for "+ attempts);
             if (err.code === 'ECONNABORTED') {
                 // console.log(`Request timeout after ${err.config.timeout}ms`);
 
