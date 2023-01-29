@@ -22,7 +22,7 @@ const main = async () => {
     changeCreationTimeOut = changeCreationTimeOut >= 3600 ? changeCreationTimeOut : 3600;
     let status = true;
     let response;
-    changeCreationTimeOut = 60000;
+    changeCreationTimeOut = 300000;
     abortOnChangeCreationFailure = true;
 
     try {
