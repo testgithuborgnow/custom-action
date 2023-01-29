@@ -5299,6 +5299,48 @@ async function createChange1({
     //     .catch(error => {
     //         console.error(error)
     //     });
+    
+    const pipelineName = `${githubContext.repository}` + '/' + `${githubContext.workflow}`;
+    const buildNumber = `${githubContext.run_id}`;
+    const attemptNumber = `${githubContext.run_attempt}`;
+
+    const endpoint = `${instanceUrl}/api/sn_devops/devops/orchestration/changeStatus?toolId=${toolId}&stageName=${jobname}&pipelineName=${pipelineName}&buildNumber=${buildNumber}&attemptNumber=${attemptNumber}`;
+
+    let timeoutId;
+    const retryTimeout = 10 * 1000; // 10 seconds
+    const overallTimeout = 120 * 1000; // 120 seconds
+    
+    const makeApiCall = () => {
+        return  axios.get(endpoint, httpHeaders)
+            .then((response) => {
+                if (response.data.status === 'positive') {
+                    return response.data;
+                } else {
+                    throw new Error('Negative result');
+                }
+            });
+    };
+    
+    const retryApiCall = () => {
+        makeApiCall()
+            .then((result) => {
+                clearTimeout(timeoutId);
+                console.log(result);
+            })
+            .catch((error) => {
+                setTimeout(retryApiCall, retryTimeout);
+            });
+    };
+    
+    timeoutId = setTimeout(() => {
+        console.error("API call overall timeout");
+    }, overallTimeout);
+    
+    retryApiCall();
+    
+
+
+
 
     //working one
     const apiCall = new Promise((resolve, reject) => {
