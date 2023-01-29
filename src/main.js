@@ -36,7 +36,7 @@ const main = async() => {
       });
     } catch (err) { 
     
-     if (err.message == 'timeout')
+     if (err.message == 'Timeout')
      {
       console.log("I'm if block");
       return;
