@@ -191,55 +191,45 @@ async function createChange1({
     //     });
 
     //working one
-    const apiCall = new Promise((resolve, reject) => {
-        setTimeout(() => {
-          axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
-            .then((response) => resolve(response))
-            .catch((error) => reject(error));
-        }, 100*1000);
-      });
-      apiCall
-        .then(response => {
-          console.log(response.data)
-        })
-        .catch(error => {
-          console.error(error)
-        })
-    //till here
-    // let counter = 0;
-    // const maxRetries = 3;
-    // let timeoutId;
     // const apiCall = new Promise((resolve, reject) => {
-    //     const retry = () => {
-    //         axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
-    //             .then((response) => {
-    //                 clearTimeout(timeoutId);
-    //                 resolve(response);
-    //             })
-    //             .catch((error) => {
-    //                 if (counter < maxRetries) {
-    //                     console.log(`Retrying API call: attempt ${counter + 1} of ${maxRetries}`);
-    //                     counter++;
-    //                     retry();
-    //                 } else {
-    //                     reject(error);
-    //                 }
-    //             });
-    //     };
-    //     retry();
-    // });
-    // timeoutId = setTimeout(() => {
-    //     apiCall.catch(error => {
-    //         console.error("API call timed out");
-    //     });
-    // }, 120 * 1000);
-    // apiCall
+    //     setTimeout(() => {
+    //       axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
+    //         .then((response) => resolve(response))
+    //         .catch((error) => reject(error));
+    //     }, 100*1000);
+    //   });
+    //   apiCall
     //     .then(response => {
-    //         console.log(response.data);
+    //       console.log(response.data)
     //     })
     //     .catch(error => {
-    //         console.error(error);
-    //     });
+    //       console.error(error)
+    //     })
+    //till here
+    let timeoutId;
+    const apiCall = new Promise((resolve, reject) => {
+        axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
+            .then((response) => {
+                clearTimeout(timeoutId);
+                resolve(response);
+            })
+            .catch((error) => {
+                reject(error);
+            });
+    });
+    timeoutId = setTimeout(() => {
+        apiCall.catch(error => {
+            console.error("API call timed out");
+        });
+    }, 100 * 1000);
+    apiCall
+        .then(response => {
+            console.log(response.data);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    
     // let counter = 0;
     // const maxRetries = 3;
     // const apiCall = new Promise((resolve, reject) => {
