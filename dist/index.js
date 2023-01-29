@@ -5047,7 +5047,7 @@ async function createChange({
                 //console.log(`Request timeout after ${err.config.timeout}ms`);
                 console.log("timeout occured");
 
-                throw new Error('testing the error timout scenario');
+                return true;
 
             }
             if (err.message.includes('ECONNREFUSED') || err.message.includes('ENOTFOUND')) {
