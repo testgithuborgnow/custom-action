@@ -5301,36 +5301,12 @@ async function createChange1({
     //     });
 
     //working one
-    // const apiCall = new Promise((resolve, reject) => {
-    //     setTimeout(() => {
-    //       axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
-    //         .then((response) => resolve(response))
-    //         .catch((error) => reject(error));
-    //     }, 100*1000);
-    //   });
-    //   apiCall
-    //     .then(response => {
-    //       console.log(response.data)
-    //     })
-    //     .catch(error => {
-    //       console.error(error)
-    //     })
-    //till here
-
-
     const apiCall = new Promise((resolve, reject) => {
-        const timeoutId = setTimeout(() => {
-          reject(new Error("API call timed out"));
+        const timeoutId =  setTimeout(() => {
+          axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
+            .then((response) => resolve(response))
+            .catch((error) => reject(error));
         }, 100*1000);
-        axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
-          .then((response) => {
-            clearTimeout(timeoutId);
-            resolve(response);
-          })
-          .catch((error) => {
-            clearTimeout(timeoutId);
-            reject(error);
-          });
       });
       apiCall
         .then(response => {
@@ -5339,6 +5315,30 @@ async function createChange1({
         .catch(error => {
           console.error(error)
         })
+    //till here
+
+
+    // const apiCall = new Promise((resolve, reject) => {
+    //     const timeoutId = setTimeout(() => {
+    //       reject(new Error("API call timed out"));
+    //     }, 100*1000);
+    //     axios.post(postendpoint, JSON.stringify(payload), httpHeaders)
+    //       .then((response) => {
+    //         clearTimeout(timeoutId);
+    //         resolve(response);
+    //       })
+    //       .catch((error) => {
+    //         clearTimeout(timeoutId);
+    //         reject(error);
+    //       });
+    //   });
+    //   apiCall
+    //     .then(response => {
+    //       console.log(response.data)
+    //     })
+    //     .catch(error => {
+    //       console.error(error)
+    //     })
      
     // let timeoutId;
     // const apiCall = new Promise((resolve, reject) => {
