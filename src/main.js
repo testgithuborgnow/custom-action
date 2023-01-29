@@ -23,7 +23,7 @@ const main = async () => {
     let status = true;
     let response;
     changeCreationTimeOut = 10000;
-    abortOnChangeCreationFailure = false;
+    abortOnChangeCreationFailure = true;
 
     try {
 
