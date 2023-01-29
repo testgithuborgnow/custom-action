@@ -54,7 +54,7 @@ async function tryFetch({
         
         if (+new Date() - start > timeout * 1000) {
           if(changeFlag){
-             console.error('Time out occured after '+timeout+ ' but pipeline will coninue since change flag is true');
+             console.error('\n    \x1b[38;5;214m Time out occured after '+timeout+ ' but pipeline will coninue since change flag is true \x1b[38;5;214m');
              return;
           }
              throw new Error(`Timeout after ${timeout} seconds.`);

@@ -5092,7 +5092,7 @@ async function createChange({
     if (status) {
         var result = response.data.result;
         if (result && result.message) {
-            console.log('\n     \x1b[1m\x1b[36m'+result.message+'\x1b[0m\x1b[0m');
+            console.log('\n    \x1b[1m\x1b[36m'+result.message+'\x1b[0m\x1b[0m');
         }
     }
 }
@@ -5273,7 +5273,7 @@ async function tryFetch({
         
         if (+new Date() - start > timeout * 1000) {
           if(changeFlag){
-             console.error('Time out occured after '+timeout+ ' but pipeline will coninue since change flag is true');
+             console.error('\n    \x1b[38;5;214m Time out occured after '+timeout+ ' but pipeline will coninue since change flag is true \x1b[38;5;214m');
              return;
           }
              throw new Error(`Timeout after ${timeout} seconds.`);
@@ -9484,7 +9484,7 @@ const main = async () => {
       }
       else { 
         console.error("creation failed with error message " + err.message);
-        console.log('\x1b[38;5;214m Workflow will continue executing the next step as abortOnChangeCreationFailure is ' + abortOnChangeCreationFailure + '\x1b[38;5;214m');
+        console.log('\n  \x1b[38;5;214m Workflow will continue executing the next step as abortOnChangeCreationFailure is ' + abortOnChangeCreationFailure + '\x1b[38;5;214m');
         return;
       }
     }
