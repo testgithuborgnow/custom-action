@@ -5023,18 +5023,18 @@ async function createChange({
         throw new Error("Exception preparing payload");
     }
 
-    // let timeoutId = setTimeout(() => {
-    //     console.log('timeout occured for change creation');
-    //     if(false)
-    //         throw new Error(`Timeout after ${changeCreationTimeOut} seconds.`);
-    //   }, changeCreationTimeOut * 1000);
+    let timeoutId = setTimeout(() => {
+        console.log('timeout occured for change creation');
+        if(abortOnChangeCreationFailure)
+            throw new Error(`Timeout after ${changeCreationTimeOut} seconds.`);
+      }, 100 *1000);
 
       
     const postendpoint = `${instanceUrl}/api/sn_devops/devops/orchestration/changeControl?toolId=${toolId}&toolType=github_server`;
     let response;
     let status = false;
 
-    while (attempts < 1) {
+    while (attempts < 3) {
         try {
             ++attempts;
             const token = `${username}:${passwd}`;
@@ -5046,22 +5046,11 @@ async function createChange({
                 'Authorization': 'Basic ' + `${encodedToken}`
             };
             let httpHeaders = { headers: defaultHeaders };
-            response = await axios.post(postendpoint, JSON.stringify(payload), {
-                headers: httpHeaders
-                // ,
-                // timeout: 60000
-            });
+            response = await axios.post(postendpoint, JSON.stringify(payload), httpHeaders);
+            clearTimeout(timeoutId);
             status = true;
-            
             break;
         } catch (err) {
-
-            //console.log(JSON.stringify(err));
-            if (err.code === 'ECONNABORTED') {
-                console.log(`Request timeout after ${err.config.timeout}ms`);
-
-                throw new Error('timout occured');
-              }
             if (err.message.includes('ECONNREFUSED') || err.message.includes('ENOTFOUND')) {
                 throw new Error('Invalid ServiceNow Instance URL. Please correct the URL and try again.');
             }
@@ -5106,7 +5095,6 @@ async function createChange({
     }
     if (status) {
         var result = response.data.result;
-          console.log(result);
         if (result && result.message) {
             console.log('\n     \x1b[1m\x1b[36m'+result.message+'\x1b[0m\x1b[0m');
         }

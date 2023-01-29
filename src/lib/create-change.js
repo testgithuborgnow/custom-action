@@ -54,13 +54,6 @@ async function createChange({
         throw new Error("Exception preparing payload");
     }
 
-    let timeoutId = setTimeout(() => {
-        console.log('timeout occured for change creation');
-        if(abortOnChangeCreationFailure)
-            throw new Error(`Timeout after ${changeCreationTimeOut} seconds.`);
-      }, 100 *1000);
-
-      
     const postendpoint = `${instanceUrl}/api/sn_devops/devops/orchestration/changeControl?toolId=${toolId}&toolType=github_server`;
     let response;
     let status = false;
@@ -78,7 +71,6 @@ async function createChange({
             };
             let httpHeaders = { headers: defaultHeaders };
             response = await axios.post(postendpoint, JSON.stringify(payload), httpHeaders);
-            clearTimeout(timeoutId);
             status = true;
             break;
         } catch (err) {
