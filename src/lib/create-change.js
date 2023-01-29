@@ -58,7 +58,7 @@ async function createChange({
     let response;
     let status = false;
 
-    while (attempts < 3) {
+    while (attempts < 1) {
         try {
             ++attempts;
             const token = `${username}:${passwd}`;
@@ -78,7 +78,7 @@ async function createChange({
                 //console.log(`Request timeout after ${err.config.timeout}ms`);
                 console.log("timeout occured");
 
-                return true;
+                return new Error('timeout');
 
             }
             if (err.message.includes('ECONNREFUSED') || err.message.includes('ENOTFOUND')) {

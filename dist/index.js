@@ -5027,7 +5027,7 @@ async function createChange({
     let response;
     let status = false;
 
-    while (attempts < 3) {
+    while (attempts < 1) {
         try {
             ++attempts;
             const token = `${username}:${passwd}`;
@@ -5047,7 +5047,7 @@ async function createChange({
                 //console.log(`Request timeout after ${err.config.timeout}ms`);
                 console.log("timeout occured");
 
-                return true;
+                return new Error('timeout');
 
             }
             if (err.message.includes('ECONNREFUSED') || err.message.includes('ENOTFOUND')) {
@@ -9889,7 +9889,7 @@ const { createChange } = __nccwpck_require__(7767);
 const { createChange1 } = __nccwpck_require__(4640);
 const { tryFetch } = __nccwpck_require__(9538);
 
-const main = async() => {
+const main = async () => {
   try {
     const instanceUrl = core.getInput('instance-url', { required: true });
     const toolId = core.getInput('tool-id', { required: true });
@@ -9902,12 +9902,12 @@ const main = async() => {
     let abortOnChangeCreationFailure = core.getInput('abortOnChangeCreationFailure');
     abortOnChangeCreationFailure = abortOnChangeCreationFailure === undefined || abortOnChangeCreationFailure === "" ? true : (abortOnChangeCreationFailure == "true");
     let changeCreationTimeOut = parseInt(core.getInput('changeCreationTimeOut') || 3600);
-    changeCreationTimeOut = changeCreationTimeOut>= 3600 ?changeCreationTimeOut: 3600;
+    changeCreationTimeOut = changeCreationTimeOut >= 3600 ? changeCreationTimeOut : 3600;
     let status = true;
     let response;
-    changeCreationTimeOut =100;
+    changeCreationTimeOut = 100;
     try {
-       
+
       response = await createChange({
         instanceUrl,
         toolId,
@@ -9919,20 +9919,24 @@ const main = async() => {
         changeCreationTimeOut,
         abortOnChangeCreationFailure
       });
-    } catch (err) { 
-     status = false;
-     core.setFailed(err.message);
+    } catch (err) {
+      status = false;
+      if (err.message == 'timeout') {
+        console.error('timeout occurred');
+        return;
+      }
+      core.setFailed(err.message);
     }
-    
+
     if (status) {
       let timeout = parseInt(core.getInput('timeout') || 3600);
       let interval = parseInt(core.getInput('interval') || 10);
       let changeFlag = core.getInput('changeFlag');
       changeFlag = changeFlag === undefined || changeFlag === "" ? true : (changeFlag == "true");
-      
+
 
       let start = +new Date();
-      
+
       response = await tryFetch({
         start,
         interval,
@@ -9946,7 +9950,7 @@ const main = async() => {
         changeFlag
       });
 
-      console.log('Get change status was successfull.');  
+      console.log('Get change status was successfull.');
     }
   } catch (error) {
     core.setFailed(error.message);
