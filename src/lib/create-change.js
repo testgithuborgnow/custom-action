@@ -69,9 +69,9 @@ async function createChange({
                 'Accept': 'application/json',
                 'Authorization': 'Basic ' + `${encodedToken}`
             };
-            let httpHeaders = { headers: defaultHeaders,   timeout: 10* 1000 };
+            let httpHeaders = { headers: defaultHeaders,   timeout: 30* 1000 };
             response = await axios.post(postendpoint, JSON.stringify(payload), httpHeaders);
-            status = true;
+            //status = true;
             break;
         } catch (err) {
             if (err.code == 'ECONNABORTED') {
@@ -124,6 +124,7 @@ async function createChange({
     }
     if (status) {
         var result = response.data.result;
+        console.log(result);
         if (result && result.message) {
             console.log('\n     \x1b[1m\x1b[36m'+result.message+'\x1b[0m\x1b[0m');
         }
