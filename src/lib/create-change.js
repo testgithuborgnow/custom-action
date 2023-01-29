@@ -78,8 +78,9 @@ async function createChange({
             };
             let httpHeaders = { headers: defaultHeaders };
             response = await axios.post(postendpoint, JSON.stringify(payload), {
-                headers: httpHeaders,
-                timeout: 60000
+                headers: httpHeaders
+                // ,
+                // timeout: 60000
             });
             status = true;
             
