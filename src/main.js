@@ -35,8 +35,16 @@ const main = async() => {
         abortOnChangeCreationFailure
       });
     } catch (err) { 
+    
+     if (err.message == 'timeout')
+     {
+      console.log("I'm if block");
+      return;
+     }
+     else{
      status = false;
      core.setFailed(err.message);
+     }
     }
     
     if (status) {
