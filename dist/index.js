@@ -5023,11 +5023,11 @@ async function createChange({
         throw new Error("Exception preparing payload");
     }
 
-    let timeoutId = setTimeout(() => {
-        console.log('timeout occured for change creation');
-        if(false)
-            {}
-      }, changeCreationTimeOut * 1000);
+    // let timeoutId = setTimeout(() => {
+    //     console.log('timeout occured for change creation');
+    //     if(false)
+    //         throw new Error(`Timeout after ${changeCreationTimeOut} seconds.`);
+    //   }, changeCreationTimeOut * 1000);
 
       
     const postendpoint = `${instanceUrl}/api/sn_devops/devops/orchestration/changeControl?toolId=${toolId}&toolType=github_server`;
@@ -5046,11 +5046,21 @@ async function createChange({
                 'Authorization': 'Basic ' + `${encodedToken}`
             };
             let httpHeaders = { headers: defaultHeaders };
-            response = await axios.post(postendpoint, JSON.stringify(payload), httpHeaders);
+            response = await axios.post(postendpoint, JSON.stringify(payload), {
+                headers: httpHeaders,
+                timeout: 60000
+            });
             status = true;
             clearTimeout(timeoutId);
             break;
         } catch (err) {
+
+            console.log(JSON.stringify(err));
+            if (err.code === 'ECONNABORTED') {
+                console.log(`Request timeout after ${err.config.timeout}ms`);
+
+                throw new Error('timout occured');
+              }
             if (err.message.includes('ECONNREFUSED') || err.message.includes('ENOTFOUND')) {
                 throw new Error('Invalid ServiceNow Instance URL. Please correct the URL and try again.');
             }
@@ -5300,47 +5310,104 @@ async function createChange1({
     //         console.error(error)
     //     });
     
-    const pipelineName = `${githubContext.repository}` + '/' + `${githubContext.workflow}`;
-    const buildNumber = `${githubContext.run_id}`;
-    const attemptNumber = `${githubContext.run_attempt}`;
+    // const pipelineName = `${githubContext.repository}` + '/' + `${githubContext.workflow}`;
+    // const buildNumber = `${githubContext.run_id}`;
+    // const attemptNumber = `${githubContext.run_attempt}`;
 
-    const endpoint = `${instanceUrl}/api/sn_devops/devops/orchestration/changeStatus?toolId=${toolId}&stageName=${jobname}&pipelineName=${pipelineName}&buildNumber=${buildNumber}&attemptNumber=${attemptNumber}`;
+    // const endpoint = `${instanceUrl}/api/sn_devops/devops/orchestration/changeStatus?toolId=${toolId}&stageName=${jobname}&pipelineName=${pipelineName}&buildNumber=${buildNumber}&attemptNumber=${attemptNumber}`;
 
-    let timeoutId;
-    const retryTimeout = 10 * 1000; // 10 seconds
-    const overallTimeout = 120 * 1000; // 120 seconds
+    // let timeoutId2;
+    // const retryTimeout = 10 * 1000; // 10 seconds
+    // const overallTimeout = 120 * 1000; // 120 seconds
     
-    const makeApiCall = () => {
-        return  axios.get(endpoint, httpHeaders)
-            .then((response) => {
-                if (response.data.status === 'positive') {
-                    return response.data;
-                } else {
-                    throw new Error('Negative result');
-                }
-            });
-    };
+    // const makeApiCall = () => {
+    //     return  axios.get(endpoint, httpHeaders)
+    //         .then((response) => {
+    //             if (response.data.status === 'positive') {
+    //                 return response.data;
+    //             } else {
+    //                 throw new Error('Negative result');
+    //             }
+    //         });
+    // };
     
-    const retryApiCall = () => {
-        makeApiCall()
-            .then((result) => {
-                clearTimeout(timeoutId);
-                console.log(result);
-            })
-            .catch((error) => {
-                setTimeout(retryApiCall, retryTimeout);
-            });
-    };
+    // const retryApiCall = () => {
+    //     makeApiCall()
+    //         .then((result) => {
+    //             clearTimeout(timeoutId2);
+    //             console.log(result);
+    //         })
+    //         .catch((error) => {
+    //             setTimeout(retryApiCall, retryTimeout);
+    //         });
+    // };
     
-    timeoutId = setTimeout(() => {
-        console.error("API call overall timeout");
-    }, overallTimeout);
+    // timeoutId2 = setTimeout(() => {
+    //     console.error("API call overall timeout");
+    // }, overallTimeout);
     
-    retryApiCall();
+    // retryApiCall();
     
 
 
-
+    // const postendpoint = 'https://example.com/post';
+    // const payload = {key: 'value'};
+    // const httpHeaders = {headers: {'Content-Type': 'application/json'}};
+    // const getEndpoint = 'https://example.com/get';
+    
+    // let timeoutId1;
+    // let timeoutId2;
+    // const retryTimeout = 10 * 1000; // 10 seconds
+    // const overallTimeout = 120 * 1000; // 120 seconds
+    
+    // const makeApiCall1 = () => {
+    //     return timeoutId1 = setTimeout(() => {
+    //         axios.post(postendpoint, JSON.stringify(payload), httpHeaders);
+    //     }, overallTimeout);
+    // };
+    
+    // const makeApiCall2 = () => {
+    //     return axios.get(getEndpoint, httpHeaders)
+    //         .then((response) => {
+    //             if (response.data.status === 'positive') {
+    //                 return response.data;
+    //             } else {
+    //                 throw new Error('Negative result');
+    //             }
+    //         });
+    // };
+    
+    // const retryApiCall2 = () => {
+    //     makeApiCall2()
+    //         .then((result) => {
+    //             clearTimeout(timeoutId2);
+    //             console.log(result);
+    //         })
+    //         .catch((error) => {
+    //             setTimeout(retryApiCall2, retryTimeout);
+    //         });
+    // };
+    
+    // timeoutId2 = setTimeout(() => {
+    //     console.error("API call 2 overall timeout");
+    // }, overallTimeout);
+    
+    // Promise.all([makeApiCall1(), makeApiCall2()])
+    //     .then((results) => {
+    //         clearTimeout(timeoutId1);
+    //         clearTimeout(timeoutId2);
+    //         if (results[2].status === 'positive') {
+    //             console.log('Both API calls returned positive results');
+    //         } else {
+    //             console.log('API call 1 returned positive result');
+    //         }
+    //     })
+    //     .catch((error) => {
+    //         console.error(error);
+    //     });
+    
+    // retryApiCall2();
+    
 
     //working one
     const apiCall = new Promise((resolve, reject) => {
@@ -9852,7 +9919,7 @@ const main = async() => {
     changeCreationTimeOut =100;
     try {
        
-      response = await createChange1({
+      response = await createChange({
         instanceUrl,
         toolId,
         username,

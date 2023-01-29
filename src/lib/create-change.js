@@ -54,11 +54,11 @@ async function createChange({
         throw new Error("Exception preparing payload");
     }
 
-    let timeoutId = setTimeout(() => {
-        console.log('timeout occured for change creation');
-        if(false)
-            throw new Error(`Timeout after ${changeCreationTimeOut} seconds.`);
-      }, changeCreationTimeOut * 1000);
+    // let timeoutId = setTimeout(() => {
+    //     console.log('timeout occured for change creation');
+    //     if(false)
+    //         throw new Error(`Timeout after ${changeCreationTimeOut} seconds.`);
+    //   }, changeCreationTimeOut * 1000);
 
       
     const postendpoint = `${instanceUrl}/api/sn_devops/devops/orchestration/changeControl?toolId=${toolId}&toolType=github_server`;
@@ -77,11 +77,21 @@ async function createChange({
                 'Authorization': 'Basic ' + `${encodedToken}`
             };
             let httpHeaders = { headers: defaultHeaders };
-            response = await axios.post(postendpoint, JSON.stringify(payload), httpHeaders);
+            response = await axios.post(postendpoint, JSON.stringify(payload), {
+                headers: httpHeaders,
+                timeout: 60000
+            });
             status = true;
             clearTimeout(timeoutId);
             break;
         } catch (err) {
+
+            console.log(JSON.stringify(err));
+            if (err.code === 'ECONNABORTED') {
+                console.log(`Request timeout after ${err.config.timeout}ms`);
+
+                throw new Error('timout occured');
+              }
             if (err.message.includes('ECONNREFUSED') || err.message.includes('ENOTFOUND')) {
                 throw new Error('Invalid ServiceNow Instance URL. Please correct the URL and try again.');
             }

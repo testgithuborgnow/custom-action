@@ -23,7 +23,7 @@ const main = async() => {
     changeCreationTimeOut =100;
     try {
        
-      response = await createChange1({
+      response = await createChange({
         instanceUrl,
         toolId,
         username,
