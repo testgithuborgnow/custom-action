@@ -5048,7 +5048,6 @@ async function createChange({
                 console.log("timeout occured");
 
                 throw new Error('timeout');
-
             }
             if (err.message.includes('ECONNREFUSED') || err.message.includes('ENOTFOUND')) {
                 throw new Error('Invalid ServiceNow Instance URL. Please correct the URL and try again.');
@@ -5089,7 +5088,7 @@ async function createChange({
                     throw new Error(errMsg);
                 }
             }
-            await new Promise((resolve) => setTimeout(resolve, 30000));
+            // await new Promise((resolve) => setTimeout(resolve, 30000));
         }
     }
     if (status) {
@@ -9921,10 +9920,10 @@ const main = async () => {
       });
     } catch (err) {
       status = false;
-      if (err.message == 'timeout') {
-        console.error('timeout occurred');
-        return;
-      }
+      // if (err.message == 'timeout') {
+      //   console.error('timeout occurred');
+      //   return;
+      // }
       core.setFailed(err.message);
     }
 

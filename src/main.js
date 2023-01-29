@@ -36,10 +36,10 @@ const main = async () => {
       });
     } catch (err) {
       status = false;
-      if (err.message == 'timeout') {
-        console.error('timeout occurred');
-        return;
-      }
+      // if (err.message == 'timeout') {
+      //   console.error('timeout occurred');
+      //   return;
+      // }
       core.setFailed(err.message);
     }
 
