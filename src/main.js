@@ -22,8 +22,7 @@ const main = async () => {
     changeCreationTimeOut = changeCreationTimeOut >= 3600 ? changeCreationTimeOut : 3600;
     let status = true;
     let response;
-    changeCreationTimeOut = 1000;
-    abortOnChangeCreationFailure = false;
+
     try {
      await createChange({
         instanceUrl,
