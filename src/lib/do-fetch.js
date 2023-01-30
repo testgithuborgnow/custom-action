@@ -67,7 +67,7 @@ async function doFetch({
           throw new Error("404");
         }
     }
-    
+
     if (status) {
         try {
           responseCode = response.status;
@@ -86,15 +86,14 @@ async function doFetch({
         let details =  changeStatus.details;
         console.log('\n     \x1b[1m\x1b[32m'+JSON.stringify(details)+'\x1b[0m\x1b[0m');
 
-
         let changeState =  details.status;
 
-          if (responseCode == 201) {
-            if (changeState == "pending_decision") {
-              throw new Error("201");
-            } else
-              throw new Error("202");
-          }
+        if (responseCode == 201) {
+          if (changeState == "pending_decision") {
+            throw new Error("201");
+          } else
+            throw new Error("202");
+        }
 
         if (responseCode == 200) {
             console.log('\n****Change is Approved.');

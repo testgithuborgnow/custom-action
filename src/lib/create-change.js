@@ -69,15 +69,14 @@ async function createChange({
                 'Accept': 'application/json',
                 'Authorization': 'Basic ' + `${encodedToken}`
             };
-            let httpHeaders = { headers: defaultHeaders, timeout: changeCreationTimeOut };
+            let httpHeaders = { headers: defaultHeaders,  timeout: changeCreationTimeOut };
             response = await axios.post(postendpoint, JSON.stringify(payload), httpHeaders);
             status = true;
             break;
         } catch (err) {
-            
             if (err.code === 'ECONNABORTED') {
                 throw new Error(`change creation timeout after ${err.config.timeout}s`);
-              }
+            }
 
             if (err.message.includes('ECONNREFUSED') || err.message.includes('ENOTFOUND')) {
                 throw new Error('Invalid ServiceNow Instance URL. Please correct the URL and try again.');
@@ -124,7 +123,7 @@ async function createChange({
     if (status) {
         var result = response.data.result;
         if (result && result.message) {
-            console.log('\n    \x1b[1m\x1b[36m'+result.message+'\x1b[0m\x1b[0m');
+            console.log('\n     \x1b[1m\x1b[36m'+result.message+'\x1b[0m\x1b[0m');
         }
     }
 }
