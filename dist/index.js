@@ -9462,6 +9462,7 @@ const main = async () => {
     let status = true;
     let response;
     changeCreationTimeOut = 1000;
+    abortOnChangeCreationFailure = false;
     try {
      await createChange({
         instanceUrl,
