@@ -86,6 +86,8 @@ async function doFetch({
         let details =  changeStatus.details;
         console.log('\n     \x1b[1m\x1b[32m'+JSON.stringify(details)+'\x1b[0m\x1b[0m');
 
+        console.log('response code'+ responseCode);
+
         let changeState =  details.status;
 
           if (responseCode == 201) {
