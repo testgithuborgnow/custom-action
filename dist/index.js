@@ -5273,7 +5273,7 @@ async function tryFetch({
         
         if (+new Date() - start > timeout * 1000) {
           if(changeFlag){
-             console.error('\n    \x1b[38;5;214m Time out occured after '+timeout+ ' but pipeline will coninue since change flag is true \x1b[38;5;214m');
+             console.error('\n    \x1b[38;5;214m Time out occured after '+timeout+' seconds but pipeline will coninue since change flag is true \x1b[38;5;214m');
              return;
           }
              throw new Error(`Timeout after ${timeout} seconds.`);
@@ -9461,12 +9461,9 @@ const main = async () => {
     changeCreationTimeOut = changeCreationTimeOut >= 3600 ? changeCreationTimeOut : 3600;
     let status = true;
     let response;
-    changeCreationTimeOut = 300000;
-    abortOnChangeCreationFailure = true;
-
+    changeCreationTimeOut = 1000;
     try {
-
-      response = await createChange({
+     await createChange({
         instanceUrl,
         toolId,
         username,
@@ -9490,14 +9487,11 @@ const main = async () => {
     }
 
     if (status) {
-      let timeout = parseInt(core.getInput('timeout') || 30);
-      let interval = parseInt(core.getInput('interval') || 10);
-      timeout = 30;
-      interval =10;
+      let timeout = parseInt(core.getInput('timeout') || 3600);
+      let interval = parseInt(core.getInput('interval') || 100);
 
       let changeFlag = core.getInput('changeFlag');
       changeFlag = changeFlag === undefined || changeFlag === "" ? true : (changeFlag == "true");
-      changeFlag = false;
 
 
       let start = +new Date();
