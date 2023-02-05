@@ -9420,6 +9420,7 @@ const main = async () => {
                 }
 
             } catch (err) {
+                console.log(JSON.parse(err));
                 status = "NOT SUCCESSFUL";
                 if (!err.response) {
                     console.error('No response from ServiceNow. Please check ServiceNow logs for more details.');
