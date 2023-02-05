@@ -9442,7 +9442,7 @@ const main = async () => {
                         console.error('Response Code from ServiceNow is 500. Please check ServiceNow logs for more details.')
                     }
 
-                    if (err.response.status == 400) {
+                    if (err.response.status == 400 || err.response.status == 404) {
                         let errMsg = 'ServiceNow DevOps Get Change is not Successful.';
                         let errMsgSuffix = ' Please provide valid inputs.';
                         let responseData = err.response.data;
