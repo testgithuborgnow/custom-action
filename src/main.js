@@ -128,13 +128,8 @@ const main = async () => {
                         let errMsg = 'ServiceNow DevOps Get Change is not Successful.';
                         let errMsgSuffix = ' Please provide valid inputs.';
                         let responseData = err.response.data;
-                        if (responseData && responseData.error && responseData.error.message) {
-                            errMsg = errMsg + responseData.error.message + errMsgSuffix;
-                        } else if (responseData && responseData.result && responseData.result.details && responseData.result.details.errors) {
-                            let errors = err.response.data.result.details.errors;
-                            for (var index in errors) {
-                                errMsg = errMsg + errors[index].message + errMsgSuffix;
-                            }
+                        if (responseData && responseData.result && responseData.result.errorMessage) {
+                            errMsg = errMsg + responseData.result.errorMessage + errMsgSuffix;    
                         }
                         console.error(errMsg);
                     }
