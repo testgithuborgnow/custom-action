@@ -25,5 +25,5 @@ outputs:
   status: 
     description: 'To know the status of the Change Request GET call'    
 runs:
-  using: 'node14'
+  using: 'node16'
   main: 'dist/index.js'
