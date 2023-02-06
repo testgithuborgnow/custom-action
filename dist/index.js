@@ -9421,7 +9421,6 @@ const main = async () => {
 
             } catch (err) {
                 status = "NOT SUCCESSFUL";
-                console.log(err);
                 console.log(err.response.data.result);
                 console.log(err.response.data.result.changeFound);
                 console.log(err.response.data.result.errorMessage);
