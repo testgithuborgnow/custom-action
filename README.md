@@ -1,6 +1,6 @@
-# ServiceNow DevOps Change GitHub Action
+# ServiceNow DevOps Get Change Github Action
 
-This custom action needs to be added at step level in a job to create change in ServiceNow instance. Using this custom action in parallel jobs is not supported.
+This custom action needs to be added at step level in a job to get change-request-number from ServiceNow instance with provided change-details to identify the change-request.
 
 # Usage
 ## Step 1: Prepare values for setting up your secrets for Actions
@@ -27,8 +27,8 @@ deploy:
     needs: <upstream job>
     runs-on: ubuntu-latest
     steps:     
-      - name: ServiceNow Change
-        uses: ServiceNow/servicenow-devops-change@v1.38.0
+      - name: ServiceNow Get Change
+        uses: ServiceNow/servicenow-devops-get-change@v1.38
         with:
           devops-integration-user-name: ${{ secrets.SN_DEVOPS_USER }}
           devops-integration-user-password: ${{ secrets.SN_DEVOPS_PASSWORD }}
@@ -36,14 +36,7 @@ deploy:
           tool-id: ${{ secrets.SN_ORCHESTRATION_TOOL_ID }}
           context-github: ${{ toJSON(github) }}
           job-name: 'Deploy'
-          change-request: '{"setCloseCode":"true","attributes":{"short_description":"Automated Software Deployment","description":"Automated Software Deployment.","assignment_group":"a715cd759f2002002920bde8132e7018","implementation_plan":"Software update is tested and results can be found in Test Summaries Tab; When the change is approved the implementation happens automated by the CICD pipeline within the change planned start and end time window.","backout_plan":"When software fails in production, the previous software release will be re-deployed.","test_plan":"Testing if the software was successfully deployed"}}'
-          interval: '100'
-          timeout: '3600'
-          changeCreationTimeOut: '3600'
-          abortOnChangeCreationFailure: true
-          abortOnChangeStepTimeout: true
-
-
+          change-details: '{"build_number":"21","pipeline_name":"CI_Pipeline","stage_name":"Create_Change"}'
 ```
 The values for secrets should be setup in Step 1. Secrets should be created in Step 2.
 
@@ -69,38 +62,19 @@ The values for secrets should be setup in Step 1. Secrets should be created in S
 
 **Required**  Github context contains information about the workflow run details.
 
-### `job-name`
+### `change-details`
 
-**Required**  Display name of the job given for attribute _name_ in which _steps_ have been added for this custom action. For example, if display name of job is _Deploy_ then job-name value must be _'Deploy'_
-
-### `change-request`
-
-The change request details to be used while creating change in ServiceNow instance. The change request is a JSON object surrounded by curly braces _{}_ containing key-value pair separated by a comma _,_. A key-value pair consists of a key and a value separated by a colon _:_. The keys supported in key-value pair are *setCloseCode*, *short_description*, *description*, *assignment_group*, *implementation_plan*, *backout_plan*, *test_plan*
-
-### `interval`
-
-The time in seconds to wait between trying the API. The default value is 100 seconds.
-
-### `timeout`
-
-The max. time in seconds to wait until the action should fail. The default value is 3600 seconds.
-
-### `changeCreationTimeOut`
-
-The maximum time in seconds to wait for change creation. The default value is 3600 seconds.
-
-### `abortOnChangeCreationFailure`
-
-This value will be used to resume or abort the pipeline if the change is not created within the mentioned time period (changeCreationTimeOut). The default value is true seconds.
-
-### `abortOnChangeStepTimeout`
-
-This value will be used to resume or abort the pipeline if the change step is not completed within the mentioned time period (timeout). The default value is true seconds.
-
-
+The change details to be used for identifying change request in ServiceNow instance. The change details is a JSON object surrounded by curly braces _{}_ containing key-value pair separated by a comma _,_. A key-value pair consists of a key and a value separated by a colon _:_. The keys supported in key-value pair are *build_number*, *pipeline_name*, *stage_name*
 
 ## Outputs
-No outputs produced.
+
+### `change-request-number` 
+
+*Change Request Number* found for the given change details
+
+### `status`
+
+To know the status of the Change Request GET.
 
 # Notices
 
