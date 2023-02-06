@@ -1,5 +1,5 @@
-name: 'ServiceNow DevOps Change Automation'
-description: 'Pause/Resume Workflow Run based on ServiceNow Change Approval Status'
+name: 'ServiceNow DevOps Get Change'
+description: 'This is a Custom Action to Get the Change Request Number using the Change Details'
 inputs:
   instance-url: 
     description: 'ServiceNow Instance URL'
@@ -13,38 +13,17 @@ inputs:
   tool-id:
     description: 'Orchestration Tool Id'
     required: true
-  job-name:
-    description: 'Display Name of the Job'
-    required: true
   context-github:
     description: 'Github Context'
     required: true
-  timeout:
-    description: 'The max. time in seconds to wait until the action should fail.'
-    required: false
-    default: '3600'
-  interval:
-    description: 'The time in seconds to wait between trying the API.'
-    required: false
-    default: '100'
-  change-request:
-    description: 'The customized inputs to create change with the requested details.'
-    required: true
-  changeCreationTimeOut:
-    description: 'The max. time in seconds to wait until change created.'
-    required: false
-    default: '3600'
-  abortOnChangeCreationFailure:
-    description: 'This value will be used to resume or abort the pipeline if the change is not created within the mentioned time period in changeCreationTimeOut. '
-    required: false
-    default: true
-  abortOnChangeStepTimeout:
-    description: 'This value will be used to resume or abort the pipeline after a timeout has occurred in case a change step is still in a pending state.'
-    required: false
-    default: true
-branding:
-  icon: 'refresh-ccw'
-  color: 'green'
-runs: 
-  using: 'node12'
+  change-details:
+    description: 'The inputs to identify change at Servicenow and GET it.'
+    required: true        
+outputs:
+  change-request-number: 
+    description: 'Change Request Number found for the given change details'
+  status: 
+    description: 'To know the status of the Change Request GET call'    
+runs:
+  using: 'node16'
   main: 'dist/index.js'
