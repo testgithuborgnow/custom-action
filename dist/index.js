@@ -9675,9 +9675,9 @@ const main = async() => {
 
     let abortOnChangeCreationFailure = core.getInput('abortOnChangeCreationFailure');
     abortOnChangeCreationFailure = abortOnChangeCreationFailure === undefined || abortOnChangeCreationFailure === "" ? true : (abortOnChangeCreationFailure == "true");
-    let changeCreationTimeOut = parseInt(core.getInput('changeCreationTimeOut') || 3600);
-    changeCreationTimeOut = changeCreationTimeOut >= 3600 ? changeCreationTimeOut : 3600;
-
+    let changeCreationTimeOut = parseInt(core.getInput('changeCreationTimeOut') );
+    // changeCreationTimeOut = changeCreationTimeOut >= 3600 ? changeCreationTimeOut : 3600;
+    // || 3600
     let status = true;
     let response;
 
@@ -9708,9 +9708,8 @@ const main = async() => {
       let timeout = parseInt(core.getInput('timeout') || 100);
       let interval = parseInt(core.getInput('interval') || 3600);
 
-      // interval = interval>=100 ? interval : 100;
+      interval = interval>=100 ? interval : 100;
       timeout = timeout>=100? timeout : 3600;
-      interval = 10;
 
       let abortOnChangeStepTimeout = core.getInput('abortOnChangeStepTimeout');
       abortOnChangeStepTimeout = abortOnChangeStepTimeout === undefined || abortOnChangeStepTimeout === "" ? false : (abortOnChangeStepTimeout == "true");
