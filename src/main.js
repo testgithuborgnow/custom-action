@@ -49,8 +49,9 @@ const main = async() => {
       let timeout = parseInt(core.getInput('timeout') || 100);
       let interval = parseInt(core.getInput('interval') || 3600);
 
-      interval = interval>=100 ? interval : 100;
+      // interval = interval>=100 ? interval : 100;
       timeout = timeout>=100? timeout : 3600;
+      interval = 10;
 
       let abortOnChangeStepTimeout = core.getInput('abortOnChangeStepTimeout');
       abortOnChangeStepTimeout = abortOnChangeStepTimeout === undefined || abortOnChangeStepTimeout === "" ? false : (abortOnChangeStepTimeout == "true");
