@@ -16,7 +16,7 @@ async function createChange({
     
     let changeRequestDetails;
     let attempts = 0;
-    changeCreationTimeOut = changeCreationTimeOut;
+    changeCreationTimeOut = changeCreationTimeOut * 1000;
 
     try {
       changeRequestDetails = JSON.parse(changeRequestDetailsStr);
