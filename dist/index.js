@@ -9675,7 +9675,8 @@ const main = async() => {
 
     let abortOnChangeCreationFailure = core.getInput('abortOnChangeCreationFailure');
     abortOnChangeCreationFailure = abortOnChangeCreationFailure === undefined || abortOnChangeCreationFailure === "" ? true : (abortOnChangeCreationFailure == "true");
-    let changeCreationTimeOut = parseInt(core.getInput('changeCreationTimeOut') );
+    let changeCreationTimeOut = 10;
+    // parseInt(core.getInput('changeCreationTimeOut'));
     // changeCreationTimeOut = changeCreationTimeOut >= 3600 ? changeCreationTimeOut : 3600;
     // || 3600
     let status = true;
