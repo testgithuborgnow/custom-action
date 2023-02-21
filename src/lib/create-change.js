@@ -27,7 +27,7 @@ async function createChange({
     console.log('This is a message with a hyperlink: %cClick here', 'color:blue; text-decoration:underline', 'https://www.example.com');
     console.log('testing');
 
-    console.log(`This is a message with a hyperlink: ${"\x1b]8;;https://www.example.com\x1b\\Click here\x1b]8;;\x1b\\'"}`);
+    console.log(`This is a message with a hyperlink: \x1b]8;;https://www.example.com\x1b\\Click here\x1b]8;;\x1b\\`);
 
 
     let githubContext;
