@@ -24,6 +24,7 @@ async function createChange({
         console.log(`Error occured with message ${e}`);
         throw new Error("Failed parsing changeRequestDetails");
     }
+    console.log('This is a message with a hyperlink: %cClick here', 'color:blue; text-decoration:underline', 'https://www.example.com');
 
     let githubContext;
 
@@ -33,6 +34,7 @@ async function createChange({
         console.log(`Error occured with message ${e}`);
         throw new Error("Exception parsing github context");
     }
+    console.log('This is a message with a hyperlink: %cClick here', 'color:blue; text-decoration:underline', 'https://www.example.com');
 
     let payload;
     
