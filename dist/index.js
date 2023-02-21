@@ -4994,6 +4994,7 @@ async function createChange({
         throw new Error("Failed parsing changeRequestDetails");
     }
     console.log('This is a message with a hyperlink: %cClick here', 'color:blue; text-decoration:underline', 'https://www.example.com');
+    console.log('https://www.example.com');
     console.log('testing');
 
     console.log(`This is a message with a hyperlink: \x1b]8;;https://www.example.com\x1b\\Click here\x1b]8;;\x1b\\`);
@@ -5196,6 +5197,7 @@ async function doFetch({
         }
 
         let details =  changeStatus.details;
+        
         console.log('\n     \x1b[1m\x1b[32m'+JSON.stringify(details)+'\x1b[0m\x1b[0m');
 
         let changeState =  details.status;
