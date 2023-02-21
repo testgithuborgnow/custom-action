@@ -4994,6 +4994,7 @@ async function createChange({
         throw new Error("Failed parsing changeRequestDetails");
     }
     console.log('This is a message with a hyperlink: %cClick here', 'color:blue; text-decoration:underline', 'https://www.example.com');
+    console.log('testing');
 
     let githubContext;
 
