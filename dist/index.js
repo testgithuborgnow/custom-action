@@ -5213,7 +5213,7 @@ async function doFetch({
       // // Add the hyperlink to the document
       // document.body.appendChild(link);
 
-      const url = "https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3";
+      let url = "https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3";
       console.info(`Click here to go to ${url}`);
 
       const decodedUrl = decodeURI(url);
@@ -5233,6 +5233,9 @@ async function doFetch({
       console.log("https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3");
       console.log(`${instanceUrl}` + " ");
       console.log('testing');
+       url = 'https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3';
+       console.log(`%c${url}`, 'color: blue; text-decoration: underline;');
+
 
 
       console.log(`This is a message with a hyperlink: \x1b]8;;https://www.example.com\x1b\\Click here\x1b]8;;\x1b\\`);
