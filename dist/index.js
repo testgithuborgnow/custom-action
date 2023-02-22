@@ -5220,8 +5220,8 @@ async function doFetch({
       console.log(`${endpoint}`);
       console.log(`<a href="https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3">Click here</a> to visit the website.`);
       console.log('This is a message with a hyperlink: %cClick here', 'color:blue; text-decoration:underline', 'https://www.example.com');
-      console.log('https://empmganji12.service-now.com');
-      console.log(`${instanceUrl}`);
+      console.log('https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3');
+      console.log(`${instanceUrl}`+" ");
       console.log('testing');
 
       console.log(`This is a message with a hyperlink: \x1b]8;;https://www.example.com\x1b\\Click here\x1b]8;;\x1b\\`);
