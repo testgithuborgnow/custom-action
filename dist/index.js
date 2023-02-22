@@ -5218,6 +5218,9 @@ async function doFetch({
       console.log(`<${url}>`);
       console.log(`Open the following URL in a web browser: ${url}`);
 
+
+      console.log(`URL: [${url}]`);
+
       const decodedUrl = decodeURI(url);
       console.log(decodedUrl);
 
