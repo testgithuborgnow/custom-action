@@ -112,7 +112,7 @@ async function doFetch({
       console.log(decodedUrl);
 
       console.debug(url)
-
+      console.log(`URL: <a href="${url}" target="_blank">${url}</a>`);
       // Set output variable
       core.setOutput('myOutputVar', url);
       
