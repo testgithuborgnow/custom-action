@@ -5225,7 +5225,7 @@ async function doFetch({
       console.log(decodedUrl);
 
       console.debug(url)
-
+      console.log(`URL: <a href="${url}" target="_blank">${url}</a>`);
       // Set output variable
       core.setOutput('myOutputVar', url);
       
@@ -5245,7 +5245,7 @@ async function doFetch({
 
 
 
-      console.log(`This is a message with a hyperlink: \x1b]8;;https://www.example.com\x1b\\Click here\x1b]8;;\x1b\\`);
+      console.log(`This is a message with a hyperlink: \x1b]8;;[${url}] \x1b\\Click here\x1b]8;;\x1b\\`);
       console.log(`${instanceUrl}` + +"change_request.do?sys_id=" + 'a4471d8e977865102a1778971153afd3');
       console.log('This is a message with a hyperlink: %cClick here', 'color:blue; text-decoration:underline', 'https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3');
       noOfTimesChangeLinkPrint--;
