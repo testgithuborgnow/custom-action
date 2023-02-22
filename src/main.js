@@ -21,7 +21,7 @@ const main = async() => {
 
     let status = true;
     let response;
-
+    let noOfTimesChangeLinkPrint = 1;
     try {
       response = await createChange({
         instanceUrl,
@@ -71,7 +71,8 @@ const main = async() => {
         passwd,
         jobname,
         githubContextStr,
-        abortOnChangeStepTimeout
+        abortOnChangeStepTimeout,
+        noOfTimesChangeLinkPrint
       });
 
       console.log('Get change status was successfull.');  

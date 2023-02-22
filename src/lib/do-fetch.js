@@ -7,7 +7,8 @@ async function doFetch({
   username,
   passwd,
   jobname,
-  githubContextStr
+  githubContextStr,
+  noOfTimesChangeLinkPrint
 }) {
     console.log(`\nPolling for change status..........`);
 
@@ -84,7 +85,12 @@ async function doFetch({
         }
 
         let details =  changeStatus.details;
-        
+        if(noOfTimesChangeLinkPrint){
+
+          console.log('https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3');
+          noOfTimesChangeLinkPrint--;  
+        }
+
         console.log('\n     \x1b[1m\x1b[32m'+JSON.stringify(details)+'\x1b[0m\x1b[0m');
 
         let changeState =  details.status;
