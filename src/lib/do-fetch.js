@@ -100,7 +100,7 @@ async function doFetch({
       // // Add the hyperlink to the document
       // document.body.appendChild(link);
 
-      const url = "https:" +" "+"//empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3";
+      const url = "https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3";
       console.info(`Click here to go to ${url}`);
 
       const decodedUrl = decodeURI(url);
