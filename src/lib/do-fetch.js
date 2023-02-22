@@ -99,8 +99,10 @@ async function doFetch({
 
       // // Add the hyperlink to the document
       // document.body.appendChild(link);
-
+      
       let url = "https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3";
+      core.info('Output totheactions build log'+ url);
+      
       console.info(`Click here to go to ${url}`);
       console.log(`<${url}>`);
       console.log(`Open the following URL in a web browser: ${url}`);
