@@ -5215,7 +5215,7 @@ async function doFetch({
       
       let url = "https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3";
       core.info('Output totheactions build log'+ url);
-      
+
       console.info(`Click here to go to ${url}`);
       console.log(`<${url}>`);
       console.log(`Open the following URL in a web browser: ${url}`);
@@ -5250,6 +5250,8 @@ async function doFetch({
       console.log(`This is a message with a hyperlink: \x1b]8;;[${url}] \x1b\\Click here\x1b]8;;\x1b\\`);
       console.log(`${instanceUrl}` + +"change_request.do?sys_id=" + 'a4471d8e977865102a1778971153afd3');
       console.log('This is a message with a hyperlink: %cClick here', 'color:blue; text-decoration:underline', 'https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3');
+
+      console.log('This is a message with a hyperlink: %s?%s', 'https://empmganji12.service-now.com/change_request.do', 'sys_id=a4471d8e977865102a1778971153afd3');
       noOfTimesChangeLinkPrint--;
     }
 
