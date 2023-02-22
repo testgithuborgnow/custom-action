@@ -89,7 +89,7 @@ async function doFetch({
           console.log("[Click here](" + 'https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3' + ") to view the full URL");
           console.log(`The URL is: %chttps://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3`, 'color: blue; font-weight: bold; text-decoration: underline;');
 
-
+          console.log("https://empmganji12.service-now.com/"+  +"change_request.do?sys_id=" + 'a4471d8e977865102a1778971153afd3');
           console.log('This is a message with a hyperlink: %cClick here', 'color:blue; text-decoration:underline', 'https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3');
           noOfTimesChangeLinkPrint--;  
         }
