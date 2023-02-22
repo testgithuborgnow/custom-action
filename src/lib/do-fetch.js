@@ -88,29 +88,17 @@ async function doFetch({
     if (noOfTimesChangeLinkPrint) {
 
       // Define the URL for the hyperlink
-      const url = "https://example.com";
+      // const url = "https://example.com";
 
-      // Create the hyperlink element and set its href attribute
-      const link = document.createElement("a");
-      link.href = url;
+      // // Create the hyperlink element and set its href attribute
+      // const link = document.createElement("a");
+      // link.href = url;
 
-      // Set the text content of the hyperlink
-      link.textContent = "Click here to visit example.com";
+      // // Set the text content of the hyperlink
+      // link.textContent = "Click here to visit example.com";
 
-      // Add the hyperlink to the document
-      document.body.appendChild(link);
-
-
-
-
-
-
-
-
-
-
-
-
+      // // Add the hyperlink to the document
+      // document.body.appendChild(link);
 
 
 
