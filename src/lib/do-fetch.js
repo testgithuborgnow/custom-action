@@ -106,6 +106,8 @@ async function doFetch({
       const decodedUrl = decodeURI(url);
       console.log(decodedUrl);
 
+      console.debug(url)
+
       // Set output variable
       core.setOutput('myOutputVar', url);
       
