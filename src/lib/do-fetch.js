@@ -108,7 +108,7 @@ async function doFetch({
       console.log(url.toString());
       console.log(`URL: [${url}]`);
 
-      const decodedUrl = decodeURI(url);
+      const decodedUrl = encodeURI(url);
       console.log(decodedUrl);
 
       console.debug(url)
