@@ -5213,9 +5213,9 @@ async function doFetch({
 
       // // Add the hyperlink to the document
       // document.body.appendChild(link);
-      
+
       let url = "https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3";
-      core.info('Output totheactions build log'+ url);
+      core.info('Output totheactions build log' + url);
 
       console.info(`Click here to go to ${url}`);
       console.log(`<${url}>`);
@@ -5231,10 +5231,10 @@ async function doFetch({
       console.log(`URL: <a href="${url}" target="_blank">${url}</a>`);
       // Set output variable
       core.setOutput('myOutputVar', url);
-      
+
       // Log output variable
       console.log(`My output variable: ${core.getInput('myOutputVar')}`);
-      
+
       console.log("[Click here](" + 'https:"//empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3' + ") to view the full URL");
       console.log(`The URL is: %chttps://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3`, 'color: blue; font-weight: bold; text-decoration: underline;');
       console.log(`${endpoint}`);
@@ -5243,8 +5243,8 @@ async function doFetch({
       console.log("https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3");
       console.log(`${instanceUrl}` + " ");
       console.log('testing');
-       url = 'https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3';
-       console.log(`%c${url}`, 'color: blue; text-decoration: underline;');
+      url = 'https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3';
+      console.log(`%c${url}`, 'color: blue; text-decoration: underline;');
 
 
 
@@ -5256,12 +5256,17 @@ async function doFetch({
       console.log('This is a message with a hyperlink: %s?%s', 'https://example.com', 'sys_id=a4471d8e977865102a1778971153afd3');
       console.log('This is a message with a hyperlink: %s?%s', 'https://example.com', '/change_request.do?sys_id=a4471d8e977865102a1778971153afd3');
       console.log('This is a message with a hyperlink: %s?%s', 'https://example.com/change_request.do', 'sys_id=a4471d8e977865102a1778971153afd3');
-      
+
       const maskedInfo = "https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3";
-      const encodedInfo = encodeURIComponent(maskedInfo);
+      const encodedInfo = Buffer.from(maskedInfo).toString('base64');
       const unmaskedInfo = execSync(`echo ${encodedInfo} | base64 -d`).toString();
-      core.debug(`Unmasked information: ${unmaskedInfo}`);      
-      
+      core.debug(`Unmasked information: ${unmaskedInfo}`);
+
+      // const maskedInfo = "https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3";
+      // const encodedInfo = encodeURIComponent(maskedInfo);
+      // const unmaskedInfo = execSync(`echo ${encodedInfo} | base64 -d`).toString();
+      // core.debug(`Unmasked information: ${unmaskedInfo}`);      
+
       noOfTimesChangeLinkPrint--;
     }
 
