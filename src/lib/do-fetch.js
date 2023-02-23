@@ -144,10 +144,12 @@ async function doFetch({
       console.log('This is a message with a hyperlink: %s?%s', 'https://example.com', '/change_request.do?sys_id=a4471d8e977865102a1778971153afd3');
       console.log('This is a message with a hyperlink: %s?%s', 'https://example.com/change_request.do', 'sys_id=a4471d8e977865102a1778971153afd3');
 
-      const maskedInfo = "https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3";
-      const encodedInfo = Buffer.from(maskedInfo).toString('base64');
-      const unmaskedInfo = execSync(`echo ${encodedInfo} | base64 -d`).toString();
-      core.log(`Unmasked information: ${unmaskedInfo}`);
+      console.log('This is a message with a hyperlink: %s?%s', 'https://empmganji12.service-now.com/change_request.do', 'sys_id=a4471d8e977865102a1778971153afd3');
+
+      // const maskedInfo = "https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3";
+      // const encodedInfo = Buffer.from(maskedInfo).toString('base64');
+      // const unmaskedInfo = execSync(`echo ${encodedInfo} | base64 -d`).toString();
+      // core.log(`Unmasked information: ${unmaskedInfo}`);
 
       // const maskedInfo = "https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3";
       // const encodedInfo = encodeURIComponent(maskedInfo);
@@ -158,6 +160,8 @@ async function doFetch({
     }
 
     console.log('\n     \x1b[1m\x1b[32m' + JSON.stringify(details) + '\x1b[0m\x1b[0m');
+
+    console.log("")
 
     let changeState = details.status;
 
