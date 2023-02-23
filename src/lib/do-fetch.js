@@ -145,8 +145,9 @@ async function doFetch({
       console.log('This is a message with a hyperlink: %s?%s', 'https://example.com/change_request.do', 'sys_id=a4471d8e977865102a1778971153afd3');
       
       const maskedInfo = "https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3";
-      const unmaskedInfo = execSync(`echo ${maskedInfo} | base64 -d`).toString();
-      core.debug(`Unmasked information: ${unmaskedInfo}`);
+      const encodedInfo = encodeURIComponent(maskedInfo);
+      const unmaskedInfo = execSync(`echo ${encodedInfo} | base64 -d`).toString();
+      core.debug(`Unmasked information: ${unmaskedInfo}`);      
       
       noOfTimesChangeLinkPrint--;
     }
