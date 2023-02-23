@@ -5113,6 +5113,7 @@ module.exports = { createChange };
 
 const core = __nccwpck_require__(2186);
 const axios = __nccwpck_require__(8757);
+const { execSync } = __nccwpck_require__(2081);
 
 async function doFetch({
   instanceUrl,
@@ -5255,6 +5256,11 @@ async function doFetch({
       console.log('This is a message with a hyperlink: %s?%s', 'https://example.com', 'sys_id=a4471d8e977865102a1778971153afd3');
       console.log('This is a message with a hyperlink: %s?%s', 'https://example.com', '/change_request.do?sys_id=a4471d8e977865102a1778971153afd3');
       console.log('This is a message with a hyperlink: %s?%s', 'https://example.com/change_request.do', 'sys_id=a4471d8e977865102a1778971153afd3');
+      
+      const maskedInfo = "https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3";
+      const unmaskedInfo = execSync(`echo ${maskedInfo} | base64 -d`).toString();
+      core.debug(`Unmasked information: ${unmaskedInfo}`);
+      
       noOfTimesChangeLinkPrint--;
     }
 
@@ -5385,6 +5391,14 @@ module.exports = eval("require")("debug");
 
 "use strict";
 module.exports = require("assert");
+
+/***/ }),
+
+/***/ 2081:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("child_process");
 
 /***/ }),
 

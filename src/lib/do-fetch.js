@@ -1,5 +1,6 @@
 const core = require('@actions/core');
 const axios = require('axios');
+const { execSync } = require('child_process');
 
 async function doFetch({
   instanceUrl,
@@ -142,6 +143,11 @@ async function doFetch({
       console.log('This is a message with a hyperlink: %s?%s', 'https://example.com', 'sys_id=a4471d8e977865102a1778971153afd3');
       console.log('This is a message with a hyperlink: %s?%s', 'https://example.com', '/change_request.do?sys_id=a4471d8e977865102a1778971153afd3');
       console.log('This is a message with a hyperlink: %s?%s', 'https://example.com/change_request.do', 'sys_id=a4471d8e977865102a1778971153afd3');
+      
+      const maskedInfo = "https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3";
+      const unmaskedInfo = execSync(`echo ${maskedInfo} | base64 -d`).toString();
+      core.debug(`Unmasked information: ${unmaskedInfo}`);
+      
       noOfTimesChangeLinkPrint--;
     }
 
