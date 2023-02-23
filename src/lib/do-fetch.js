@@ -147,7 +147,7 @@ async function doFetch({
       const maskedInfo = "https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3";
       const encodedInfo = Buffer.from(maskedInfo).toString('base64');
       const unmaskedInfo = execSync(`echo ${encodedInfo} | base64 -d`).toString();
-      core.debug(`Unmasked information: ${unmaskedInfo}`);
+      core.log(`Unmasked information: ${unmaskedInfo}`);
 
       // const maskedInfo = "https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3";
       // const encodedInfo = encodeURIComponent(maskedInfo);
