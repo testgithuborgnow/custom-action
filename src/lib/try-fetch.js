@@ -13,7 +13,7 @@ async function tryFetch({
   jobname,
   githubContextStr,
   abortOnChangeStepTimeout,
-  prevChangeDetails
+  prevPollChangeDetails
 }) {
 
   try {
@@ -24,7 +24,7 @@ async function tryFetch({
       passwd,
       jobname,
       githubContextStr,
-      prevChangeDetails
+      prevPollChangeDetails
     });
   } catch (error) {
     if (error.message == "500") {
@@ -51,8 +51,12 @@ async function tryFetch({
       throw new Error("****Change has been created but the change is either rejected or cancelled.");
     }
 
-    if (error.message == "201") {
-      console.log('\n****Change is pending for approval decision.');
+    if (error.message) {
+      errorObject = JSON.parse(error.message);
+      if (errorObject && errorObject.statusCode == "201") {
+        prevPollChangeDetails = errorObject.details;
+        console.log('\n****Change is pending for approval decision.');
+      }
     }
 
     // Wait and then continue
@@ -78,7 +82,7 @@ async function tryFetch({
       jobname,
       githubContextStr,
       abortOnChangeStepTimeout,
-      prevChangeDetails
+      prevPollChangeDetails
     });
   }
 }

@@ -58,7 +58,7 @@ const main = async() => {
       abortOnChangeStepTimeout = abortOnChangeStepTimeout === undefined || abortOnChangeStepTimeout === "" ? false : (abortOnChangeStepTimeout == "true");
 
       let start = +new Date();
-      let prevChangeDetails = {};
+      let prevChangeDetails ;
       
       response = await tryFetch({
         start,
