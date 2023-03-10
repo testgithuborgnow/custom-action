@@ -5191,6 +5191,7 @@ async function doFetch({
       throw new Error("500");
     }
     let currChangeDetails = changeStatus.details;
+    console.log('prev'+ prevPollChangeDetails);
     // Check if objects are equal and log messages accordingly
     if (isChangeDetailsChanged(prevPollChangeDetails, currChangeDetails)) {
       
@@ -5219,7 +5220,8 @@ async function doFetch({
 
 // Check if change Object have the same fields and values
  function isChangeDetailsChanged(prevPollChangeDetails, currChangeDetails) {
-
+  
+  console.log('we testing' + prevPollChangeDetails);
   console.log("im prev"+JSON.stringify(prevPollChangeDetails));
   console.log("im cur"+JSON.stringify(currChangeDetails));
 
@@ -9757,7 +9759,7 @@ const main = async() => {
       abortOnChangeStepTimeout = abortOnChangeStepTimeout === undefined || abortOnChangeStepTimeout === "" ? false : (abortOnChangeStepTimeout == "true");
 
       let start = +new Date();
-      let prevChangeDetails = {};
+      let prevPollChangeDetails = {};
       
       response = await tryFetch({
         start,
@@ -9770,7 +9772,7 @@ const main = async() => {
         jobname,
         githubContextStr,
         abortOnChangeStepTimeout,
-        prevChangeDetails
+        prevPollChangeDetails
       });
 
       console.log('Get change status was successfull.');  

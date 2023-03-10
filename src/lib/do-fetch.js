@@ -85,6 +85,7 @@ async function doFetch({
       throw new Error("500");
     }
     let currChangeDetails = changeStatus.details;
+    console.log('prev'+ prevPollChangeDetails);
     // Check if objects are equal and log messages accordingly
     if (isChangeDetailsChanged(prevPollChangeDetails, currChangeDetails)) {
       
@@ -113,7 +114,8 @@ async function doFetch({
 
 // Check if change Object have the same fields and values
  function isChangeDetailsChanged(prevPollChangeDetails, currChangeDetails) {
-
+  
+  console.log('we testing' + prevPollChangeDetails);
   console.log("im prev"+JSON.stringify(prevPollChangeDetails));
   console.log("im cur"+JSON.stringify(currChangeDetails));
 
