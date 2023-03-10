@@ -5201,8 +5201,9 @@ async function doFetch({
 
     if (responseCode == 201) {
       if (changeState == "pending_decision") {
-        
-        throw new Error(JSON.stringify({"statusCode":"201","details" :currChangeDetails }));
+        let errorMessage = JSON.stringify({"statusCode":"201","details" :currChangeDetails });
+        console.log(errorMessage);
+        throw new Error(errorMessage);
       } else
         throw new Error("202");
     }
@@ -5301,7 +5302,7 @@ async function tryFetch({
     }
 
     if (error.message) {
-      errorObject = JSON.parse(error.message);
+     let errorObject = JSON.parse(error.message);
       if (errorObject && errorObject.statusCode == "201") {
         prevPollChangeDetails = errorObject.details;
         console.log('\n****Change is pending for approval decision.');
@@ -9756,7 +9757,7 @@ const main = async() => {
       abortOnChangeStepTimeout = abortOnChangeStepTimeout === undefined || abortOnChangeStepTimeout === "" ? false : (abortOnChangeStepTimeout == "true");
 
       let start = +new Date();
-      let prevChangeDetails ;
+      let prevChangeDetails = {};
       
       response = await tryFetch({
         start,

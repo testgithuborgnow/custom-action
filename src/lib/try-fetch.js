@@ -52,7 +52,7 @@ async function tryFetch({
     }
 
     if (error.message) {
-      errorObject = JSON.parse(error.message);
+     let errorObject = JSON.parse(error.message);
       if (errorObject && errorObject.statusCode == "201") {
         prevPollChangeDetails = errorObject.details;
         console.log('\n****Change is pending for approval decision.');
