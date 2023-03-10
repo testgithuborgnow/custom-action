@@ -21,7 +21,7 @@ const main = async() => {
 
     let status = true;
     let response;
-    let noOfTimesChangeLinkPrint = 1;
+
     try {
       response = await createChange({
         instanceUrl,
@@ -52,10 +52,6 @@ const main = async() => {
       interval = interval>=100 ? interval : 100;
       timeout = timeout>=100? timeout : 3600;
 
-      interval = 10;
-      timeout = 30;
-
-
       let abortOnChangeStepTimeout = core.getInput('abortOnChangeStepTimeout');
       abortOnChangeStepTimeout = abortOnChangeStepTimeout === undefined || abortOnChangeStepTimeout === "" ? false : (abortOnChangeStepTimeout == "true");
 
@@ -71,8 +67,7 @@ const main = async() => {
         passwd,
         jobname,
         githubContextStr,
-        abortOnChangeStepTimeout,
-        noOfTimesChangeLinkPrint
+        abortOnChangeStepTimeout
       });
 
       console.log('Get change status was successfull.');  

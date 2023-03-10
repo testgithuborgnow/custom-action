@@ -4993,12 +4993,6 @@ async function createChange({
         console.log(`Error occured with message ${e}`);
         throw new Error("Failed parsing changeRequestDetails");
     }
-    console.log('This is a message with a hyperlink: %cClick here', 'color:blue; text-decoration:underline', 'https://www.example.com');
-    console.log('https://www.example.com');
-    console.log('testing');
-
-    console.log(`This is a message with a hyperlink: \x1b]8;;https://www.example.com\x1b\\Click here\x1b]8;;\x1b\\`);
-
 
     let githubContext;
 
@@ -5008,7 +5002,6 @@ async function createChange({
         console.log(`Error occured with message ${e}`);
         throw new Error("Exception parsing github context");
     }
-    console.log('This is a message with a hyperlink: %cClick here', 'color:blue; text-decoration:underline', 'https://www.example.com');
 
     let payload;
     
@@ -5113,7 +5106,6 @@ module.exports = { createChange };
 
 const core = __nccwpck_require__(2186);
 const axios = __nccwpck_require__(8757);
-const { execSync } = __nccwpck_require__(2081);
 
 async function doFetch({
   instanceUrl,
@@ -5121,177 +5113,101 @@ async function doFetch({
   username,
   passwd,
   jobname,
-  githubContextStr,
-  noOfTimesChangeLinkPrint
+  githubContextStr
 }) {
-  console.log(`\nPolling for change status..........`);
+    console.log(`\nPolling for change status..........`);
 
-  let githubContext = JSON.parse(githubContextStr);
+    let githubContext = JSON.parse(githubContextStr);
+    
+    const codesAllowedArr = '200,201,400,401,403,404,500'.split(',').map(Number);
+    const pipelineName = `${githubContext.repository}` + '/' + `${githubContext.workflow}`;
+    const buildNumber = `${githubContext.run_id}`;
+    const attemptNumber = `${githubContext.run_attempt}`;
 
-  const codesAllowedArr = '200,201,400,401,403,404,500'.split(',').map(Number);
-  const pipelineName = `${githubContext.repository}` + '/' + `${githubContext.workflow}`;
-  const buildNumber = `${githubContext.run_id}`;
-  const attemptNumber = `${githubContext.run_attempt}`;
-
-  const endpoint = `${instanceUrl}/api/sn_devops/devops/orchestration/changeStatus?toolId=${toolId}&stageName=${jobname}&pipelineName=${pipelineName}&buildNumber=${buildNumber}&attemptNumber=${attemptNumber}`;
-
-  let response = {};
-  let status = false;
-  let changeStatus = {};
-  let responseCode = 500;
-
-  try {
-    const token = `${username}:${passwd}`;
-    const encodedToken = Buffer.from(token).toString('base64');
-
-    const defaultHeaders = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Authorization': 'Basic ' + `${encodedToken}`
-    };
-
-    let httpHeaders = { headers: defaultHeaders };
-    response = await axios.get(endpoint, httpHeaders);
-    status = true;
-  } catch (err) {
-    if (!err.response) {
-      throw new Error("500");
-    }
-
-    if (!codesAllowedArr.includes(err.response.status)) {
-      throw new Error("500");
-    }
-
-    if (err.response.status == 500) {
-      throw new Error("500");
-    }
-
-    if (err.response.status == 400) {
-      throw new Error("400");
-    }
-
-    if (err.response.status == 401) {
-      throw new Error("401");
-    }
-
-    if (err.response.status == 403) {
-      throw new Error("403");
-    }
-
-    if (err.response.status == 404) {
-      throw new Error("404");
-    }
-  }
-
-  if (status) {
-    try {
-      responseCode = response.status;
-    } catch (error) {
-      core.setFailed('\nCould not read response code from API response: ' + error);
-      throw new Error("500");
-    }
+    const endpoint = `${instanceUrl}/api/sn_devops/devops/orchestration/changeStatus?toolId=${toolId}&stageName=${jobname}&pipelineName=${pipelineName}&buildNumber=${buildNumber}&attemptNumber=${attemptNumber}`;
+    
+    let response = {};
+    let status = false;
+    let changeStatus = {};
+    let responseCode = 500;
 
     try {
-      changeStatus = response.data.result;
-    } catch (error) {
-      core.setFailed('\nCould not read change status details from API response: ' + error);
-      throw new Error("500");
+        const token = `${username}:${passwd}`;
+        const encodedToken = Buffer.from(token).toString('base64');
+
+        const defaultHeaders = {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': 'Basic ' + `${encodedToken}`
+        };
+
+        let httpHeaders = { headers: defaultHeaders };
+        response = await axios.get(endpoint, httpHeaders);
+        status = true;
+    } catch (err) {
+        if (!err.response) {
+           throw new Error("500");
+        }
+
+        if (!codesAllowedArr.includes(err.response.status)) {
+          throw new Error("500");
+        }
+   
+        if (err.response.status == 500) {
+            throw new Error("500");
+        }
+
+        if (err.response.status == 400) {
+          throw new Error("400");
+        }
+
+        if (err.response.status == 401) {
+          throw new Error("401");
+        }
+
+        if (err.response.status == 403) {
+          throw new Error("403");
+        }
+
+        if (err.response.status == 404) {
+          throw new Error("404");
+        }
     }
 
-    let details = changeStatus.details;
-    if (noOfTimesChangeLinkPrint) {
+    if (status) {
+        try {
+          responseCode = response.status;
+        } catch (error) {
+            core.setFailed('\nCould not read response code from API response: ' + error);
+            throw new Error("500");
+        }
 
-      // Define the URL for the hyperlink
-      // const url = "https://example.com";
+        try {
+          changeStatus = response.data.result;
+        } catch (error) {
+            core.setFailed('\nCould not read change status details from API response: ' + error);
+            throw new Error("500");
+        }
 
-      // // Create the hyperlink element and set its href attribute
-      // const link = document.createElement("a");
-      // link.href = url;
+        let details =  changeStatus.details;
+        console.log('\n     \x1b[1m\x1b[32m'+JSON.stringify(details)+'\x1b[0m\x1b[0m');
 
-      // // Set the text content of the hyperlink
-      // link.textContent = "Click here to visit example.com";
+        let changeState =  details.status;
 
-      // // Add the hyperlink to the document
-      // document.body.appendChild(link);
+        if (responseCode == 201) {
+          if (changeState == "pending_decision") {
+            throw new Error("201");
+          } else
+            throw new Error("202");
+        }
 
-      let url = "https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3";
-      core.info('Output totheactions build log' + url);
+        if (responseCode == 200) {
+            console.log('\n****Change is Approved.');
+        }
+    } else
+        throw new Error("500");
 
-      console.info(`Click here to go to ${url}`);
-      console.log(`<${url}>`);
-      console.log(`Open the following URL in a web browser: ${url}`);
-
-      console.log(url.toString());
-      console.log(`URL: [${url}]`);
-
-      const decodedUrl = encodeURI(url);
-      console.log(decodedUrl);
-
-      console.debug(url)
-      console.log(`URL: <a href="${url}" target="_blank">${url}</a>`);
-      // Set output variable
-      core.setOutput('myOutputVar', url);
-
-      // Log output variable
-      console.log(`My output variable: ${core.getInput('myOutputVar')}`);
-
-      console.log("[Click here](" + 'https:"//empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3' + ") to view the full URL");
-      console.log(`The URL is: %chttps://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3`, 'color: blue; font-weight: bold; text-decoration: underline;');
-      console.log(`${endpoint}`);
-      console.log(`<a href="https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3">Click here</a> to visit the website.`);
-      console.log('This is a message with a hyperlink: %cClick here', 'color:blue; text-decoration:underline', 'https://www.example.com');
-      console.log("https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3");
-      console.log(`${instanceUrl}` + " ");
-      console.log('testing');
-      url = 'https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3';
-      console.log(`%c${url}`, 'color: blue; text-decoration: underline;');
-
-
-
-      console.log(`This is a message with a hyperlink: \x1b]8;;[${url}] \x1b\\Click here\x1b]8;;\x1b\\`);
-      console.log(`${instanceUrl}` + +"change_request.do?sys_id=" + 'a4471d8e977865102a1778971153afd3');
-      console.log('This is a message with a hyperlink: %cClick here', 'color:blue; text-decoration:underline', 'https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3');
-
-      console.log('This is a message with a hyperlink: %s?%s', 'https://empmganji12.service-now.com/change_request.do', 'sys_id=a4471d8e977865102a1778971153afd3');
-      console.log('This is a message with a hyperlink: %s?%s', 'https://example.com', 'sys_id=a4471d8e977865102a1778971153afd3');
-      console.log('This is a message with a hyperlink: %s?%s', 'https://example.com', '/change_request.do?sys_id=a4471d8e977865102a1778971153afd3');
-      console.log('This is a message with a hyperlink: %s?%s', 'https://example.com/change_request.do', 'sys_id=a4471d8e977865102a1778971153afd3');
-
-      console.log('This is a message with a hyperlink: %s?%s', 'https://empmganji12.service-now.com/change_request.do', 'sys_id=a4471d8e977865102a1778971153afd3');
-
-      // const maskedInfo = "https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3";
-      // const encodedInfo = Buffer.from(maskedInfo).toString('base64');
-      // const unmaskedInfo = execSync(`echo ${encodedInfo} | base64 -d`).toString();
-      // core.log(`Unmasked information: ${unmaskedInfo}`);
-
-      // const maskedInfo = "https://empmganji12.service-now.com/change_request.do?sys_id=a4471d8e977865102a1778971153afd3";
-      // const encodedInfo = encodeURIComponent(maskedInfo);
-      // const unmaskedInfo = execSync(`echo ${encodedInfo} | base64 -d`).toString();
-      // core.debug(`Unmasked information: ${unmaskedInfo}`);      
-
-      noOfTimesChangeLinkPrint--;
-    }
-
-    console.log('\n     \x1b[1m\x1b[32m' + JSON.stringify(details) + '\x1b[0m\x1b[0m');
-
-    console.log("")
-
-    let changeState = details.status;
-
-    if (responseCode == 201) {
-      if (changeState == "pending_decision") {
-        throw new Error("201");
-      } else
-        throw new Error("202");
-    }
-
-    if (responseCode == 200) {
-      console.log('\n****Change is Approved.');
-    }
-  } else
-    throw new Error("500");
-
-  return true;
+    return true;
 }
 
 module.exports = { doFetch };
@@ -5314,8 +5230,7 @@ async function tryFetch({
   passwd,
   jobname,
   githubContextStr,
-  abortOnChangeStepTimeout,
-  noOfTimesChangeLinkPrint
+  abortOnChangeStepTimeout
 }) {
     try {
         await doFetch({
@@ -5324,8 +5239,7 @@ async function tryFetch({
           username,
           passwd,
           jobname,
-          githubContextStr,
-          noOfTimesChangeLinkPrint
+          githubContextStr
         });
     } catch (error) {
         if (error.message == "500") {
@@ -5355,6 +5269,7 @@ async function tryFetch({
         if (error.message == "201") {
           console.log('\n****Change is pending for approval decision.');
         }
+
         // Wait and then continue
         await new Promise((resolve) => setTimeout(resolve, interval * 1000));
 
@@ -5377,8 +5292,7 @@ async function tryFetch({
           passwd,
           jobname,
           githubContextStr,
-          abortOnChangeStepTimeout,
-          noOfTimesChangeLinkPrint
+          abortOnChangeStepTimeout
         });
     }
 }
@@ -5401,14 +5315,6 @@ module.exports = eval("require")("debug");
 
 "use strict";
 module.exports = require("assert");
-
-/***/ }),
-
-/***/ 2081:
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("child_process");
 
 /***/ }),
 
@@ -9774,7 +9680,7 @@ const main = async() => {
 
     let status = true;
     let response;
-    let noOfTimesChangeLinkPrint = 1;
+
     try {
       response = await createChange({
         instanceUrl,
@@ -9805,10 +9711,6 @@ const main = async() => {
       interval = interval>=100 ? interval : 100;
       timeout = timeout>=100? timeout : 3600;
 
-      interval = 10;
-      timeout = 30;
-
-
       let abortOnChangeStepTimeout = core.getInput('abortOnChangeStepTimeout');
       abortOnChangeStepTimeout = abortOnChangeStepTimeout === undefined || abortOnChangeStepTimeout === "" ? false : (abortOnChangeStepTimeout == "true");
 
@@ -9824,8 +9726,7 @@ const main = async() => {
         passwd,
         jobname,
         githubContextStr,
-        abortOnChangeStepTimeout,
-        noOfTimesChangeLinkPrint
+        abortOnChangeStepTimeout
       });
 
       console.log('Get change status was successfull.');  

@@ -11,8 +11,7 @@ async function tryFetch({
   passwd,
   jobname,
   githubContextStr,
-  abortOnChangeStepTimeout,
-  noOfTimesChangeLinkPrint
+  abortOnChangeStepTimeout
 }) {
     try {
         await doFetch({
@@ -21,8 +20,7 @@ async function tryFetch({
           username,
           passwd,
           jobname,
-          githubContextStr,
-          noOfTimesChangeLinkPrint
+          githubContextStr
         });
     } catch (error) {
         if (error.message == "500") {
@@ -52,6 +50,7 @@ async function tryFetch({
         if (error.message == "201") {
           console.log('\n****Change is pending for approval decision.');
         }
+
         // Wait and then continue
         await new Promise((resolve) => setTimeout(resolve, interval * 1000));
 
@@ -74,8 +73,7 @@ async function tryFetch({
           passwd,
           jobname,
           githubContextStr,
-          abortOnChangeStepTimeout,
-          noOfTimesChangeLinkPrint
+          abortOnChangeStepTimeout
         });
     }
 }
