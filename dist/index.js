@@ -5202,8 +5202,11 @@ async function doFetch({
 
     if (responseCode == 201) {
       if (changeState == "pending_decision") {
-        let errorMessage = JSON.stringify({"statusCode":"201","details" :JSON.stringify(currChangeDetails) });
+
+        let errorMessage = JSON.stringify({"statusCode":"201","details" : 'testing' });
+
         console.log('display'+ errorMessage);
+
         throw new Error(errorMessage);
       } else
         throw new Error("202");
