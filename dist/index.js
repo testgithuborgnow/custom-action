@@ -5113,102 +5113,125 @@ async function doFetch({
   username,
   passwd,
   jobname,
-  githubContextStr
+  githubContextStr,
+  prevChangeDetails
 }) {
-    console.log(`\nPolling for change status..........`);
+  console.log(`\nPolling for change status..........`);
 
-    let githubContext = JSON.parse(githubContextStr);
-    
-    const codesAllowedArr = '200,201,400,401,403,404,500'.split(',').map(Number);
-    const pipelineName = `${githubContext.repository}` + '/' + `${githubContext.workflow}`;
-    const buildNumber = `${githubContext.run_id}`;
-    const attemptNumber = `${githubContext.run_attempt}`;
+  let githubContext = JSON.parse(githubContextStr);
 
-    const endpoint = `${instanceUrl}/api/sn_devops/devops/orchestration/changeStatus?toolId=${toolId}&stageName=${jobname}&pipelineName=${pipelineName}&buildNumber=${buildNumber}&attemptNumber=${attemptNumber}`;
-    
-    let response = {};
-    let status = false;
-    let changeStatus = {};
-    let responseCode = 500;
+  const codesAllowedArr = '200,201,400,401,403,404,500'.split(',').map(Number);
+  const pipelineName = `${githubContext.repository}` + '/' + `${githubContext.workflow}`;
+  const buildNumber = `${githubContext.run_id}`;
+  const attemptNumber = `${githubContext.run_attempt}`;
 
-    try {
-        const token = `${username}:${passwd}`;
-        const encodedToken = Buffer.from(token).toString('base64');
+  const endpoint = `${instanceUrl}/api/sn_devops/devops/orchestration/changeStatus?toolId=${toolId}&stageName=${jobname}&pipelineName=${pipelineName}&buildNumber=${buildNumber}&attemptNumber=${attemptNumber}`;
 
-        const defaultHeaders = {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': 'Basic ' + `${encodedToken}`
-        };
+  let response = {};
+  let status = false;
+  let changeStatus = {};
+  let responseCode = 500;
 
-        let httpHeaders = { headers: defaultHeaders };
-        response = await axios.get(endpoint, httpHeaders);
-        status = true;
-    } catch (err) {
-        if (!err.response) {
-           throw new Error("500");
-        }
 
-        if (!codesAllowedArr.includes(err.response.status)) {
-          throw new Error("500");
-        }
-   
-        if (err.response.status == 500) {
-            throw new Error("500");
-        }
+  try {
+    const token = `${username}:${passwd}`;
+    const encodedToken = Buffer.from(token).toString('base64');
 
-        if (err.response.status == 400) {
-          throw new Error("400");
-        }
+    const defaultHeaders = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Authorization': 'Basic ' + `${encodedToken}`
+    };
 
-        if (err.response.status == 401) {
-          throw new Error("401");
-        }
-
-        if (err.response.status == 403) {
-          throw new Error("403");
-        }
-
-        if (err.response.status == 404) {
-          throw new Error("404");
-        }
+    let httpHeaders = { headers: defaultHeaders };
+    response = await axios.get(endpoint, httpHeaders);
+    status = true;
+  } catch (err) {
+    if (!err.response) {
+      throw new Error("500");
     }
 
-    if (status) {
-        try {
-          responseCode = response.status;
-        } catch (error) {
-            core.setFailed('\nCould not read response code from API response: ' + error);
-            throw new Error("500");
-        }
+    if (!codesAllowedArr.includes(err.response.status)) {
+      throw new Error("500");
+    }
 
-        try {
-          changeStatus = response.data.result;
-        } catch (error) {
-            core.setFailed('\nCould not read change status details from API response: ' + error);
-            throw new Error("500");
-        }
+    if (err.response.status == 500) {
+      throw new Error("500");
+    }
 
-        let details =  changeStatus.details;
-        console.log('\n     \x1b[1m\x1b[32m'+JSON.stringify(details)+'\x1b[0m\x1b[0m');
+    if (err.response.status == 400) {
+      throw new Error("400");
+    }
 
-        let changeState =  details.status;
+    if (err.response.status == 401) {
+      throw new Error("401");
+    }
 
-        if (responseCode == 201) {
-          if (changeState == "pending_decision") {
-            throw new Error("201");
-          } else
-            throw new Error("202");
-        }
+    if (err.response.status == 403) {
+      throw new Error("403");
+    }
 
-        if (responseCode == 200) {
-            console.log('\n****Change is Approved.');
-        }
-    } else
-        throw new Error("500");
+    if (err.response.status == 404) {
+      throw new Error("404");
+    }
+  }
 
-    return true;
+  if (status) {
+    try {
+      responseCode = response.status;
+    } catch (error) {
+      core.setFailed('\nCould not read response code from API response: ' + error);
+      throw new Error("500");
+    }
+
+    try {
+      changeStatus = response.data.result;
+    } catch (error) {
+      core.setFailed('\nCould not read change status details from API response: ' + error);
+      throw new Error("500");
+    }
+    let currChangeDetails = changeStatus.details;
+    // Check if objects are equal and log messages accordingly
+    if (isChangeDetailsChanged(prevChangeDetails, currChangeDetails)) {
+      prevChangeDetails = currChangeDetails;
+      console.log('\n     \x1b[1m\x1b[32m' + JSON.stringify(currChangeDetails) + '\x1b[0m\x1b[0m');
+    }
+    let changeState = details.status;
+
+    if (responseCode == 201) {
+      if (changeState == "pending_decision") {
+        throw new Error("201");
+      } else
+        throw new Error("202");
+    }
+
+    if (responseCode == 200) {
+      console.log('\n****Change is Approved.');
+    }
+  } else
+    throw new Error("500");
+
+  return true;
 }
+
+// Check if change Object have the same fields and values
+function isChangeDetailsChanged(prevChangeDetails, currChangeDetails) {
+
+  if (Object.keys(currChangeDetails).length !== Object.keys(prevChangeDetails).length) {
+    return true;
+  }
+
+  for (let field of Object.keys(currChangeDetails)) {
+    if (currChangeDetails[field] !== prevChangeDetails[field]) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+
+
 
 module.exports = { doFetch };
 
@@ -5219,6 +5242,8 @@ module.exports = { doFetch };
 
 const core = __nccwpck_require__(2186);
 const { doFetch } = __nccwpck_require__(1754);
+
+let prevChangeDetails = {};
 
 async function tryFetch({
   start = +new Date(),
@@ -5232,69 +5257,71 @@ async function tryFetch({
   githubContextStr,
   abortOnChangeStepTimeout
 }) {
-    try {
-        await doFetch({
-          instanceUrl,
-          toolId,
-          username,
-          passwd,
-          jobname,
-          githubContextStr
-        });
-    } catch (error) {
-        if (error.message == "500") {
-          throw new Error(`Internal server error. An unexpected error occurred while processing the request.`);
-        }
 
-        if (error.message == "400") {
-          throw new Error(`Bad Request. Missing inputs to process the request.`);
-        }
-
-        if (error.message == "401") {
-          throw new Error(`The user credentials are incorrect.`);
-        }
-
-        if (error.message == "403") {
-          throw new Error(`Forbidden. The user does not have the role to process the request.`);
-        }
-
-        if (error.message == "404") {
-          throw new Error(`Not found. The requested item was not found.`);
-        }
-
-        if (error.message == "202") {
-          throw new Error("****Change has been created but the change is either rejected or cancelled.");
-        }
-
-        if (error.message == "201") {
-          console.log('\n****Change is pending for approval decision.');
-        }
-
-        // Wait and then continue
-        await new Promise((resolve) => setTimeout(resolve, interval * 1000));
-
-        if (+new Date() - start > timeout * 1000) {
-          if(!abortOnChangeStepTimeout){
-             console.error('\n    \x1b[38;5;214m Timeout occured after '+timeout+' seconds but pipeline will coninue since abortOnChangeStepTimeout flag is false \x1b[38;5;214m');
-             return;
-          }
-             throw new Error(`Timeout after ${timeout} seconds.Workflow execution is aborted since abortOnChangeStepTimeout flag is true`);
-        }
-
-
-        await tryFetch({
-          start,
-          interval,
-          timeout,
-          instanceUrl,
-          toolId,
-          username,
-          passwd,
-          jobname,
-          githubContextStr,
-          abortOnChangeStepTimeout
-        });
+  try {
+    await doFetch({
+      instanceUrl,
+      toolId,
+      username,
+      passwd,
+      jobname,
+      githubContextStr,
+      prevChangeDetails
+    });
+  } catch (error) {
+    if (error.message == "500") {
+      throw new Error(`Internal server error. An unexpected error occurred while processing the request.`);
     }
+
+    if (error.message == "400") {
+      throw new Error(`Bad Request. Missing inputs to process the request.`);
+    }
+
+    if (error.message == "401") {
+      throw new Error(`The user credentials are incorrect.`);
+    }
+
+    if (error.message == "403") {
+      throw new Error(`Forbidden. The user does not have the role to process the request.`);
+    }
+
+    if (error.message == "404") {
+      throw new Error(`Not found. The requested item was not found.`);
+    }
+
+    if (error.message == "202") {
+      throw new Error("****Change has been created but the change is either rejected or cancelled.");
+    }
+
+    if (error.message == "201") {
+      console.log('\n****Change is pending for approval decision.');
+    }
+
+    // Wait and then continue
+    await new Promise((resolve) => setTimeout(resolve, interval * 1000));
+
+    if (+new Date() - start > timeout * 1000) {
+      if (!abortOnChangeStepTimeout) {
+        console.error('\n    \x1b[38;5;214m Timeout occured after ' + timeout + ' seconds but pipeline will coninue since abortOnChangeStepTimeout flag is false \x1b[38;5;214m');
+        return;
+      }
+      throw new Error(`Timeout after ${timeout} seconds.Workflow execution is aborted since abortOnChangeStepTimeout flag is true`);
+    }
+
+
+    await tryFetch({
+      start,
+      interval,
+      timeout,
+      instanceUrl,
+      toolId,
+      username,
+      passwd,
+      jobname,
+      githubContextStr,
+      abortOnChangeStepTimeout
+    });
+  }
 }
 
 module.exports = { tryFetch };
@@ -9710,6 +9737,8 @@ const main = async() => {
 
       interval = interval>=100 ? interval : 100;
       timeout = timeout>=100? timeout : 3600;
+
+      interval = 5;
 
       let abortOnChangeStepTimeout = core.getInput('abortOnChangeStepTimeout');
       abortOnChangeStepTimeout = abortOnChangeStepTimeout === undefined || abortOnChangeStepTimeout === "" ? false : (abortOnChangeStepTimeout == "true");
