@@ -88,6 +88,7 @@ async function doFetch({
     // Check if objects are equal and log messages accordingly
     if (isChangeDetailsChanged(prevChangeDetails, currChangeDetails)) {
       prevChangeDetails = currChangeDetails;
+      console.log(prevChangeDetails);
       console.log('\n     \x1b[1m\x1b[32m' + JSON.stringify(currChangeDetails) + '\x1b[0m\x1b[0m');
     }
     let changeState = details.status;
