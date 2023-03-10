@@ -111,12 +111,17 @@ async function doFetch({
 // Check if change Object have the same fields and values
 function isChangeDetailsChanged(prevChangeDetails, currChangeDetails) {
 
+  console.log("im prev"+JSON.stringify(prevChangeDetails));
+  console.log("im cur"+JSON.stringify(currChangeDetails));
+
   if (Object.keys(currChangeDetails).length !== Object.keys(prevChangeDetails).length) {
+    console.log('failing here');
     return true;
   }
 
   for (let field of Object.keys(currChangeDetails)) {
     if (currChangeDetails[field] !== prevChangeDetails[field]) {
+      console.log('fialiing here 2');
       return true;
     }
   }
