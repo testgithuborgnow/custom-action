@@ -53,6 +53,7 @@ async function tryFetch({
 
     if (error.message) {
       console.log("1");
+      console.log('we are error messages'+ error.message);
      let errorObject = JSON.parse(error.message);
      console.log("12");
       if (errorObject && errorObject.statusCode == "201") {
