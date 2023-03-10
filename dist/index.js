@@ -5248,7 +5248,6 @@ module.exports = { doFetch };
 const core = __nccwpck_require__(2186);
 const { doFetch } = __nccwpck_require__(1754);
 
-let prevChangeDetails = {};
 
 async function tryFetch({
   start = +new Date(),
@@ -5260,7 +5259,8 @@ async function tryFetch({
   passwd,
   jobname,
   githubContextStr,
-  abortOnChangeStepTimeout
+  abortOnChangeStepTimeout,
+  prevChangeDetails
 }) {
 
   try {
@@ -5324,7 +5324,8 @@ async function tryFetch({
       passwd,
       jobname,
       githubContextStr,
-      abortOnChangeStepTimeout
+      abortOnChangeStepTimeout,
+      prevChangeDetails
     });
   }
 }
@@ -9749,6 +9750,7 @@ const main = async() => {
       abortOnChangeStepTimeout = abortOnChangeStepTimeout === undefined || abortOnChangeStepTimeout === "" ? false : (abortOnChangeStepTimeout == "true");
 
       let start = +new Date();
+      var prevChangeDetails = {};
       
       response = await tryFetch({
         start,
@@ -9760,7 +9762,8 @@ const main = async() => {
         passwd,
         jobname,
         githubContextStr,
-        abortOnChangeStepTimeout
+        abortOnChangeStepTimeout,
+        prevChangeDetails
       });
 
       console.log('Get change status was successfull.');  

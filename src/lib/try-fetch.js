@@ -1,7 +1,6 @@
 const core = require('@actions/core');
 const { doFetch } = require('./do-fetch');
 
-let prevChangeDetails = {};
 
 async function tryFetch({
   start = +new Date(),
@@ -13,7 +12,8 @@ async function tryFetch({
   passwd,
   jobname,
   githubContextStr,
-  abortOnChangeStepTimeout
+  abortOnChangeStepTimeout,
+  prevChangeDetails
 }) {
 
   try {
@@ -77,7 +77,8 @@ async function tryFetch({
       passwd,
       jobname,
       githubContextStr,
-      abortOnChangeStepTimeout
+      abortOnChangeStepTimeout,
+      prevChangeDetails
     });
   }
 }
