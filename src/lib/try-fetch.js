@@ -46,10 +46,26 @@ async function tryFetch({
     if (error.message == "202") {
       throw new Error("****Change has been created but the change is either rejected or cancelled.");
     }
+    const errorMessage = error.message;
+    if (errorMessage) {
+      console.log(errorMessage);
 
-    if (error.message == "201") {
+      const errorObject = JSON.parse(errorMessage);
+
+      
+      if(errorObject &&errorObject.statusCode == "201")
+      {
+      const statusCode = errorObject.statusCode;
+      const details = errorObject.details;
+      console.log("Details"+ details);
+      }
       console.log('\n****Change is pending for approval decision.');
     }
+
+   
+  
+
+
 
     // Wait and then continue
     await new Promise((resolve) => setTimeout(resolve, interval * 1000));

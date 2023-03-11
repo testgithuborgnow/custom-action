@@ -93,7 +93,7 @@ async function doFetch({
         console.log("change details"+JSON.stringify(details) );
         var errMsg = {"statusCode":"201", "details": details};
         console.log("Im the error message"+ JSON.stringify(errMsg)); 
-        throw new Error("201");
+        throw new Error(JSON.stringify(errMsg));
       } else
         throw new Error("202");
     }
