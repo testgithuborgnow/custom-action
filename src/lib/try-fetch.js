@@ -12,7 +12,7 @@ async function tryFetch({
   jobname,
   githubContextStr,
   abortOnChangeStepTimeout,
-  Test
+  PrevPollChangeDetails
 }) {
   try {
     await doFetch({
@@ -22,7 +22,7 @@ async function tryFetch({
       passwd,
       jobname,
       githubContextStr,
-      Test
+      PrevPollChangeDetails
     });
   } catch (error) {
     if (error.message == "500") {
@@ -50,18 +50,11 @@ async function tryFetch({
     }
     const errorMessage = error.message;
     if (errorMessage) {
-      console.log(errorMessage);
-
       const errorObject = JSON.parse(errorMessage);
-      
-      if(errorObject &&errorObject.statusCode == "201")
-      {
-      const statusCode = errorObject.statusCode;
-      const details = errorObject.details;
-      Test = details;
-      console.log("Details"+ JSON.stringify(Test));
+      if (errorObject && errorObject.statusCode == "201") {
+        PrevPollChangeDetails = errorObject.details;
+        console.log('\n****Change is pending for approval decision.');
       }
-      console.log('\n****Change is pending for approval decision.');
     }
 
 
@@ -88,7 +81,7 @@ async function tryFetch({
       jobname,
       githubContextStr,
       abortOnChangeStepTimeout,
-      Test
+      PrevPollChangeDetails
     });
   }
 }

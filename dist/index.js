@@ -5114,7 +5114,7 @@ async function doFetch({
   passwd,
   jobname,
   githubContextStr,
-  Test
+  PrevPollChangeDetails
 }) {
   console.log(`\nPolling for change status..........`);
 
@@ -5190,21 +5190,15 @@ async function doFetch({
       throw new Error("500");
     }
 
-    let details = changeStatus.details;
-   
-
-    let changeState = details.status;
+    let currChangeDetails = changeStatus.details;
+    let changeState = currChangeDetails.status;
 
     if (responseCode == 201) {
       if (changeState == "pending_decision") {
-        console.log("change details"+JSON.stringify(details));
-        console.log("change details"+JSON.stringify(Test));
-        if(isChangeDetailsChanged(Test,details)){
-          console.log('\n     \x1b[1m\x1b[32m' + JSON.stringify(details) + '\x1b[0m\x1b[0m');
+        if (isChangeDetailsChanged(PrevPollChangeDetails, currChangeDetails)) {
+          console.log('\n \x1b[1m\x1b[32m' + JSON.stringify(currChangeDetails) + '\x1b[0m\x1b[0m');
         }
-        var errMsg = {"statusCode":"201", "details": details};
-        console.log("Im the error message"+ JSON.stringify(errMsg)); 
-        throw new Error(JSON.stringify(errMsg));
+        throw new Error(JSON.stringify({ "statusCode": "201", "details": currChangeDetails }));
       } else
         throw new Error("202");
     }
@@ -5218,18 +5212,11 @@ async function doFetch({
   return true;
 }
 function isChangeDetailsChanged(prevPollChangeDetails, currChangeDetails) {
-  
-  console.log('we testing' + prevPollChangeDetails);
-  console.log("im prev"+JSON.stringify(prevPollChangeDetails));
-  console.log("im cur"+JSON.stringify(currChangeDetails));
   if (Object.keys(currChangeDetails).length !== Object.keys(prevPollChangeDetails).length) {
-    console.log('failing here');
     return true;
   }
   for (let field of Object.keys(currChangeDetails)) {
     if (currChangeDetails[field] !== prevPollChangeDetails[field]) {
-
-      console.log('fialiing here 2'+ currChangeDetails[field] +" and prev" + currChangeDetails[field]);
       return true;
     }
   }
@@ -5257,7 +5244,7 @@ async function tryFetch({
   jobname,
   githubContextStr,
   abortOnChangeStepTimeout,
-  Test
+  PrevPollChangeDetails
 }) {
   try {
     await doFetch({
@@ -5267,7 +5254,7 @@ async function tryFetch({
       passwd,
       jobname,
       githubContextStr,
-      Test
+      PrevPollChangeDetails
     });
   } catch (error) {
     if (error.message == "500") {
@@ -5295,18 +5282,11 @@ async function tryFetch({
     }
     const errorMessage = error.message;
     if (errorMessage) {
-      console.log(errorMessage);
-
       const errorObject = JSON.parse(errorMessage);
-      
-      if(errorObject &&errorObject.statusCode == "201")
-      {
-      const statusCode = errorObject.statusCode;
-      const details = errorObject.details;
-      Test = details;
-      console.log("Details"+ JSON.stringify(Test));
+      if (errorObject && errorObject.statusCode == "201") {
+        PrevPollChangeDetails = errorObject.details;
+        console.log('\n****Change is pending for approval decision.');
       }
-      console.log('\n****Change is pending for approval decision.');
     }
 
 
@@ -5333,7 +5313,7 @@ async function tryFetch({
       jobname,
       githubContextStr,
       abortOnChangeStepTimeout,
-      Test
+      PrevPollChangeDetails
     });
   }
 }
@@ -9757,7 +9737,7 @@ const main = async () => {
       abortOnChangeStepTimeout = abortOnChangeStepTimeout === undefined || abortOnChangeStepTimeout === "" ? false : (abortOnChangeStepTimeout == "true");
 
       let start = +new Date();
-      let Test = {};
+      let PrevPollChangeDetails = {};
       response = await tryFetch({
         start,
         interval,
@@ -9769,7 +9749,7 @@ const main = async () => {
         jobname,
         githubContextStr,
         abortOnChangeStepTimeout,
-        Test
+        PrevPollChangeDetails
       });
 
       console.log('Get change status was successfull.');
