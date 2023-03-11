@@ -85,7 +85,7 @@ async function doFetch({
     }
 
     let details = changeStatus.details;
-    console.log('\n     \x1b[1m\x1b[32m' + JSON.stringify(details) + '\x1b[0m\x1b[0m');
+   
 
     let changeState = details.status;
 
@@ -93,7 +93,9 @@ async function doFetch({
       if (changeState == "pending_decision") {
         console.log("change details"+JSON.stringify(details));
         console.log("change details"+JSON.stringify(Test));
-
+        if(isChangeDetailsChanged(Test,details)){
+          console.log('\n     \x1b[1m\x1b[32m' + JSON.stringify(details) + '\x1b[0m\x1b[0m');
+        }
         var errMsg = {"statusCode":"201", "details": details};
         console.log("Im the error message"+ JSON.stringify(errMsg)); 
         throw new Error(JSON.stringify(errMsg));
@@ -108,6 +110,23 @@ async function doFetch({
     throw new Error("500");
 
   return true;
+}
+function isChangeDetailsChanged(prevPollChangeDetails, currChangeDetails) {
+  
+  console.log('we testing' + prevPollChangeDetails);
+  console.log("im prev"+JSON.stringify(prevPollChangeDetails));
+  console.log("im cur"+JSON.stringify(currChangeDetails));
+  if (Object.keys(currChangeDetails).length !== Object.keys(prevPollChangeDetails).length) {
+    console.log('failing here');
+    return true;
+  }
+  for (let field of Object.keys(currChangeDetails)) {
+    if (currChangeDetails[field] !== prevPollChangeDetails[field]) {
+      console.log('fialiing here 2');
+      return true;
+    }
+  }
+  return false;
 }
 
 module.exports = { doFetch };
