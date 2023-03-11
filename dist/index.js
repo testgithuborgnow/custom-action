@@ -5273,13 +5273,12 @@ async function tryFetch({
       console.log(errorMessage);
 
       const errorObject = JSON.parse(errorMessage);
-
       
       if(errorObject &&errorObject.statusCode == "201")
       {
       const statusCode = errorObject.statusCode;
       const details = errorObject.details;
-      console.log("Details"+ details);
+      console.log("Details"+ JSON.stringify(details));
       }
       console.log('\n****Change is pending for approval decision.');
     }
