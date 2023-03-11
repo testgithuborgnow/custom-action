@@ -57,7 +57,7 @@ const main = async () => {
       abortOnChangeStepTimeout = abortOnChangeStepTimeout === undefined || abortOnChangeStepTimeout === "" ? false : (abortOnChangeStepTimeout == "true");
 
       let start = +new Date();
-
+      let Test = {};
       response = await tryFetch({
         start,
         interval,
@@ -68,7 +68,8 @@ const main = async () => {
         passwd,
         jobname,
         githubContextStr,
-        abortOnChangeStepTimeout
+        abortOnChangeStepTimeout,
+        Test
       });
 
       console.log('Get change status was successfull.');

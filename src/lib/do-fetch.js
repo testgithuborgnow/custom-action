@@ -7,7 +7,8 @@ async function doFetch({
   username,
   passwd,
   jobname,
-  githubContextStr
+  githubContextStr,
+  Test
 }) {
   console.log(`\nPolling for change status..........`);
 
@@ -90,7 +91,9 @@ async function doFetch({
 
     if (responseCode == 201) {
       if (changeState == "pending_decision") {
-        console.log("change details"+JSON.stringify(details) );
+        console.log("change details"+JSON.stringify(details));
+        console.log("change details"+JSON.stringify(Test));
+
         var errMsg = {"statusCode":"201", "details": details};
         console.log("Im the error message"+ JSON.stringify(errMsg)); 
         throw new Error(JSON.stringify(errMsg));

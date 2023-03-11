@@ -5113,7 +5113,8 @@ async function doFetch({
   username,
   passwd,
   jobname,
-  githubContextStr
+  githubContextStr,
+  Test
 }) {
   console.log(`\nPolling for change status..........`);
 
@@ -5196,7 +5197,9 @@ async function doFetch({
 
     if (responseCode == 201) {
       if (changeState == "pending_decision") {
-        console.log("change details"+JSON.stringify(details) );
+        console.log("change details"+JSON.stringify(details));
+        console.log("change details"+JSON.stringify(Test));
+
         var errMsg = {"statusCode":"201", "details": details};
         console.log("Im the error message"+ JSON.stringify(errMsg)); 
         throw new Error(JSON.stringify(errMsg));
@@ -5233,7 +5236,8 @@ async function tryFetch({
   passwd,
   jobname,
   githubContextStr,
-  abortOnChangeStepTimeout
+  abortOnChangeStepTimeout,
+  Test
 }) {
   try {
     await doFetch({
@@ -5242,7 +5246,8 @@ async function tryFetch({
       username,
       passwd,
       jobname,
-      githubContextStr
+      githubContextStr,
+      Test
     });
   } catch (error) {
     if (error.message == "500") {
@@ -5278,14 +5283,11 @@ async function tryFetch({
       {
       const statusCode = errorObject.statusCode;
       const details = errorObject.details;
-      console.log("Details"+ JSON.stringify(details));
+      Test = details;
+      console.log("Details"+ JSON.stringify(Test));
       }
       console.log('\n****Change is pending for approval decision.');
     }
-
-   
-  
-
 
 
     // Wait and then continue
@@ -5310,7 +5312,8 @@ async function tryFetch({
       passwd,
       jobname,
       githubContextStr,
-      abortOnChangeStepTimeout
+      abortOnChangeStepTimeout,
+      Test
     });
   }
 }
@@ -9734,7 +9737,7 @@ const main = async () => {
       abortOnChangeStepTimeout = abortOnChangeStepTimeout === undefined || abortOnChangeStepTimeout === "" ? false : (abortOnChangeStepTimeout == "true");
 
       let start = +new Date();
-
+      let Test = {};
       response = await tryFetch({
         start,
         interval,
@@ -9745,7 +9748,8 @@ const main = async () => {
         passwd,
         jobname,
         githubContextStr,
-        abortOnChangeStepTimeout
+        abortOnChangeStepTimeout,
+        Test
       });
 
       console.log('Get change status was successfull.');

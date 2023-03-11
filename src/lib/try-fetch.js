@@ -11,7 +11,8 @@ async function tryFetch({
   passwd,
   jobname,
   githubContextStr,
-  abortOnChangeStepTimeout
+  abortOnChangeStepTimeout,
+  Test
 }) {
   try {
     await doFetch({
@@ -20,7 +21,8 @@ async function tryFetch({
       username,
       passwd,
       jobname,
-      githubContextStr
+      githubContextStr,
+      Test
     });
   } catch (error) {
     if (error.message == "500") {
@@ -56,14 +58,11 @@ async function tryFetch({
       {
       const statusCode = errorObject.statusCode;
       const details = errorObject.details;
-      console.log("Details"+ JSON.stringify(details));
+      Test = details;
+      console.log("Details"+ JSON.stringify(Test));
       }
       console.log('\n****Change is pending for approval decision.');
     }
-
-   
-  
-
 
 
     // Wait and then continue
@@ -88,7 +87,8 @@ async function tryFetch({
       passwd,
       jobname,
       githubContextStr,
-      abortOnChangeStepTimeout
+      abortOnChangeStepTimeout,
+      Test
     });
   }
 }
