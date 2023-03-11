@@ -5116,7 +5116,7 @@ async function doFetch({
   githubContextStr,
   PrevPollChangeDetails
 }) {
-  console.log(`\nPolling for change status..........`);
+  // console.log(`\nPolling for change status..........`);
 
   let githubContext = JSON.parse(githubContextStr);
 
@@ -5285,7 +5285,7 @@ async function tryFetch({
       const errorObject = JSON.parse(errorMessage);
       if (errorObject && errorObject.statusCode == "201") {
         PrevPollChangeDetails = errorObject.details;
-        console.log('\n****Change is pending for approval decision.');
+        // console.log('\n****Change is pending for approval decision.');
       }
     }
 

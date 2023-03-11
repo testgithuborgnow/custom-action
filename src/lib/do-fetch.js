@@ -10,7 +10,7 @@ async function doFetch({
   githubContextStr,
   PrevPollChangeDetails
 }) {
-  console.log(`\nPolling for change status..........`);
+  // console.log(`\nPolling for change status..........`);
 
   let githubContext = JSON.parse(githubContextStr);
 
