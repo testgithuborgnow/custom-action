@@ -2,24 +2,24 @@ const core = require('@actions/core');
 const axios = require('axios');
 
 async function createChange({
-  instanceUrl,
-  toolId,
-  username,
-  passwd,
-  jobname,
-  githubContextStr,
-  changeRequestDetailsStr,
-  changeCreationTimeOut
+    instanceUrl,
+    toolId,
+    username,
+    passwd,
+    jobname,
+    githubContextStr,
+    changeRequestDetailsStr,
+    changeCreationTimeOut
 }) {
-   
+
     console.log('Calling Change Control API to create change....');
-    
+
     let changeRequestDetails;
     let attempts = 0;
     changeCreationTimeOut = changeCreationTimeOut * 1000;
 
     try {
-      changeRequestDetails = JSON.parse(changeRequestDetailsStr);
+        changeRequestDetails = JSON.parse(changeRequestDetailsStr);
     } catch (e) {
         console.log(`Error occured with message ${e}`);
         throw new Error("Failed parsing changeRequestDetails");
@@ -35,7 +35,7 @@ async function createChange({
     }
 
     let payload;
-    
+
     try {
         payload = {
             'toolId': toolId,
@@ -69,7 +69,7 @@ async function createChange({
                 'Accept': 'application/json',
                 'Authorization': 'Basic ' + `${encodedToken}`
             };
-            let httpHeaders = { headers: defaultHeaders,  timeout: changeCreationTimeOut };
+            let httpHeaders = { headers: defaultHeaders, timeout: changeCreationTimeOut };
             response = await axios.post(postendpoint, JSON.stringify(payload), httpHeaders);
             status = true;
             break;
@@ -81,11 +81,11 @@ async function createChange({
             if (err.message.includes('ECONNREFUSED') || err.message.includes('ENOTFOUND')) {
                 throw new Error('Invalid ServiceNow Instance URL. Please correct the URL and try again.');
             }
-            
+
             if (err.message.includes('401')) {
                 throw new Error('Invalid Credentials. Please correct the credentials and try again.');
             }
-               
+
             if (err.message.includes('405')) {
                 throw new Error('Response Code from ServiceNow is 405. Please correct ServiceNow logs for more details.');
             }
@@ -97,7 +97,7 @@ async function createChange({
             if (err.response.status == 500) {
                 throw new Error('Response Code from ServiceNow is 500. Please check ServiceNow logs for more details.')
             }
-            
+
             if (err.response.status == 400) {
                 let errMsg = 'ServiceNow DevOps Change is not created. Please check ServiceNow logs for more details.';
                 let responseData = err.response.data;
@@ -123,7 +123,7 @@ async function createChange({
     if (status) {
         var result = response.data.result;
         if (result && result.message) {
-            console.log('\n     \x1b[1m\x1b[36m'+result.message+'\x1b[0m\x1b[0m');
+            console.log('\n     \x1b[1m\x1b[36m' + result.message + '\x1b[0m\x1b[0m');
         }
     }
 }

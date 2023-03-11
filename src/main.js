@@ -3,7 +3,7 @@ const axios = require('axios');
 const { createChange } = require('./lib/create-change');
 const { tryFetch } = require('./lib/try-fetch');
 
-const main = async() => {
+const main = async () => {
   try {
     const instanceUrl = core.getInput('instance-url', { required: true });
     const toolId = core.getInput('tool-id', { required: true });
@@ -38,7 +38,7 @@ const main = async() => {
         status = false;
         core.setFailed(err.message);
       }
-      else { 
+      else {
         console.error("creation failed with error message " + err.message);
         console.log('\n  \x1b[38;5;214m Workflow will continue executing the next step as abortOnChangeCreationFailure is ' + abortOnChangeCreationFailure + '\x1b[38;5;214m');
         return;
@@ -49,17 +49,14 @@ const main = async() => {
       let timeout = parseInt(core.getInput('timeout') || 100);
       let interval = parseInt(core.getInput('interval') || 3600);
 
-      interval = interval>=100 ? interval : 100;
-      timeout = timeout>=100? timeout : 3600;
-
-      interval = 5;
+      interval = interval >= 100 ? interval : 100;
+      timeout = timeout >= 100 ? timeout : 3600;
 
       let abortOnChangeStepTimeout = core.getInput('abortOnChangeStepTimeout');
       abortOnChangeStepTimeout = abortOnChangeStepTimeout === undefined || abortOnChangeStepTimeout === "" ? false : (abortOnChangeStepTimeout == "true");
 
       let start = +new Date();
-      let prevPollChangeDetails = {};
-      
+
       response = await tryFetch({
         start,
         interval,
@@ -70,11 +67,10 @@ const main = async() => {
         passwd,
         jobname,
         githubContextStr,
-        abortOnChangeStepTimeout,
-        prevPollChangeDetails
+        abortOnChangeStepTimeout
       });
 
-      console.log('Get change status was successfull.');  
+      console.log('Get change status was successfull.');
     }
   } catch (error) {
     core.setFailed(error.message);

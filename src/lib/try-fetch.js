@@ -1,7 +1,6 @@
 const core = require('@actions/core');
 const { doFetch } = require('./do-fetch');
 
-
 async function tryFetch({
   start = +new Date(),
   interval,
@@ -12,10 +11,8 @@ async function tryFetch({
   passwd,
   jobname,
   githubContextStr,
-  abortOnChangeStepTimeout,
-  prevPollChangeDetails
+  abortOnChangeStepTimeout
 }) {
-
   try {
     await doFetch({
       instanceUrl,
@@ -23,8 +20,7 @@ async function tryFetch({
       username,
       passwd,
       jobname,
-      githubContextStr,
-      prevPollChangeDetails
+      githubContextStr
     });
   } catch (error) {
     if (error.message == "500") {
@@ -51,16 +47,8 @@ async function tryFetch({
       throw new Error("****Change has been created but the change is either rejected or cancelled.");
     }
 
-    if (error.message) {
-      console.log("1");
-      console.log('we are error messages'+ error.message);
-     let errorObject = JSON.parse(error.message);
-     console.log("12");
-      if (errorObject && errorObject.statusCode == "201") {
-        console.log("13");
-        prevPollChangeDetails = errorObject.details;
-        console.log('\n****Change is pending for approval decision.');
-      }
+    if (error.message == "201") {
+      console.log('\n****Change is pending for approval decision.');
     }
 
     // Wait and then continue
@@ -85,8 +73,7 @@ async function tryFetch({
       passwd,
       jobname,
       githubContextStr,
-      abortOnChangeStepTimeout,
-      prevPollChangeDetails
+      abortOnChangeStepTimeout
     });
   }
 }

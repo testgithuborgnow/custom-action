@@ -4971,24 +4971,24 @@ const core = __nccwpck_require__(2186);
 const axios = __nccwpck_require__(8757);
 
 async function createChange({
-  instanceUrl,
-  toolId,
-  username,
-  passwd,
-  jobname,
-  githubContextStr,
-  changeRequestDetailsStr,
-  changeCreationTimeOut
+    instanceUrl,
+    toolId,
+    username,
+    passwd,
+    jobname,
+    githubContextStr,
+    changeRequestDetailsStr,
+    changeCreationTimeOut
 }) {
-   
+
     console.log('Calling Change Control API to create change....');
-    
+
     let changeRequestDetails;
     let attempts = 0;
     changeCreationTimeOut = changeCreationTimeOut * 1000;
 
     try {
-      changeRequestDetails = JSON.parse(changeRequestDetailsStr);
+        changeRequestDetails = JSON.parse(changeRequestDetailsStr);
     } catch (e) {
         console.log(`Error occured with message ${e}`);
         throw new Error("Failed parsing changeRequestDetails");
@@ -5004,7 +5004,7 @@ async function createChange({
     }
 
     let payload;
-    
+
     try {
         payload = {
             'toolId': toolId,
@@ -5038,7 +5038,7 @@ async function createChange({
                 'Accept': 'application/json',
                 'Authorization': 'Basic ' + `${encodedToken}`
             };
-            let httpHeaders = { headers: defaultHeaders,  timeout: changeCreationTimeOut };
+            let httpHeaders = { headers: defaultHeaders, timeout: changeCreationTimeOut };
             response = await axios.post(postendpoint, JSON.stringify(payload), httpHeaders);
             status = true;
             break;
@@ -5050,11 +5050,11 @@ async function createChange({
             if (err.message.includes('ECONNREFUSED') || err.message.includes('ENOTFOUND')) {
                 throw new Error('Invalid ServiceNow Instance URL. Please correct the URL and try again.');
             }
-            
+
             if (err.message.includes('401')) {
                 throw new Error('Invalid Credentials. Please correct the credentials and try again.');
             }
-               
+
             if (err.message.includes('405')) {
                 throw new Error('Response Code from ServiceNow is 405. Please correct ServiceNow logs for more details.');
             }
@@ -5066,7 +5066,7 @@ async function createChange({
             if (err.response.status == 500) {
                 throw new Error('Response Code from ServiceNow is 500. Please check ServiceNow logs for more details.')
             }
-            
+
             if (err.response.status == 400) {
                 let errMsg = 'ServiceNow DevOps Change is not created. Please check ServiceNow logs for more details.';
                 let responseData = err.response.data;
@@ -5092,7 +5092,7 @@ async function createChange({
     if (status) {
         var result = response.data.result;
         if (result && result.message) {
-            console.log('\n     \x1b[1m\x1b[36m'+result.message+'\x1b[0m\x1b[0m');
+            console.log('\n     \x1b[1m\x1b[36m' + result.message + '\x1b[0m\x1b[0m');
         }
     }
 }
@@ -5113,8 +5113,7 @@ async function doFetch({
   username,
   passwd,
   jobname,
-  githubContextStr,
-  prevPollChangeDetails
+  githubContextStr
 }) {
   console.log(`\nPolling for change status..........`);
 
@@ -5131,7 +5130,6 @@ async function doFetch({
   let status = false;
   let changeStatus = {};
   let responseCode = 500;
-
 
   try {
     const token = `${username}:${passwd}`;
@@ -5190,26 +5188,18 @@ async function doFetch({
       core.setFailed('\nCould not read change status details from API response: ' + error);
       throw new Error("500");
     }
-    let currChangeDetails = changeStatus.details;
-    console.log('prev'+ prevPollChangeDetails);
-    // Check if objects are equal and log messages accordingly
-    if (isChangeDetailsChanged(prevPollChangeDetails, currChangeDetails)) {
-      
-      console.log(prevPollChangeDetails);
-      console.log('\n     \x1b[1m\x1b[32m' + JSON.stringify(currChangeDetails) + '\x1b[0m\x1b[0m');
-    }
+
+    let details = changeStatus.details;
+    console.log('\n     \x1b[1m\x1b[32m' + JSON.stringify(details) + '\x1b[0m\x1b[0m');
+
     let changeState = details.status;
 
     if (responseCode == 201) {
       if (changeState == "pending_decision") {
-        
-        let test = {"statusCode":"201","details" : 'testing' };
-        console.log(test);
-        let errorMessage = JSON.stringify(test);
-
-        console.log('display'+ errorMessage);
-
-        throw new Error(errorMessage);
+        console.log("change details"+JSON.stringify(details) );
+        var errMsg = {"statusCode":"201", "details": " "};
+        console.log("Im the error message"+ JSON.stringify(errMsg)); 
+        throw new Error("201");
       } else
         throw new Error("202");
     }
@@ -5223,31 +5213,6 @@ async function doFetch({
   return true;
 }
 
-// Check if change Object have the same fields and values
- function isChangeDetailsChanged(prevPollChangeDetails, currChangeDetails) {
-  
-  console.log('we testing' + prevPollChangeDetails);
-  console.log("im prev"+JSON.stringify(prevPollChangeDetails));
-  console.log("im cur"+JSON.stringify(currChangeDetails));
-
-  if (Object.keys(currChangeDetails).length !== Object.keys(prevPollChangeDetails).length) {
-    console.log('failing here');
-    return true;
-  }
-
-  for (let field of Object.keys(currChangeDetails)) {
-    if (currChangeDetails[field] !== prevPollChangeDetails[field]) {
-      console.log('fialiing here 2');
-      return true;
-    }
-  }
-
-  return false;
-}
-
-
-
-
 module.exports = { doFetch };
 
 /***/ }),
@@ -5257,7 +5222,6 @@ module.exports = { doFetch };
 
 const core = __nccwpck_require__(2186);
 const { doFetch } = __nccwpck_require__(1754);
-
 
 async function tryFetch({
   start = +new Date(),
@@ -5269,10 +5233,8 @@ async function tryFetch({
   passwd,
   jobname,
   githubContextStr,
-  abortOnChangeStepTimeout,
-  prevPollChangeDetails
+  abortOnChangeStepTimeout
 }) {
-
   try {
     await doFetch({
       instanceUrl,
@@ -5280,8 +5242,7 @@ async function tryFetch({
       username,
       passwd,
       jobname,
-      githubContextStr,
-      prevPollChangeDetails
+      githubContextStr
     });
   } catch (error) {
     if (error.message == "500") {
@@ -5308,16 +5269,8 @@ async function tryFetch({
       throw new Error("****Change has been created but the change is either rejected or cancelled.");
     }
 
-    if (error.message) {
-      console.log("1");
-      console.log('we are error messages'+ error.message);
-     let errorObject = JSON.parse(error.message);
-     console.log("12");
-      if (errorObject && errorObject.statusCode == "201") {
-        console.log("13");
-        prevPollChangeDetails = errorObject.details;
-        console.log('\n****Change is pending for approval decision.');
-      }
+    if (error.message == "201") {
+      console.log('\n****Change is pending for approval decision.');
     }
 
     // Wait and then continue
@@ -5342,8 +5295,7 @@ async function tryFetch({
       passwd,
       jobname,
       githubContextStr,
-      abortOnChangeStepTimeout,
-      prevPollChangeDetails
+      abortOnChangeStepTimeout
     });
   }
 }
@@ -9713,7 +9665,7 @@ const axios = __nccwpck_require__(8757);
 const { createChange } = __nccwpck_require__(7767);
 const { tryFetch } = __nccwpck_require__(9538);
 
-const main = async() => {
+const main = async () => {
   try {
     const instanceUrl = core.getInput('instance-url', { required: true });
     const toolId = core.getInput('tool-id', { required: true });
@@ -9748,7 +9700,7 @@ const main = async() => {
         status = false;
         core.setFailed(err.message);
       }
-      else { 
+      else {
         console.error("creation failed with error message " + err.message);
         console.log('\n  \x1b[38;5;214m Workflow will continue executing the next step as abortOnChangeCreationFailure is ' + abortOnChangeCreationFailure + '\x1b[38;5;214m');
         return;
@@ -9759,17 +9711,14 @@ const main = async() => {
       let timeout = parseInt(core.getInput('timeout') || 100);
       let interval = parseInt(core.getInput('interval') || 3600);
 
-      interval = interval>=100 ? interval : 100;
-      timeout = timeout>=100? timeout : 3600;
-
-      interval = 5;
+      interval = interval >= 100 ? interval : 100;
+      timeout = timeout >= 100 ? timeout : 3600;
 
       let abortOnChangeStepTimeout = core.getInput('abortOnChangeStepTimeout');
       abortOnChangeStepTimeout = abortOnChangeStepTimeout === undefined || abortOnChangeStepTimeout === "" ? false : (abortOnChangeStepTimeout == "true");
 
       let start = +new Date();
-      let prevPollChangeDetails = {};
-      
+
       response = await tryFetch({
         start,
         interval,
@@ -9780,11 +9729,10 @@ const main = async() => {
         passwd,
         jobname,
         githubContextStr,
-        abortOnChangeStepTimeout,
-        prevPollChangeDetails
+        abortOnChangeStepTimeout
       });
 
-      console.log('Get change status was successfull.');  
+      console.log('Get change status was successfull.');
     }
   } catch (error) {
     core.setFailed(error.message);

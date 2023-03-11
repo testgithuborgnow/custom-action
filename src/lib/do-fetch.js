@@ -7,8 +7,7 @@ async function doFetch({
   username,
   passwd,
   jobname,
-  githubContextStr,
-  prevPollChangeDetails
+  githubContextStr
 }) {
   console.log(`\nPolling for change status..........`);
 
@@ -25,7 +24,6 @@ async function doFetch({
   let status = false;
   let changeStatus = {};
   let responseCode = 500;
-
 
   try {
     const token = `${username}:${passwd}`;
@@ -84,26 +82,18 @@ async function doFetch({
       core.setFailed('\nCould not read change status details from API response: ' + error);
       throw new Error("500");
     }
-    let currChangeDetails = changeStatus.details;
-    console.log('prev'+ prevPollChangeDetails);
-    // Check if objects are equal and log messages accordingly
-    if (isChangeDetailsChanged(prevPollChangeDetails, currChangeDetails)) {
-      
-      console.log(prevPollChangeDetails);
-      console.log('\n     \x1b[1m\x1b[32m' + JSON.stringify(currChangeDetails) + '\x1b[0m\x1b[0m');
-    }
+
+    let details = changeStatus.details;
+    console.log('\n     \x1b[1m\x1b[32m' + JSON.stringify(details) + '\x1b[0m\x1b[0m');
+
     let changeState = details.status;
 
     if (responseCode == 201) {
       if (changeState == "pending_decision") {
-        
-        let test = {"statusCode":"201","details" : 'testing' };
-        console.log(test);
-        let errorMessage = JSON.stringify(test);
-
-        console.log('display'+ errorMessage);
-
-        throw new Error(errorMessage);
+        console.log("change details"+JSON.stringify(details) );
+        var errMsg = {"statusCode":"201", "details": " "};
+        console.log("Im the error message"+ JSON.stringify(errMsg)); 
+        throw new Error("201");
       } else
         throw new Error("202");
     }
@@ -116,30 +106,5 @@ async function doFetch({
 
   return true;
 }
-
-// Check if change Object have the same fields and values
- function isChangeDetailsChanged(prevPollChangeDetails, currChangeDetails) {
-  
-  console.log('we testing' + prevPollChangeDetails);
-  console.log("im prev"+JSON.stringify(prevPollChangeDetails));
-  console.log("im cur"+JSON.stringify(currChangeDetails));
-
-  if (Object.keys(currChangeDetails).length !== Object.keys(prevPollChangeDetails).length) {
-    console.log('failing here');
-    return true;
-  }
-
-  for (let field of Object.keys(currChangeDetails)) {
-    if (currChangeDetails[field] !== prevPollChangeDetails[field]) {
-      console.log('fialiing here 2');
-      return true;
-    }
-  }
-
-  return false;
-}
-
-
-
 
 module.exports = { doFetch };
