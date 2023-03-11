@@ -5228,7 +5228,8 @@ function isChangeDetailsChanged(prevPollChangeDetails, currChangeDetails) {
   }
   for (let field of Object.keys(currChangeDetails)) {
     if (currChangeDetails[field] !== prevPollChangeDetails[field]) {
-      console.log('fialiing here 2');
+
+      console.log('fialiing here 2'+ currChangeDetails[field] +" and prev" + currChangeDetails[field]);
       return true;
     }
   }
