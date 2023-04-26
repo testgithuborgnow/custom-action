@@ -9423,9 +9423,10 @@ const main = async () => {
 
             } catch (err) {
                 status = "NOT SUCCESSFUL";
-                // console.log(err.response.data.result);
-                // console.log(err.response.data.result.changeFound);
-                // console.log(err.response.data.result.errorMessage);
+                console.log(err.response.status);
+                console.log(err.response.data.result);
+                console.log(err.response.data.result.changeFound);
+                console.log(err.response.data.result.errorMessage);
 
                 if (!err.response) {
                     console.error('No response from ServiceNow. Please check ServiceNow logs for more details.');
