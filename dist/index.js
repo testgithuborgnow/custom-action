@@ -9329,7 +9329,9 @@ const main = async () => {
         const instanceUrl = core.getInput('instance-url');
         const username = core.getInput('devops-integration-user-name');
         const passwd = core.getInput('devops-integration-user-password');
-        const toolId = core.getInput('tool-id');
+        const toolId = '123';
+        // core.getInput('tool-id');
+
         let changeDetailsStr = core.getInput('change-details', { required: true });
         let githubContextStr = core.getInput('context-github', { required: true });
         core.setOutput("status", status);
