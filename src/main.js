@@ -131,8 +131,13 @@ const main = async () => {
                         if (responseData && responseData.result && responseData.result.errorMessage) {
                             errMsg = errMsg + responseData.result.errorMessage + errMsgSuffix;    
                         }
+                        else if (responseData && responseData.result && responseData.result.details && responseData.result.details.errors) {
+                            let errors = result.result.details.errors;
+                            errors.forEach(error => errMsg + error.message + errMsgSuffix);
+                          }
                         console.error(errMsg);
                     }
+
                 }
                 core.setOutput("status", status);
             }
