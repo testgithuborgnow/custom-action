@@ -132,14 +132,17 @@ const main = async () => {
                         let errMsgSuffix = ' Please provide valid inputs.';
                         let responseData = err.response.data;
                         if (responseData && responseData.result && responseData.result.errorMessage) {
-                            errMsg = errMsg + responseData.result.errorMessage + errMsgSuffix;    
+                            errMsg = errMsg + responseData.result.errorMessage + errMsgSuffix;
+                            console.error("Inside, if, errMsg => " + errMsg);
                         }
                         else if (responseData && responseData.result && responseData.result.details && responseData.result.details.errors) {
-                            let errors = result.result.details.errors;
+                            let errors = responseData.result.details.errors;
                             console.log("im entered");
-                            errors.forEach(error => errMsg + error.message + errMsgSuffix);
-                          }
-                        console.error(errMsg);
+                            for (var index in errors) {
+                                errMsg = errMsg + errors[index].message + errMsgSuffix;
+                            }
+                            console.error("Inside, else-if, errMsg => " + errMsg);
+                        }
                     }
 
                 }
