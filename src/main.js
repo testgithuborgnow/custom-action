@@ -103,7 +103,7 @@ const main = async () => {
             } catch (err) {
                 status = "NOT SUCCESSFUL";
                 console.log(err.response.status);
-                console.log(err.response.data.result);
+                console.log(JSON.stringify(err.response.data.result));
                 console.log(err.response.data.result.changeFound);
                 console.log(err.response.data.result.errorMessage);
 
@@ -136,6 +136,7 @@ const main = async () => {
                         }
                         else if (responseData && responseData.result && responseData.result.details && responseData.result.details.errors) {
                             let errors = result.result.details.errors;
+                            console.log("im entered");
                             errors.forEach(error => errMsg + error.message + errMsgSuffix);
                           }
                         console.error(errMsg);
