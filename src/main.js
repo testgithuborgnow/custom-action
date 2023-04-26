@@ -8,8 +8,7 @@ const main = async () => {
         const instanceUrl = core.getInput('instance-url');
         const username = core.getInput('devops-integration-user-name');
         const passwd = core.getInput('devops-integration-user-password');
-        const toolId = '123';
-        // core.getInput('tool-id');
+        const toolId = core.getInput('tool-id');
 
         let changeDetailsStr = core.getInput('change-details', { required: true });
         let githubContextStr = core.getInput('context-github', { required: true });
@@ -102,11 +101,6 @@ const main = async () => {
 
             } catch (err) {
                 status = "NOT SUCCESSFUL";
-                console.log(err.response.status);
-                console.log(JSON.stringify(err.response.data.result));
-                console.log(err.response.data.result.changeFound);
-                console.log(err.response.data.result.errorMessage);
-
                 if (!err.response) {
                     console.error('No response from ServiceNow. Please check ServiceNow logs for more details.');
                 } else {
@@ -137,7 +131,6 @@ const main = async () => {
                         }
                         else if (responseData && responseData.result && responseData.result.details && responseData.result.details.errors) {
                             let errors = responseData.result.details.errors;
-                            console.log("im entered");
                             for (var index in errors) {
                                 errMsg = errMsg + errors[index].message + errMsgSuffix;
                             }
