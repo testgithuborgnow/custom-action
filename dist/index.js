@@ -9446,14 +9446,14 @@ const main = async () => {
                         let responseData = err.response.data;
                         if (responseData && responseData.result && responseData.result.errorMessage) {
                             errMsg = errMsg + responseData.result.errorMessage + errMsgSuffix;
-                            displayErrorMsg("Inside, if, errMsg => " + errMsg);
+                            displayErrorMsg(errMsg);
                         }
                         else if (responseData && responseData.result && responseData.result.details && responseData.result.details.errors) {
                             let errors = responseData.result.details.errors;
                             for (var index in errors) {
                                 errMsg = errMsg + errors[index].message + errMsgSuffix;
                             }
-                            displayErrorMsg("Inside, else-if, errMsg => " + errMsg);
+                            displayErrorMsg(errMsg);
                         }
                     }
 
