@@ -24,13 +24,13 @@ jobs:
     - name: Compile
       run: npm run build
 
-  GetChangeDetails:
+  SecurityScanResults:
     needs: build
     runs-on: ubuntu-latest
-    name: Servicenow Get Change Details
+    name: Servicenow Security Scan Results
 
     steps:
-      - name: ServiceNow DevOps Sonar Scan Results
+      - name: Servicenow Security Scan Results
         uses: ServiceNow/custom-action-get@sonar
         with:
           devops-integration-user-name: ${{ secrets.SN_DEVOPS_USER }}
