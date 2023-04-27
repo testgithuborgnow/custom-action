@@ -1,5 +1,5 @@
-name: 'ServiceNow DevOps Get Change'
-description: 'This is a Custom Action to Get the Change Request Number using the Change Details'
+name: 'ServiceNow DevOps Sonar Scan Results'
+description: 'Send Sonar Information to ServiceNow Devops'
 inputs:
   instance-url: 
     description: 'ServiceNow Instance URL'
@@ -16,14 +16,18 @@ inputs:
   context-github:
     description: 'Github Context'
     required: true
-  change-details:
-    description: 'The inputs to identify change at Servicenow and GET it.'
-    required: true        
-outputs:
-  change-request-number: 
-    description: 'Change Request Number found for the given change details'
-  status: 
-    description: 'To know the status of the Change Request GET call'    
-runs:
-  using: 'node16'
+  job-name:
+    description: 'Display Name of the Job'
+    required: true
+  sonar-host-url:
+    description: 'Sonar Host URL'
+    required: true
+  sonar-project-key:
+    description: 'Sonar Project Key'
+    required: true
+branding:
+  icon: 'refresh-ccw'
+  color: 'green'
+runs: 
+  using: 'node12'
   main: 'dist/index.js'
