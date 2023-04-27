@@ -9322,15 +9322,14 @@ var __webpack_exports__ = {};
 const core = __nccwpck_require__(2186);
 const axios = __nccwpck_require__(8757);
 
-
 (async function main() {
     let instanceUrl = core.getInput('instance-url', { required: true });
+    const securityToolId = core.getInput('security-tool-id', { required: true });
     const toolId = core.getInput('tool-id', { required: true });
     const username = core.getInput('devops-integration-user-name', { required: true });
     const password = core.getInput('devops-integration-user-password', { required: true });
     const jobname = core.getInput('job-name', { required: true });
-    const projectKey = core.getInput('sonar-project-key', { required: true });
-    let sonarUrl = core.getInput('sonar-host-url', { required: true });
+    const securityResultAttributes = core.getInput('security-result-attributes', { required: true });
 
     let githubContext = core.getInput('context-github', { required: true });
 
@@ -9339,19 +9338,15 @@ const axios = __nccwpck_require__(8757);
     } catch (e) {
         core.setFailed(`Exception parsing github context ${e}`);
     }
-            
-    let payload;
-    
-    try {
-        sonarUrl = sonarUrl.trim();
-        if (sonarUrl.endsWith('/'))
-            sonarUrl = sonarUrl.slice(0, -1);
 
+    let payload;
+
+    try {
         instanceUrl = instanceUrl.trim();
         if (instanceUrl.endsWith('/'))
             instanceUrl = instanceUrl.slice(0, -1);
 
-        payload = {
+        pipelineInfo = {
             toolId: toolId,
             runId: `${githubContext.run_id}`,
             runNumber: `${githubContext.run_number}`,
@@ -9359,21 +9354,26 @@ const axios = __nccwpck_require__(8757);
             job: `${jobname}`,
             sha: `${githubContext.sha}`,
             workflow: `${githubContext.workflow}`,
-            projectKey: `${projectKey}`,
-            sonarUrl: `${sonarUrl}`,
             repository: `${githubContext.repository}`,
             ref: `${githubContext.ref}`,
             refName: `${githubContext.ref_name}`,
             refType: `${githubContext.ref_type}`
         };
-        core.debug('Sonar Custon Action payload is : ${JSON.stringify(payload)}\n\n');
+
+        payload = {
+            pipelineInfo: pipelineInfo,
+            securityToolId: securityToolId,
+            securityResultAttributes: securityResultAttributes
+        };
+
+        core.debug('Security scan results Custon Action payload is : ${JSON.stringify(pipelineInfo)}\n\n');
     } catch (e) {
         core.setFailed(`Exception setting the payload ${e}`);
         return;
     }
 
     let result;
-    const endpoint = `${instanceUrl}/api/sn_devops/devops/tool/softwarequality?toolId=${toolId}`;
+    const endpoint = `${instanceUrl}/api/sn_devops/devops/tool/security?toolId=${toolId}`;
 
     try {
         const token = `${username}:${password}`;
@@ -9396,7 +9396,7 @@ const axios = __nccwpck_require__(8757);
             core.setFailed(`ServiceNow Software Quality Results are NOT created. Please check ServiceNow logs for more details.`);
         }
     }
-    
+
 })();
 })();
 
