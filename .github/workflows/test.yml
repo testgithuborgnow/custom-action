@@ -31,7 +31,7 @@ jobs:
 
     steps:
       - name: Servicenow Security Scan Results
-        uses: ServiceNow/custom-action-get@sonar
+        uses: maheshganji/custom-action-get@sonar
         with:
           devops-integration-user-name: 'devops.integration.user'
           devops-integration-user-password: 'Testing1!'
