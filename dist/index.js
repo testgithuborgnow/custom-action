@@ -9329,7 +9329,7 @@ const axios = __nccwpck_require__(8757);
     const username = core.getInput('devops-integration-user-name', { required: true });
     const password = core.getInput('devops-integration-user-password', { required: true });
     const jobname = core.getInput('job-name', { required: true });
-    const securityResultAttributes = core.getInput('security-result-attributes', { required: true });
+    let securityResultAttributes = core.getInput('security-result-attributes', { required: true });
 
     let githubContext = core.getInput('context-github', { required: true });
 
@@ -9337,6 +9337,13 @@ const axios = __nccwpck_require__(8757);
         githubContext = JSON.parse(githubContext);
     } catch (e) {
         core.setFailed(`Exception parsing github context ${e}`);
+    }
+
+
+    try {
+        securityResultAttributes = JSON.parse(securityResultAttributes);
+    } catch (e) {
+        core.setFailed(`Exception parsing securityResultAttributes ${e}`);
     }
 
     let payload;
