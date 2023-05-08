@@ -9380,7 +9380,7 @@ const axios = __nccwpck_require__(8757);
     }
 
     let result;
-    const endpoint = `${instanceUrl}/api/sn_devops/devops/tool/security?toolId=${toolId}`;
+    const endpoint = `${instanceUrl}/api/sn_devops/v1/devops/tool/security?toolId=${toolId}`;
 
     try {
         const token = `${username}:${password}`;
