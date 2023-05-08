@@ -41,26 +41,3 @@ jobs:
           job-name: 'Build'
           security-tool-id:  '3f3382b4479a615060f22fe4126d431d'
           security-result-attributes:  '{"testing":"123"}'
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-#           devops-integration-user-name: ${{ secrets.SN_DEVOPS_USER }}
-#           devops-integration-user-password: ${{ secrets.SN_DEVOPS_PASSWORD }}
-#           instance-url: ${{ secrets.SN_INSTANCE_URL }}
-#           tool-id: ${{ secrets.SN_ORCHESTRATION_TOOL_ID }}
-#           context-github: ${{ toJSON(github) }}
-#           job-name: 'Build'
-#           security-tool-id:  ${{ secrets.SN_SECURITY_TOOL_ID }}
-#           security-result-attributes:  ${{ secrets.SN_SECURITY_RESULT_ATTRIBUTES}}
-
