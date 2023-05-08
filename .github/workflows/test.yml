@@ -34,7 +34,7 @@ jobs:
         uses: maheshganji/custom-action-get@sonar
         with:
           devops-integration-user-name: 'devops.integration.user'
-          devops-integration-user-password: 'Testing1!'
+          devops-integration-user-password: 'Test@123'
           instance-url: 'https://empmganji10.service-now.com/'
           tool-id: '3f3382b4479a615060f22fe4126d431d'
           context-github: ${{ toJSON(github) }}
