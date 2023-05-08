@@ -9392,12 +9392,12 @@ const axios = __nccwpck_require__(8757);
             'Authorization': 'Basic ' + `${encodedToken}`
         };
 
-        console.log("Security scan details registration payload: "+JSON.stringify(payload));
+        console.log("Security scan details registration payload: \n "+JSON.stringify(payload));
 
         let httpHeaders = { headers: defaultHeaders };
         responseData = await axios.post(endpoint, JSON.stringify(payload), httpHeaders);
-        result = responseData.result;
-        if (result.status == "Success")
+       
+        if (responseData.data && responseData.data.result) 
             console.log("\n \x1b[1m\x1b[32m' + SUCCESS: Security Scan registration was successful"+ '\x1b[0m\x1b[0m');
         else
             console.log("FAILED: Security Scan could not be registered");
