@@ -33,7 +33,7 @@ jobs:
       - name: Servicenow Security Scan Results
         uses: maheshganji/custom-action-get@sonar
         with:
-          devops-integration-user-name: 'devops.system'
+          devops-integration-user-name: 'devops.integration.user'
           devops-integration-user-password: 'Test@123'
           instance-url: 'https://sumitdtokyo2.service-now.com/'
           tool-id: 'db6f247783626910566ace40ceaad326'
