@@ -9379,7 +9379,7 @@ const axios = __nccwpck_require__(8757);
         return;
     }
 
-    let result;
+    let responseData;
     const endpoint = `${instanceUrl}/api/sn_devops/v1/devops/tool/security?toolId=${toolId}`;
 
     try {
@@ -9392,8 +9392,15 @@ const axios = __nccwpck_require__(8757);
             'Authorization': 'Basic ' + `${encodedToken}`
         };
 
+        console.log("Security scan details registration payload: "+JSON.stringify(payload));
+
         let httpHeaders = { headers: defaultHeaders };
-        result = await axios.post(endpoint, JSON.stringify(payload), httpHeaders);
+        responseData = await axios.post(endpoint, JSON.stringify(payload), httpHeaders);
+        result = responseData.result;
+        if (result.status == "Success")
+            console.log("\n \x1b[1m\x1b[32m' + SUCCESS: Security Scan registration was successful"+ '\x1b[0m\x1b[0m');
+        else
+            console.log("FAILED: Security Scan could not be registered");
     } catch (e) {
         if (e.message.includes('ECONNREFUSED') || e.message.includes('ENOTFOUND') || e.message.includes('405')) {
             core.setFailed('ServiceNow Instance URL is NOT valid. Please correct the URL and try again.');
