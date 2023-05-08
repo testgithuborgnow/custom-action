@@ -9398,7 +9398,7 @@ const axios = __nccwpck_require__(8757);
         responseData = await axios.post(endpoint, JSON.stringify(payload), httpHeaders);
        
         if (responseData.data && responseData.data.result) 
-            console.log("\n \x1b[1m\x1b[32m' + SUCCESS: Security Scan registration was successful"+ '\x1b[0m\x1b[0m');
+            console.log("\n \x1b[1m\x1b[32m SUCCESS: Security Scan registration was successful"+ '\x1b[0m\x1b[0m');
         else
             console.log("FAILED: Security Scan could not be registered");
     } catch (e) {
