@@ -40,7 +40,7 @@ jobs:
             instance-url: ${{ secrets.SN_INSTANCE_URL }}
             tool-id: ${{ secrets.SN_ORCHESTRATION_TOOL_ID }}
             context-github: ${{ toJSON(github) }}
-            job-name: 'SecurityScanResults'
+            job-name: 'Servicenow Security Scan Results'
             security-result-attributes: '{"scanner":"Veracode","applicationName":"azure","buildVersion":"jenkins-Veracode with Step-27"}'
     
 #        - name: ServiceNow DevOps Security Results
