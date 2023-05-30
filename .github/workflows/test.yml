@@ -30,17 +30,17 @@ jobs:
     name: Servicenow Security Scan Results
 
     steps:
-       - name: ServiceNow DevOps Sonar Scan Results
-         uses: ServiceNow/servicenow-devops-sonar@v1.34.2
-         with:
-            devops-integration-user-name: ${{ secrets.SN_DEVOPS_USER }}
-            devops-integration-user-password: ${{ secrets.SN_DEVOPS_PASSWORD }}
-            instance-url: ${{ secrets.SN_INSTANCE_URL }}
-            tool-id: ${{ secrets.SN_ORCHESTRATION_TOOL_ID }}
-            context-github: ${{ toJSON(github) }}
-            job-name: 'Servicenow Security Scan Results'
-            sonar-host-url: 'https://sonarcloud.io'
-            sonar-project-key: 'kiranlakhani20_First_repo'
+#        - name: ServiceNow DevOps Sonar Scan Results
+#          uses: ServiceNow/servicenow-devops-sonar@v1.34.2
+#          with:
+#             devops-integration-user-name: ${{ secrets.SN_DEVOPS_USER }}
+#             devops-integration-user-password: ${{ secrets.SN_DEVOPS_PASSWORD }}
+#             instance-url: ${{ secrets.SN_INSTANCE_URL }}
+#             tool-id: ${{ secrets.SN_ORCHESTRATION_TOOL_ID }}
+#             context-github: ${{ toJSON(github) }}
+#             job-name: 'Servicenow Security Scan Results'
+#             sonar-host-url: 'https://sonarcloud.io'
+#             sonar-project-key: 'kiranlakhani20_First_repo'
        - name: ServiceNow DevOps Security Results
          uses: maheshganji/custom-action-get@sonar
          with:
