@@ -30,8 +30,6 @@ jobs:
     name: Servicenow Security Scan Results
 
     steps:
-       - name: Print Hello World
-         run: echo "Hello, world!"
        - name: ServiceNow DevOps Security Results
          uses: maheshganji/custom-action-get@sonar
          with:
