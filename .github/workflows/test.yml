@@ -40,7 +40,7 @@ jobs:
             context-github: ${{ toJSON(github) }}
             job-name: 'Servicenow Security Scan Results'
             sonar-host-url: 'https://sonarcloud.io'
-            sonar-project-key: 'pramaraju96_First_repo'
+            sonar-project-key: 'kiranlakhani20_First_repo'
        - name: ServiceNow DevOps Security Results
          uses: maheshganji/custom-action-get@sonar
          with:
