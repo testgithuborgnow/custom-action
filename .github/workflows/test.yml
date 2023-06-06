@@ -30,17 +30,6 @@ jobs:
     name: Servicenow Security Scan Results
 
     steps:
-#        - name: ServiceNow DevOps Sonar Scan Results
-#          uses: ServiceNow/servicenow-devops-sonar@v1.34.2
-#          with:
-#             devops-integration-user-name: ${{ secrets.SN_DEVOPS_USER }}
-#             devops-integration-user-password: ${{ secrets.SN_DEVOPS_PASSWORD }}
-#             instance-url: ${{ secrets.SN_INSTANCE_URL }}
-#             tool-id: ${{ secrets.SN_ORCHESTRATION_TOOL_ID }}
-#             context-github: ${{ toJSON(github) }}
-#             job-name: 'Servicenow Security Scan Results'
-#             sonar-host-url: 'https://sonarcloud.io'
-#             sonar-project-key: 'kiranlakhani20_First_repo'
        - name: ServiceNow DevOps Security Results
          uses: maheshganji/custom-action-get@sonar
          with:
@@ -51,22 +40,3 @@ jobs:
             context-github: ${{ toJSON(github) }}
             job-name: 'Servicenow Security Scan Results'
             security-result-attributes: '{"scanner": "Veracode", "applicationName": "VeraDemo10", "buildVersion": "21 Mar 2023 Static"}'
-#            '{ "scanner": "Veracode", "applicationName": "App-DevOps-Azure-POC", "buildVersion": "jenkins-Veracode without Step-11"}'
-            
-            
-#     
-# '{"scanner": "Veracode","build_id":"5775767","securityToolId":"6135dec3878f2d106fd38777dabb3549"}'
-            #'{"scanner": "Veracode","application_id":"5264ee5a-0665-4f7a-82b2-12bf1141b562","build_id":"5775767"}'
-#             '{"scanner": "Veracode","application_id":"5264ee5a-0665-4f7a-82b2-12bf1141b562","build_id":"5775767","securityToolId":"4896d247878f2d106fd38777dabb3595"}'
-            #'{"scanner":"Veracode","applicationName":"azure","buildVersion":"jenkins-Veracode with Step-27"}'
-
-#        - name: ServiceNow DevOps Security Results
-#          uses: maheshganji/custom-action-get@sonar
-#          with:
-#             devops-integration-user-name: ${{ secrets.SN_DEVOPS_USER }}
-#             devops-integration-user-password: ${{ secrets.SN_DEVOPS_PASSWORD }}
-#             instance-url: ${{ secrets.SN_INSTANCE_URL }}
-#             tool-id: ${{ secrets.SN_ORCHESTRATION_TOOL_ID }}
-#             context-github: ${{ toJSON(github) }}
-#             job-name: 'Servicenow Security Scan Results'
-#             security-result-attributes: '{"scanner":"Veracode","applicationName":"azure","buildVersion":"jenkins-Veracode with Step-27"}'
