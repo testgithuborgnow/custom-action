@@ -67,7 +67,7 @@ const axios = require('axios');
         }
         else if (token !== '') {
 
-            console.log("I have enternted ere else token "  + username + "ppassword"+ token);
+            console.log("Im in token "  + username + "ppassword"+ token);
 
             restendpoint = `${instanceUrl}/api/sn_devops/v2/devops/tool/security?toolId=${toolId}`;
             const defaultHeadersForToken = {
