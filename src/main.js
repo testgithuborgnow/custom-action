@@ -60,10 +60,15 @@ const axios = require('axios');
 
     try {
         if (token === '' && username === '' && password === '') {
+
+            console.log("I have enternted ere if ");
             core.setFailed('Either secret token or integration username, password is needed for integration user authentication');
             return;
         }
         else if (token !== '') {
+
+            console.log("I have enternted ere else token "  + username + "ppassword"+ token);
+
             restendpoint = `${instanceUrl}/api/sn_devops/v2/devops/tool/security?toolId=${toolId}`;
             const defaultHeadersForToken = {
                 'Content-Type': 'application/json',
@@ -72,9 +77,12 @@ const axios = require('axios');
             };
             httpHeaders = { headers: defaultHeadersForToken };
         }
-        else if (username !== '' && passwd !== '') {
+        else if (username !== '' && password !== '') {
+
+            console.log("I have enternted ere else "  + username + "ppassword"+ password);
+
             restendpoint = `${instanceUrl}/api/sn_devops/v1/devops/tool/security?toolId=${toolId}`;
-            const tokenBasicAuth = `${username}:${passwd}`;
+            const tokenBasicAuth = `${username}:${password}`;
             const encodedTokenForBasicAuth = Buffer.from(tokenBasicAuth).toString('base64');
 
             const defaultHeadersForBasicAuth = {
