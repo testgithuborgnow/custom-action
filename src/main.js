@@ -4,8 +4,10 @@ const axios = require('axios');
 (async function main() {
     let instanceUrl = core.getInput('instance-url', { required: true });
     const toolId = core.getInput('tool-id', { required: true });
-    const username = core.getInput('devops-integration-user-name', { required: true });
-    const password = core.getInput('devops-integration-user-password', { required: true });
+    const username = core.getInput('devops-integration-user-name');
+    const password = core.getInput('devops-integration-user-password');
+    const token = core.getInput('devops-integration-token', { required: false });
+
     const jobname = core.getInput('job-name', { required: true });
     let securityResultAttributes = core.getInput('security-result-attributes', { required: true });
 
@@ -56,26 +58,42 @@ const axios = require('axios');
         return;
     }
 
-    let responseData;
-    const endpoint = `${instanceUrl}/api/sn_devops/v1/devops/tool/security?toolId=${toolId}`;
-
     try {
-        const token = `${username}:${password}`;
-        const encodedToken = Buffer.from(token).toString('base64');
+        if (token === '' && username === '' && password === '') {
+            core.setFailed('Either secret token or integration username, password is needed for integration user authentication');
+            return;
+        }
+        else if (token !== '') {
+            restendpoint = `${instanceUrl}/api/sn_devops/v2/devops/tool/security?toolId=${toolId}`;
+            const defaultHeadersForToken = {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'sn_devops.DevOpsToken ' + `${toolId}:${token}`
+            };
+            httpHeaders = { headers: defaultHeadersForToken };
+        }
+        else if (username !== '' && passwd !== '') {
+            restendpoint = `${instanceUrl}/api/sn_devops/v1/devops/tool/security?toolId=${toolId}`;
+            const tokenBasicAuth = `${username}:${passwd}`;
+            const encodedTokenForBasicAuth = Buffer.from(tokenBasicAuth).toString('base64');
 
-        const defaultHeaders = {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': 'Basic ' + `${encodedToken}`
-        };
+            const defaultHeadersForBasicAuth = {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'Authorization': 'Basic ' + `${encodedTokenForBasicAuth}`
+            };
+            httpHeaders = { headers: defaultHeadersForBasicAuth };
+        }
+        else {
+            core.setFailed('For Basic Auth, Username and Password is mandatory for integration user authentication');
+            return;
+        }
 
-        console.log("Security scan details registration payload: \n "+JSON.stringify(payload));
 
-        let httpHeaders = { headers: defaultHeaders };
-        responseData = await axios.post(endpoint, JSON.stringify(payload), httpHeaders);
-       
-        if (responseData.data && responseData.data.result) 
-            console.log("\n \x1b[1m\x1b[32m SUCCESS: Security Scan registration was successful"+ '\x1b[0m\x1b[0m');
+        responseData = await axios.post(restendpoint, JSON.stringify(payload), httpHeaders);
+
+        if (responseData.data && responseData.data.result)
+            console.log("\n \x1b[1m\x1b[32m SUCCESS: Security Scan registration was successful" + '\x1b[0m\x1b[0m');
         else
             console.log("FAILED: Security Scan could not be registered");
     } catch (e) {
