@@ -35,7 +35,6 @@ jobs:
       - name: Servicenow Get Change Details
         uses: ServiceNow/servicenow-devops-change@v1.34.2
 #         uses:  maheshganji/custom-action-get@test
-
         id: get
         with:
           devops-integration-user-name: ${{ secrets.SN_DEVOPS_USER }}
