@@ -19,7 +19,6 @@ const axios = require('axios');
         core.setFailed(`Exception parsing github context ${e}`);
     }
 
-
     try {
         securityResultAttributes = JSON.parse(securityResultAttributes);
     } catch (e) {
