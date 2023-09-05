@@ -31,14 +31,16 @@ jobs:
 
     steps:
        - name: ServiceNow DevOps Security Results
-         uses: maheshganji/custom-action-get@sonar
+         uses: ServiceNow/servicenow-devops-security-result@v3.0.0
          with:
             devops-integration-user-name: ${{ secrets.SN_DEVOPS_USER }}
-#             devops-integration-token: ${{ secrets.SN_DEVOPS_INTEGRATION_TOKEN }}
             devops-integration-user-password: ${{ secrets.SN_DEVOPS_PASSWORD }}
             instance-url: ${{ secrets.SN_INSTANCE_URL }}
             tool-id: ${{ secrets.SN_ORCHESTRATION_TOOL_ID }}
             context-github: ${{ toJSON(github) }}
             job-name: 'Servicenow Security Scan Results'
-            security-result-attributes: '{"scanner": "Veracode", "applicationName": "Azure", "buildVersion": "v1"}'
-# {"applicationName": "Azure", "buildVersion": "v1"}
+            security-result-attributes: "{'scanner': 'Checkmarx One', 'projectName': 'CheckMarxOneAzureBuildYml', 'scanId': 'e53bd102-1338-46a2-9962-2ad4311c6745', 'securityToolId': '6c6a14dac305f510548d4ad9d0013188'}"
+            #   scanner:  Scanning tool and is required e.g. Checkmarx One.
+            #   projectName/ProjectId: Name/Id of your CheckMarxOne project and is required. This attribute is applicable only for Checkmarx One.
+            #   scanId: CheckmarxOne scan id and is optional. This attribute is applicable only for Checkmarx One.
+            #   securityToolId: Security tool onboarded in ServiceNow (sys_id of the onboarded security tool) and is optional.
